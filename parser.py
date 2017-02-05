@@ -1,6 +1,7 @@
 import lxml
 from lxml import etree
 import sqlite3
+from geopy import geocoders
 
 def create_etree(path):
 	return etree.parse("out.xml")
@@ -16,6 +17,15 @@ def filter_bad(tree):
 			item.getparent().remove(item)
 	return tree
 	
+def get_latLong(place):
+	g= geocoders.GoogleV3()
+	place, (lat, lng)=g.geocode(place)
+	return (lat, lng)
+
+def get_timezone(cordinates):
+	return geocoders.GoogleV3().timezone(cordinates)
+
+print get_timezone(get_latLong('India'))
 def parse_xml_file(xml_file):
     with open(xml_file,'r') as f:
         for x in f:
@@ -33,5 +43,5 @@ def parse_xml_file(xml_file):
 #from lxml  import etree
 
 
-if __name__=="__main__":
-    parse_xml_file('out.xml')
+#if __name__=="__main__":
+    #parse_xml_file('out.xml')
