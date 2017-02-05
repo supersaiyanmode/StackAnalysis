@@ -2,7 +2,9 @@ import lxml
 from lxml import etree
 import sqlite3
 from geopy import geocoders
-
+import pytz
+from datetime import datetime
+import tzlocal
 def create_etree(path):
 	return etree.parse("out.xml")
 
@@ -25,7 +27,11 @@ def get_latLong(place):
 def get_timezone(cordinates):
 	return geocoders.GoogleV3().timezone(cordinates)
 
-print get_timezone(get_latLong('India'))
+def utc_to_local(timestamp , timezone):
+	return datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%f").replace(tzinfo=pytz.utc).astimezone(timezone)
+
+print utc_to_local("2008-07-31T21:42:52.667", get_timezone(get_latLong('Chicago, IL')))
+
 def parse_xml_file(xml_file):
     with open(xml_file,'r') as f:
         for x in f:
