@@ -21,6 +21,10 @@ class Posts(Base):
     Tags = Column(String)
     AnswerCount = Column(Integer)
 
+class Users(Base):
+	__tablename__ = 'users'
+	
+
 engine = create_engine('sqlite:///posts.db') 
 Base.metadata.create_all(engine)
 
