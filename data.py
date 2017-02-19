@@ -23,7 +23,13 @@ class Posts(Base):
 
 class Users(Base):
 	__tablename__ = 'users'
-	
+	Id = Column(Integer, primary_key= True)
+	Reputation = Column(Integer)
+	Location = Column(String)
+	Views = Column(Integer)
+	UpVotes = Column(Integer)
+	DownVotes = Column(Integer)
+	Age = Column(Integer)		
 
 engine = create_engine('sqlite:///posts.db') 
 Base.metadata.create_all(engine)
