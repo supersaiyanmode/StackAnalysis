@@ -31,6 +31,6 @@ class Users(Base):
 	DownVotes = Column(Integer)
 	Age = Column(Integer)		
 
-engine = create_engine('sqlite:///posts.db') 
+engine = create_engine('sqlite:///stackoverflow.db') 
 Base.metadata.create_all(engine)
-
+Session = scoped_session(sessionmaker(bind=engine))
