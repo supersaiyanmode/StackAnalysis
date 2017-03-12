@@ -49,5 +49,5 @@ Base = declarative_base()
 Base.metadata.create_all(engine)
 Session = scoped_session(sessionmaker(bind=engine))
 
-Session.execute(insert(Users).values(Id = 123, Reputation = 21, Location= "test", Views= 2, UpVotes = 2, DownVotes = 3, Age = 22))
-
+#Session.execute(insert(Users).values(Id = 123, Reputation = 21, Location= "test", Views= 2, UpVotes = 2, DownVotes = 3, Age = 22))
+#Session.commit()
