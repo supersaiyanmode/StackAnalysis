@@ -1,3 +1,5 @@
+#posts methods
+
 from lxml  import etree
 import sqlite3
 import data
