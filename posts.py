@@ -22,12 +22,13 @@ def parse_xml_file(xml_file):
                 print node.keys()
                 '''
                 for key in node.keys():
-                    if (field_counter == 0):
-                        list_of_fields.append(key)
+                   # if (field_counter == 0):
+                   #    list_of_fields.append(key)
                     post_object[key] = node.attrib[key]    
                     '''
                     print "key = "+key+" " +node.attrib[key],
                 '''    
+                '''
                 post_object.setdefault('ParentId',-1)
                 post_object.setdefault('PostTypeId',-1)
                 post_object.setdefault('AcceptedAnswerId',-1)
@@ -37,16 +38,17 @@ def parse_xml_file(xml_file):
                 post_object.setdefault('LastActivityDate',"")
                 post_object.setdefault('Tags',"")
                 post_object.setdefault('AnswerCount',-1)
+                '''
                 print " PRINTING THE RECORDS NOW "
-                print post_object    
-                posts = data.Posts(post_object['Id'],post_object['PostTypeId'],post_object['AcceptedAnswerId'],post_object['ParentId'],post_object['CreationDate'],post_object['Score'],post_object['OwnerUserId'],post_object['LastActivityDate'],post_object['Tags'],post_object['AnswerCount'])
+                # print post_object    
+                posts = data.Posts(post_object.get('Id'),post_object.get('PostTypeId'),post_object.get('AcceptedAnswerId'),post_object.get('ParentId'),post_object.get('CreationDate'),post_object.get('Score'),post_object.get('OwnerUserId'),post_object.get('LastActivityDate'),post_object.get('Tags'),post_object.get('AnswerCount'))
                 s = data.Session()
                 s.add(posts)
                 s.commit()
                 print post_object    
-                field_counter += 1
+                #field_counter += 1
                 post_object = {}
-    print list_of_fields
+    #print list_of_fields
 '''    create_posts_schema(list_of_fields)'''
 
 
@@ -80,4 +82,4 @@ if __name__=="__main__":
    # delete_from_post() deletes the all records from the posts table
    # delete_from_post()
    # select_from_post() selects and prints records from the table 
-   select_from_post()
+   #select_from_post()
