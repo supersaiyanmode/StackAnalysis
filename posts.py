@@ -1,6 +1,6 @@
 from lxml  import etree
 import sqlite3
-import data
+import data, re
 
 
 def parse_xml_file(xml_file):
@@ -12,43 +12,40 @@ def parse_xml_file(xml_file):
             x = x.strip()
             if x.startswith("<row"):
                 node = etree.fromstring(x)
-                '''
-                print node.get('Body')
-                '''
-                '''
-                print node.attrib 
-                '''
-                '''
-                print node.keys()
-                '''
+                
                 for key in node.keys():
-                   # if (field_counter == 0):
-                   #    list_of_fields.append(key)
+                  
                     post_object[key] = node.attrib[key]    
-                    '''
-                    print "key = "+key+" " +node.attrib[key],
-                '''    
-                '''
-                post_object.setdefault('ParentId',-1)
-                post_object.setdefault('PostTypeId',-1)
-                post_object.setdefault('AcceptedAnswerId',-1)
-                post_object.setdefault('CreationDate',"")
-                post_object.setdefault('Score',-1)
-                post_object.setdefault('OwnerUserId',-1)
-                post_object.setdefault('LastActivityDate',"")
-                post_object.setdefault('Tags',"")
-                post_object.setdefault('AnswerCount',-1)
-                '''
+                  
                 print " PRINTING THE RECORDS NOW "
                 # print post_object    
                 posts = data.Posts(post_object.get('Id'),post_object.get('PostTypeId'),post_object.get('AcceptedAnswerId'),post_object.get('ParentId'),post_object.get('CreationDate'),post_object.get('Score'),post_object.get('OwnerUserId'),post_object.get('LastActivityDate'),post_object.get('Tags'),post_object.get('AnswerCount'))
+ 
+                
                 s = data.Session()
-                s.add(posts)
-                s.commit()
-                print post_object    
-                #field_counter += 1
+                print "tags = ", post_object.get('Tags')
+                if post_object.get('Tags') is not None:
+                    print "inside"
+                    str =  re.findall("\<(.*?)\>", post_object.get('Tags'))
+                    for x in str:
+                        print "x = ",x
+                        tag = s.query(data.Tags).filter_by(TagName = x).first()
+                        if not tag:
+                            tag = data.Tags(x)
+                        tag.posts.append(posts)
+                        s.add(tag)
+
+                    s.commit()    
+                else: 
+
+
+                    s.add(posts)
+
+                    s.commit()
+   
+
                 post_object = {}
-    #print list_of_fields
+
 '''    create_posts_schema(list_of_fields)'''
 
 
