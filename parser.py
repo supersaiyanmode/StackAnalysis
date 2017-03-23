@@ -26,11 +26,13 @@ def bounding_box(place):
 
 def get_location_params(location):
 	g= geocoder.google(location)
+	if not g.latlng:
+		return {'location': location}
 	timezone =  get_timezone(g.latlng)
 	bbox = g.geojson['bbox']
 	return {
 		'location': location,
-		'city':g.city,
+		'city': g.city,
 		'state':g.state,
 		'timezone': timezone.zone,
 		'country':g.country,
@@ -39,8 +41,6 @@ def get_location_params(location):
 		'right':bbox[2],
 		'top':bbox[3]
 	}
-
-#print get_location_params('tinmaktu')
 
 #latlng = get_lat_long('chicago')
 #if latlng is not None:

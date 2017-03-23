@@ -1,7 +1,7 @@
 import os
 import sys
 
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
+from sqlalchemy import Column, ForeignKey, Integer, Float, String, DateTime
 from sqlalchemy import UniqueConstraint, Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -71,10 +71,10 @@ class Location(Base):
     __tablename__ = 'locations'
 
     id = Column(Integer, primary_key = True, autoincrement= True)
-    location = Column(String,ForeignKey('users.Location'))
-    city = Column(String)
-    state = Column(String)
-    country = Column(String)
+    location = Column(String(convert_unicode=True))
+    city = Column(String(convert_unicode=True))
+    state = Column(String(convert_unicode=True))
+    country = Column(String(convert_unicode=True))
     timezone = Column(String)
     left = Column(Float)
     right = Column(Float)

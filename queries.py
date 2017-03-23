@@ -1,33 +1,35 @@
-import data
-import parser
 from lxml import etree
 import sqlite3
 from sqlalchemy.sql import select,distinct
 from sqlalchemy import (update, insert, and_)
+import parser
+from data import Location, Session, Users
 
-Session=data.Session()
+session = Session()
 
 def insert_users(Id, Reputation, Location, Views, UpVotes, DownVotes, Age):
-    Session.execute(insert(Users).values(Id = Id, Reputation = Reputation, Location= Location, Views= Views, UpVotes = UpVotes, DownVotes = DownVotes, Age = Age))
-    Session.commit()
+    session.execute(insert(Users).values(Id = Id, Reputation = Reputation, Location= Location, Views= Views, UpVotes = UpVotes, DownVotes = DownVotes, Age = Age))
+    session.commit()
     return "User information successfully inserted"
 
 def get_unique_locations():
 	locations=[]
-	s = Session.query(distinct(data.Users.Location))	
+	s = session.query(distinct(Users.Location))	
 	for row in s:
 		locations.append(row)
 	return list(set(locations))
 
 def insert_locations():
 	locations = get_unique_locations()
-	count = 0
-	for location in locations:
-		i = insert(data.Location).values(parser.get_location_params(location))
-		Session.execute(i)
-		count+=1
-		Session.commit()
-		print count
+	for i, location in enumerate(locations):
+		if session.query(Location).filter(Location.location == location).count():
+			continue
+		location_params = parser.get_location_params(location)
+		record = Location(**location_params)
+		session.add(record)
+		print i, location
+		session.commit()
+	session.commit()
 	return "success"
 
 def parse_xml_file(xml_file):
