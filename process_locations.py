@@ -29,7 +29,8 @@ def insert_locations():
 		location_params = parser.get_location_params(location)
 		record = Location(**location_params)
 		session.add(record)
-		print i, location, "->", location_params["city"], location_params["state"], location_params["country"]
+		city, state, country = [location_params.get(x) for x in ("city", "state", "country")]
+		print i, location, "->", city, state, country
 		session.commit()
 	session.commit()
 	return "success"
