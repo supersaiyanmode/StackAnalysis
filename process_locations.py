@@ -21,7 +21,7 @@ def insert_locations():
 	locations = get_unique_locations()
 	for i, location in enumerate(locations):
 		if session.query(Location).filter(Location.location == location).count():
-			print location, "is already cached."
+			print i, location, "is already cached."
 			continue
 		location_params = parser.get_location_params(location)
 		record = Location(**location_params)
