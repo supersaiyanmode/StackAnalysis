@@ -6,14 +6,14 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker,relationship,scoped_session
 from dateutil import parser
-Base = declarative_base()
 
+
+Base = declarative_base()
 
 poststags_table  = Table('poststags',Base.metadata,
                     Column('PostsId', Integer(), ForeignKey('posts.id')),
                     Column('TagsId', Integer(), ForeignKey('tags.id'))
                     )
-
 
 class Posts(Base):
     __tablename__ = 'posts'
@@ -29,7 +29,8 @@ class Posts(Base):
     Tags = Column(String)
     AnswerCount = Column(Integer)
     
-    def __init__(self,id,PostTypeId,AcceptedAnswerId,ParentId,CreationDate,Score,OwnerUserId,LastActivityDate,Tags,AnswerCount):
+    def __init__(self,id,PostTypeId,AcceptedAnswerId,ParentId,\
+		CreationDate,Score,OwnerUserId,LastActivityDate,Tags,AnswerCount):
         self.id = id
         print self.AcceptedAnswerId," ",AcceptedAnswerId," ",PostTypeId," ",self.PostTypeId
         self.PostTypeId = PostTypeId
@@ -58,11 +59,29 @@ class Tags(Base):
         self.TagName = TagName
 
 
+class Location(Base):
+    __tablename__ = 'locations'
 
+    id = Column(Integer, primary_key = True)
+    LocationName = Column(String,ForeignKey('users.Location'))
+    CityName = Column(String)
+    StateName = Column(String)
+    CountryName = Column(String)
+    Offset = Column(Integer)  #offset will be in minutes
+    Left = Column(Float)
+    Right = Column(Float)
+    Top = Column(Float)
+    Bottom = Column(Float)
 
-
-
-
+class Users(Base):
+	__tablename__ = 'users'
+	Id = Column(Integer, primary_key= True)
+	Reputation = Column(Integer)
+	Location = Column(String)
+	Views = Column(Integer)
+	UpVotes = Column(Integer)
+	DownVotes = Column(Integer)
+	Age = Column(Integer)
 
 engine = create_engine('sqlite:///posts.db') 
 Base.metadata.create_all(engine)
