@@ -1,74 +1,55 @@
-from lxml  import etree
-import sqlite3
-from schema import Posts, Users, Questions, Answers, Tags, Session
-import  re
+import re
 
+from lxml import etree
+from dateutil import parser
+
+from data import Posts, Users, Questions, Answers, Tags, Session
+
+def process_questions(s, post_object):
+    arr = ['Id', 'PostTypeId', 'AcceptedAnswerId', 'CreationDate', 'Score',
+            'OwnerUserId', 'LastActivityDate', 'AnswerCount']
+    params = {x: post_object.get(x) for x in arr}
+    params['CreationDate'] = parser.parse(params['CreationDate'])
+    params['LastActivityDate'] = parser.parse(params['LastActivityDate'])
+    questions = Questions(**params)
+    if post_object.get('Tags') is not None:
+        tags = re.findall("\<(.*?)\>", post_object.get('Tags'))
+        for tag in tags:
+            tag_obj = s.query(Tags).filter_by(TagName=x).first()
+            if not tag_obj:
+                tag_obj = Tags(TagName=x)
+            tag_obj.questions.append(questions)
+            s.add(tag_obj)
+        s.commit()    
+    else:
+        s.add(questions)
+        s.commit()
+
+def process_answers(s, post_object):
+    arr = ['Id', 'PostTypeId', 'ParentId', 'CreationDate', 'Score',
+            'OwnerUserId', 'LastActivityDate']
+    params = {x: post_object.get(x) for x in arr}
+    params['CreationDate'] = parser.parse(params['CreationDate'])
+    params['LastActivityDate'] = parser.parse(params['LastActivityDate'])
+    answers = Answers(**params)
+    s.add(answers)
+    s.commit()
 
 def parse_xml_file(xml_file):
-
-    post_object = {}
-
+    s = Session()
     with open(xml_file,'r') as f:
-        for x in f:
-            x = x.strip()
-            if x.startswith("<row"):
-                node = etree.fromstring(x)
-                
-                for key in node.keys():
-                  
-                    post_object[key] = node.attrib[key]    
-                  
-                print " PRINTING THE RECORDS NOW "
-                posts = Posts(post_object.get('Id'),post_object.get('PostTypeId'),post_object.get('AcceptedAnswerId'),post_object.get('ParentId'),post_object.get('CreationDate'),post_object.get('Score'),post_object.get('OwnerUserId'),post_object.get('LastActivityDate'),post_object.get('Tags'),post_object.get('AnswerCount'))
- 
-                
-                s = Session()
+        for line in f:
+            line = line.strip()
+            if line.startswith("<row"):
+                node = etree.fromstring(line)
+                post_object = node.attrib
+
                 if post_object.get('PostTypeId') == str(1):
-                    questions = Questions(post_object.get('Id'),post_object.get('PostTypeId'),post_object.get('AcceptedAnswerId'),post_object.get('CreationDate'),post_object.get('Score'),post_object.get('OwnerUserId'),post_object.get('LastActivityDate'),post_object.get('Tags'),post_object.get('AnswerCount'))
-                    print "tags = ", post_object.get('Tags')
-                    if post_object.get('Tags') is not None:
-                        print "inside"
-                        str_ =  re.findall("\<(.*?)\>", post_object.get('Tags'))
-                        for x in str_:
-                            print "x = ",x
-                            tag = s.query(Tags).filter_by(TagName = x).first()
-                            if not tag:
-                                tag = Tags(x)
-                            tag.questions.append(questions)
-                            s.add(tag)
-
-                        s.commit()    
-                    else: 
-                        s.add(questions)
-                        s.commit()
-                 
+                   process_questions(s, post_object)
                 if post_object.get('PostTypeId') == str(2):
-                    answers = Answers(post_object.get('Id'),post_object.get('PostTypeId'),post_object.get('ParentId'),post_object.get('CreationDate'),post_object.get('Score'),post_object.get('OwnerUserId'),post_object.get('LastActivityDate'))
-                    s.add(answers)
-                    s.commit()
-   
-
-                post_object = {}
-
-'''    create_posts_schema(list_of_fields)'''
-
-
-'''
-The fields in the Posts.xml are :
-['Id', 'PostTypeId', 'AcceptedAnswerId', 'CreationDate', 'Score', 'ViewCount', 'Body', 'OwnerUserId', 'LastEditorUserId', 'LastEditorDisplayName', 'LastEditDate', 'LastActivityDate', 'Title', 'Tags', 'AnswerCount', 'CommentCount', 'FavoriteCount', 'CommunityOwnedDate']
-
-'''
-
-
-
-
-
-
+                   process_answers(s, post_object)
 
 
 if __name__=="__main__":
-
    parse_xml_file('post_out.xml')
-  
-   
-   
+
