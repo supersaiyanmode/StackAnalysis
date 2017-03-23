@@ -14,15 +14,14 @@ def insert_users(Id, Reputation, Location, Views, UpVotes, DownVotes, Age):
 
 def get_unique_locations():
 	locations=[]
-	s = session.query(distinct(Users.Location))	
-	for row in s:
-		locations.append(row)
-	return list(set(locations))
+	result = session.query(distinct(Users.Location)).all()
+	return [x[0] for x in result]
 
 def insert_locations():
 	locations = get_unique_locations()
 	for i, location in enumerate(locations):
 		if session.query(Location).filter(Location.location == location).count():
+			print location, "is already cached."
 			continue
 		location_params = parser.get_location_params(location)
 		record = Location(**location_params)
@@ -42,18 +41,14 @@ def parse_xml_file(xml_file):
 			if x.startswith("<row"):
 				node = etree.fromstring(x)
 				for key in node.keys():
-				   # if (field_counter == 0):
-				   #	list_of_fields.append(key)
-					user_object[key] = node.attrib[key]    
-				#print " PRINTING THE RECORDS NOW "
+					user_object[key] = node.attrib[key]
 				users = data.Users(user_object.get('Id'),user_object.get('Reputation'),user_object.get('Location'),user_object.get('Views'),user_object.get('UpVotes'),user_object.get('DownVotes'),user_object.get('Age'))
 				session = data.Session()
 				session.add(users)
 				session.commit()
-				#print user_object	  
 				field_counter += 1
 				print field_counter
 				user_object = {}
 
 if __name__=="__main__":
-	print insert_locations()	
+	print insert_locations()
