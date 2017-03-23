@@ -4,7 +4,6 @@ import sqlite3
 from geopy import geocoders
 import pytz
 from datetime import datetime
-import tzlocal
 
 def create_etree(path):
 	return etree.parse("out.xml")
@@ -36,14 +35,3 @@ def utc_to_local(timestamp , timezone):
 latlng = get_latLong('Chicago, IL')
 if latlng is not None:
 	print utc_to_local("2008-07-31T21:42:52.667", get_timezone(latlng))
-
-#et = create_etree("out.xml")
-#filtered_et = filter_bad(et)
-#for item in filtered_et.iter():
-#	print item.items()
-#
-#from lxml  import etree
-
-
-#if __name__=="__main__":
-    #parse_xml_file('out.xml')
