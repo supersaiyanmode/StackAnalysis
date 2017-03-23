@@ -2,7 +2,7 @@ import lxml
 import geocoder
 import sqlite3
 from geopy import geocoders
-from geopy.exe import GeocoderParseError
+from geopy.exc import GeocoderParseError
 import pytz
 from datetime import datetime
 
