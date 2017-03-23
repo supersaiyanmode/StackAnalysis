@@ -1,25 +1,11 @@
 import lxml
-from lxml import etree
+import geocoder
 import sqlite3
 from geopy import geocoders
 import pytz
 from datetime import datetime
 
-def create_etree(path):
-	return etree.parse("out.xml")
-
-def is_bad(element):
-	keys = element.keys()
-	required_tags= set(['Id' , 'Reputation' , 'Location' , 'Views'])
-	return False if required_tags<set(keys) else True
-
-def filter_bad(tree):
-	for item in tree.iter():
-		if len(item.keys())!=0 and is_bad(item):
-			item.getparent().remove(item)
-	return tree
-	
-def get_latLong(place):
+def get_lat_long(place):
 	g= geocoders.GoogleV3()
 	result = g.geocode(place)
 	if result is None:
@@ -30,8 +16,32 @@ def get_timezone(cordinates):
 	return geocoders.GoogleV3().timezone(cordinates)
 
 def utc_to_local(timestamp , timezone):
-	return datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%f").replace(tzinfo=pytz.utc).astimezone(timezone)
+	date = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%f")
+	utc_date = pytz.utc.localize(date)
+	return utc_date.astimezone(timezone)
 
-latlng = get_latLong('Chicago, IL')
-if latlng is not None:
-	print utc_to_local("2008-07-31T21:42:52.667", get_timezone(latlng))
+def bounding_box(place):
+	g = geocoders.google(place)
+	return g.geojson['bbox']  #return [Left South Right North] cordinates
+
+def get_location_params(location):
+	g= geocoder.google(location)
+	timezone =  get_timezone(g.latlng)
+	bbox = g.geojson['bbox']
+	return {
+		'location': location,
+		'city':g.city,
+		'state':g.state,
+		'timezone': timezone.zone,
+		'country':g.country,
+		'left':bbox[0],
+		'bottom':bbox[1],
+		'right':bbox[2],
+		'top':bbox[3]
+	}
+
+#print get_location_params('tinmaktu')
+
+#latlng = get_lat_long('chicago')
+#if latlng is not None:
+#	print utc_to_local("2008-07-31T21:42:52.667", get_timezone(latlng))
