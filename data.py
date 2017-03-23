@@ -86,7 +86,7 @@ class Users(Base):
 
 	Id = Column(Integer, primary_key= True)
 	Reputation = Column(Integer)
-	Location = Column(String)
+	Location = Column(String(convert_unicode=True))
 	Views = Column(Integer)
 	UpVotes = Column(Integer)
 	DownVotes = Column(Integer)
@@ -96,7 +96,7 @@ class Users(Base):
 	answers = relationship('Answers', backref = 'users')
 
 
-engine = create_engine('sqlite:///stackoverflow.db')
+engine = create_engine('sqlite:///' + sys.argv[1])
 Base.metadata.create_all(engine)
 Session = scoped_session(sessionmaker(bind=engine))
 
