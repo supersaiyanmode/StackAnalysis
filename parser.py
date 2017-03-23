@@ -2,6 +2,7 @@ import lxml
 import geocoder
 import sqlite3
 from geopy import geocoders
+from geopy.exe import GeocoderParseError
 import pytz
 from datetime import datetime
 
@@ -13,7 +14,10 @@ def get_lat_long(place):
 	return result[1]
 
 def get_timezone(cordinates):
-	return geocoders.GoogleV3().timezone(cordinates)
+	try:
+		return geocoders.GoogleV3().timezone(cordinates).zone
+	except GeocoderParseError:
+		return None
 
 def utc_to_local(timestamp , timezone):
 	date = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%f")
@@ -34,7 +38,7 @@ def get_location_params(location):
 		'location': location,
 		'city': g.city,
 		'state':g.state,
-		'timezone': timezone.zone,
+		'timezone': timezone,
 		'country':g.country,
 		'left':bbox[0],
 		'bottom':bbox[1],
