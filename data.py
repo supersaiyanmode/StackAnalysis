@@ -1,11 +1,11 @@
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime,  UniqueConstraint, Table
+from sqlalchemy import Column, ForeignKey,Float, Integer, String, DateTime,  UniqueConstraint, Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker,relationship,scoped_session
-from dateutil import parser
+#from dateutil import parser
 
 
 Base = declarative_base()
@@ -62,16 +62,16 @@ class Tags(Base):
 class Location(Base):
     __tablename__ = 'locations'
 
-    id = Column(Integer, primary_key = True)
-    LocationName = Column(String,ForeignKey('users.Location'))
-    CityName = Column(String)
-    StateName = Column(String)
-    CountryName = Column(String)
-    Offset = Column(Integer)  #offset will be in minutes
-    Left = Column(Float)
-    Right = Column(Float)
-    Top = Column(Float)
-    Bottom = Column(Float)
+    id = Column(Integer, primary_key = True, autoincrement= True)
+    location = Column(String,ForeignKey('users.Location'))
+    city = Column(String)
+    state = Column(String)
+    country = Column(String)
+    timezone = Column(String)
+    left = Column(Float)
+    right = Column(Float)
+    top = Column(Float)
+    bottom = Column(Float)
 
 class Users(Base):
 	__tablename__ = 'users'
@@ -83,7 +83,7 @@ class Users(Base):
 	DownVotes = Column(Integer)
 	Age = Column(Integer)
 
-engine = create_engine('sqlite:///posts.db') 
+engine = create_engine('sqlite:///stackoverflow.db') 
 Base.metadata.create_all(engine)
 Session = scoped_session(sessionmaker(bind=engine))
 
