@@ -17,12 +17,15 @@ def get_unique_locations():
 	result = session.query(distinct(Users.Location)).all()
 	return [x[0] for x in result]
 
-def insert_locations():
+def get_new_locations():
 	locations = get_unique_locations()
+	entered_locations = session.query(Location.location).all()
+	result = {x[0] for x in entered_locations}
+	return set(locations) - result
+
+def insert_locations():
+	locations = get_new_locations()
 	for i, location in enumerate(locations):
-		if session.query(Location).filter(Location.location == location).count():
-			print i, location, "is already cached."
-			continue
 		location_params = parser.get_location_params(location)
 		record = Location(**location_params)
 		session.add(record)
