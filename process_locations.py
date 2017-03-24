@@ -1,3 +1,6 @@
+import json
+import sys
+
 from lxml import etree
 import sqlite3
 from sqlalchemy.sql import select,distinct
@@ -17,6 +20,16 @@ def get_unique_locations():
 	result = session.query(distinct(Users.Location)).all()
 	return [x[0] for x in result]
 
+def process_location_file(path):
+	with open(path, 'r') as f, open(path+"_out",'w') as o: 
+		for i,loc in enumerate(f):
+			loc = loc.strip()
+			params = parser.get_location_params(loc)
+			print >> o, json.dumps(params)
+			city, state, country = [params.get(x) for x in ("city", "state", "country")] 
+			print i, loc, "->" , city, state, country
+	return "success"
+
 def get_new_locations():
 	locations = get_unique_locations()
 	entered_locations = session.query(Location.location).all()
@@ -34,6 +47,15 @@ def insert_locations():
 		session.commit()
 	session.commit()
 	return "success"
+
+def insert_processed_locations(path):
+	with open(path) as f:
+		for i, line in enumerate(f):
+			obj = json.loads(line.strip())
+			record = Location(**obj)
+			session.add(record)
+			print i, obj["location"]
+		session.commit()
 
 def parse_xml_file(xml_file):
 	list_of_fields = []
@@ -55,4 +77,6 @@ def parse_xml_file(xml_file):
 				user_object = {}
 
 if __name__=="__main__":
-	print insert_locations()
+	#print insert_locations()
+	#print process_location_file(sys.argv[2])
+	print insert_processed_locations(sys.argv[2])
