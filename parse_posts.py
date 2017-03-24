@@ -68,8 +68,10 @@ def parse_xml_file(xml_file):
 					process_questions(s, post_object)
 				if post_object.get('PostTypeId') == "2":
 					process_answers(s, post_object)
-			if index % 1000 == 0:
+			if index % 10000:
 				print index, "processed."
+
+			if index % 100000 == 0:
 				s.commit()
 		s.commit()
 
@@ -86,8 +88,10 @@ def attach_foreignkeys(xml_file):
 					attach_question(s, post_object)
 				if post_object.get('PostTypeId') == "2":
 					attach_answer(s, post_object)
-			if index % 1000 == 0:
-				print index, "processed."
+			if index % 10000:
+				print index, "attached."
+
+			if index % 100000 == 0:
 				s.commit()
 		s.commit()
 
