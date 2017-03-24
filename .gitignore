@@ -92,3 +92,4 @@ ENV/
 env/*
 **/*.sw?
 
+stackoverflow.db
