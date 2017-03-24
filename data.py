@@ -7,13 +7,14 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker,relationship,scoped_session
+from sqlalchemy.interfaces import PoolListener
 
 
 Base = declarative_base()
 
 
 poststags_table  = Table('poststags',Base.metadata,
-							Column('PostsId', Integer(), ForeignKey('questions.id')),
+							Column('PostsId', Integer(), ForeignKey('questions.Id')),
 							Column('TagsId', Integer(), ForeignKey('tags.id')))
 
 
@@ -35,21 +36,20 @@ class Posts(Base):
 class Questions(Base):
 	__tablename__ = 'questions'
 
-	id = Column(Integer, primary_key=True)
+	Id = Column(Integer, primary_key=True)
 	PostTypeId = Column(Integer)
 	AcceptedAnswerId = Column(Integer)
 	CreationDate = Column(DateTime)
 	Score = Column(Integer)
 	OwnerUserId = Column(Integer, ForeignKey('users.Id'))
 	LastActivityDate = Column(DateTime)
-	Tags = Column(String)
 	AnswerCount = Column(Integer)
 
 
 class Answers(Base):
 	__tablename__ = 'answers'
 
-	id = Column(Integer, primary_key=True)
+	Id = Column(Integer, primary_key=True)
 	PostTypeId = Column(Integer)
 	ParentId = Column(Integer)
 	CreationDate = Column(DateTime)
@@ -63,23 +63,10 @@ class Tags(Base):
 
 	id = Column(Integer, primary_key=True)
 	TagName = Column(String,index = True, unique = True)
-	posts = relationship("Questions", secondary = poststags_table)
+	questions = relationship("Questions", secondary = poststags_table)
 
 	__table_args__ = (UniqueConstraint("TagName"),)
 
-class Location(Base):
-    __tablename__ = 'locations'
-
-    id = Column(Integer, primary_key = True, autoincrement= True)
-    location = Column(String,ForeignKey('users.Location'))
-    city = Column(String)
-    state = Column(String)
-    country = Column(String)
-    timezone = Column(String)
-    left = Column(Float)
-    right = Column(Float)
-    top = Column(Float)
-    bottom = Column(Float)
 
 class Users(Base):
 	__tablename__ = 'users'
@@ -96,7 +83,11 @@ class Users(Base):
 	answers = relationship('Answers', backref = 'users')
 
 
-engine = create_engine('sqlite:///stackoverflow.db')
+class ForeignKeysListener(PoolListener):
+    def connect(self, dbapi_con, con_record):
+        db_cursor = dbapi_con.execute('pragma foreign_keys=ON')
+
+engine = create_engine('sqlite:///posts.db', listeners=[ForeignKeysListener()])
 Base.metadata.create_all(engine)
 Session = scoped_session(sessionmaker(bind=engine))
 
