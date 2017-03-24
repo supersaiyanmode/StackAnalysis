@@ -14,7 +14,7 @@ Base = declarative_base()
 
 
 poststags_table  = Table('poststags',Base.metadata,
-							Column('PostsId', Integer(), ForeignKey('questions.Id')),
+							Column('PostsId', Integer(), ForeignKey('questions.id')),
 							Column('TagsId', Integer(), ForeignKey('tags.id')))
 
 
@@ -22,9 +22,9 @@ class Questions(Base):
 	__tablename__ = 'questions'
 
 	id = Column(Integer, primary_key=True)
-	accepted_answer = Column(Integer, ForeignKey('answers.id'))
+	accepted_answer_id = Column(Integer, ForeignKey('answers.id'))
 	score = Column(Integer)
-	author = Column(Integer, ForeignKey('users.Id'))
+	author_id = Column(Integer, ForeignKey('users.id'))
 	creation_date = Column(DateTime)
 	modified_date = Column(DateTime)
 	answer_count = Column(Integer) # TODO: To remove post-verification using joins
@@ -34,9 +34,9 @@ class Answers(Base):
 	__tablename__ = 'answers'
 
 	id = Column(Integer, primary_key=True)
-	question = Column(Integer, ForeignKey('questions.id'))
+	question_id = Column(Integer, ForeignKey('questions.id'))
 	score = Column(Integer)
-	author = Column(Integer, ForeignKey('users.Id'))
+	author_id = Column(Integer, ForeignKey('users.id'))
 	creation_date = Column(DateTime)
 	modified_date = Column(DateTime)
 
@@ -73,7 +73,6 @@ class Users(Base):
 	upvotes = Column(Integer)
 	downvotes = Column(Integer)
 	age = Column(Integer)
-	posts = relationship ('Posts', backref = 'users', lazy = 'dynamic')
 	questions = relationship('Questions', backref = 'users')
 	answers = relationship('Answers', backref = 'users')
 
