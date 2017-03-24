@@ -68,18 +68,18 @@ class Tags(Base):
 	__table_args__ = (UniqueConstraint("TagName"),)
 
 class Location(Base):
-    __tablename__ = 'locations'
+	__tablename__ = 'locations'
 
-    id = Column(Integer, primary_key = True, autoincrement= True)
-    location = Column(String(convert_unicode=True))
-    city = Column(String(convert_unicode=True))
-    state = Column(String(convert_unicode=True))
-    country = Column(String(convert_unicode=True))
-    timezone = Column(String)
-    left = Column(Float)
-    right = Column(Float)
-    top = Column(Float)
-    bottom = Column(Float)
+	id = Column(Integer, primary_key = True, autoincrement= True)
+	location = Column(String(convert_unicode=True))
+	city = Column(String(convert_unicode=True))
+	state = Column(String(convert_unicode=True))
+	country = Column(String(convert_unicode=True))
+	timezone = Column(String)
+	left = Column(Float)
+	right = Column(Float)
+	top = Column(Float)
+	bottom = Column(Float)
 
 class Users(Base):
 	__tablename__ = 'users'
