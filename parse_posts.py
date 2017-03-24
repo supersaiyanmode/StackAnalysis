@@ -70,6 +70,7 @@ def parse_xml_file(xml_file):
 					process_answers(s, post_object)
 			if index % 10000 == 0:
 				print index, "processed."
+				sys.stdout.flush()
 
 			if index % 100000 == 0:
 				s.commit()
@@ -90,6 +91,7 @@ def attach_foreignkeys(xml_file):
 					attach_answer(s, post_object)
 			if index % 10000 == 0:
 				print index, "attached."
+				sys.stdout.flush()
 
 			if index % 100000 == 0:
 				s.commit()
