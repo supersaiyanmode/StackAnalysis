@@ -3,3 +3,4 @@ lxml
 geopy
 geocoder
 sqlalchemy
+python-dateutil
