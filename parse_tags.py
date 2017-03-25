@@ -21,7 +21,7 @@ def parse_xml_file(xml_file, tags_file):
 				post_object = node.attrib
 
 				if post_object.get('PostTypeId') == "1":
-					all_tags |= set(get_tags(s, post_object)))
+					all_tags |= set(get_tags(s, post_object))
 			if index % 10000 == 0:
 				print index, "processed."
 				sys.stdout.flush()
