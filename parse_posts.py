@@ -1,5 +1,6 @@
 import re
 import sys
+from itertools import islice
 
 from lxml import etree
 from dateutil import parser
