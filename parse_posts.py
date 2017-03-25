@@ -9,7 +9,6 @@ from data import Users, Questions, Answers, Tags, Session
 def process_questions(s, post_object):
 	mappings = {
 		'Id': "id",
-		#'AcceptedAnswerId': "accepted_answer_id",
 		'CreationDate': "creation_date",
 		'Score': 'score',
 		'OwnerUserId': 'author_id',
@@ -19,19 +18,12 @@ def process_questions(s, post_object):
 	params = {y: post_object.get(x) for x, y in mappings.items()}
 	params['creation_date'] = parser.parse(params['creation_date'])
 	params['modified_date'] = parser.parse(params['modified_date'])
-	questions = Questions(**params)
-	tags = re.findall("\<(.*?)\>", post_object.get('Tags'))
-	for tag in tags:
-		tag_obj = s.query(Tags).filter_by(name=tag).first()
-		if not tag_obj:
-			tag_obj = Tags(name=tag)
-		tag_obj.questions.append(questions)
-		s.add(tag_obj)
+	question = Questions(**params)
+	s.add(question)
 
 def process_answers(s, post_object):
 	mappings = {
 		'Id': "id",
-		#'ParentId': "question_id",
 		'Score': 'score',
 		'OwnerUserId': 'author_id',
 		'CreationDate': "creation_date",
@@ -68,11 +60,11 @@ def parse_xml_file(xml_file):
 					process_questions(s, post_object)
 				if post_object.get('PostTypeId') == "2":
 					process_answers(s, post_object)
-			if index % 10000 == 0:
+			if index % 2000 == 0:
 				print index, "processed."
 				sys.stdout.flush()
 
-			if index % 100000 == 0:
+			if index % 50000 == 0:
 				s.commit()
 		s.commit()
 
@@ -99,6 +91,6 @@ def attach_foreignkeys(xml_file):
 
 
 if __name__=="__main__":
-	parse_xml_file(sys.argv[2])
-	attach_foreignkeys(sys.argv[2])
+	parse_xml_file(sys.argv[1])
+	attach_foreignkeys(sys.argv[1])
 
