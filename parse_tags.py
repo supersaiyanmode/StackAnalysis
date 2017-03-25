@@ -12,7 +12,7 @@ def get_tags(s, post_object):
 
 def parse_xml_file(xml_file, tags_file):
 	s = Session()
-	all_tags =-set()
+	all_tags = set()
 	with open(xml_file,'r') as f:
 		for index, line in enumerate(f):
 			line = line.strip()
