@@ -93,5 +93,5 @@ if __name__=="__main__":
 	with open(sys.argv[1]) as f:
 		gen = islice(f, int(sys.argv[2]), int(sys.argv[3]))
 		parse_lines(gen)
-		attach_foreignkeys(sys.argv[1])
+		#attach_foreignkeys(sys.argv[1])
 
