@@ -77,13 +77,24 @@ class Users(Base):
 	answers = relationship('Answers', backref = 'users')
 
 
-class ForeignKeysListener(PoolListener):
-	def connect(self, dbapi_con, con_record):
-		db_cursor = dbapi_con.execute('pragma foreign_keys=ON')
 
+def get_sqlite3_session(path):
+	class ForeignKeysListener(PoolListener):
+		def connect(self, dbapi_con, con_record):
+			db_cursor = dbapi_con.execute('pragma foreign_keys=ON')
 
-listeners = [ForeignKeysListener()]
-engine = create_engine('sqlite:///' + sys.argv[1], listeners=listeners)
-Base.metadata.create_all(engine)
-Session = scoped_session(sessionmaker(bind=engine))
+	listeners = [ForeignKeysListener()]
+	engine = create_engine('sqlite:///' + path, listeners=listeners)
+	Base.metadata.create_all(engine)
+	return scoped_session(sessionmaker(bind=engine))
+
+def get_postgres_session(host, port, username, password, db):
+	protocol = "postgresql"
+	string = "{}://{}:{}@{}:{}/{}".format(protocol, username, password,
+						host, port, db)
+	engine = create_engine(string)
+	Base.metadata.create_all(engine)
+	return scoped_session(sessionmaker(bind=engine))
+
+Session = get_postgres_session("db.slis.indiana.edu", 5433, 'rangira', 'iDNKrQa4', 'rangira')
 
