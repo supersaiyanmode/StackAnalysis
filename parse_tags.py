@@ -43,6 +43,6 @@ def insert_tags(all_tags):
 
 
 if __name__=="__main__":
-	tags = parse_xml_file(sys.argv[1])
+	tags = parse_xml_file(sys.argv[1], sys.argv[2])
 	insert_tags(tags)
 
