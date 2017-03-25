@@ -46,27 +46,25 @@ def attach_answer(s, post_object):
 	answer.question_id = int(post_object["ParentId"])
 	s.add(answer)
 
-
-def parse_xml_file(xml_file):
+def parse_lines(gen):
 	s = Session()
-	with open(xml_file,'r') as f:
-		for index, line in enumerate(f):
-			line = line.strip()
-			if line.startswith("<row"):
-				node = etree.fromstring(line)
-				post_object = node.attrib
+	for index, line in enumerate(gen):
+		line = line.strip()
+		if line.startswith("<row"):
+			node = etree.fromstring(line)
+			post_object = node.attrib
 
-				if post_object.get('PostTypeId') == "1":
-					process_questions(s, post_object)
-				if post_object.get('PostTypeId') == "2":
-					process_answers(s, post_object)
-			if index % 2000 == 0:
-				print index, "processed."
-				sys.stdout.flush()
+			if post_object.get('PostTypeId') == "1":
+				process_questions(s, post_object)
+			if post_object.get('PostTypeId') == "2":
+				process_answers(s, post_object)
+		if index % 2000 == 0:
+			print index, "processed."
+			sys.stdout.flush()
 
-			if index % 50000 == 0:
-				s.commit()
-		s.commit()
+		if index % 50000 == 0:
+			s.commit()
+	s.commit()
 
 def attach_foreignkeys(xml_file):
 	s = Session()
@@ -91,6 +89,8 @@ def attach_foreignkeys(xml_file):
 
 
 if __name__=="__main__":
-	parse_xml_file(sys.argv[1])
-	attach_foreignkeys(sys.argv[1])
+	with open(sys.argv[1]) as f:
+		gen = islice(f, int(sys.argv[2]), int(sys.argv[3]))
+		parse_lines(gen)
+		attach_foreignkeys(sys.argv[1])
 
