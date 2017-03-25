@@ -3,6 +3,7 @@ import sys
 
 from lxml import etree
 from dateutil import parser
+from sqlalchemy.exc import IntegrityError
 
 from data import Users, Questions, Answers, Tags, Session
 
@@ -11,7 +12,6 @@ def get_tags(s, post_object):
 
 
 def parse_xml_file(xml_file, tags_file):
-	s = Session()
 	all_tags = set()
 	with open(xml_file,'r') as f:
 		for index, line in enumerate(f):
@@ -33,16 +33,20 @@ def parse_xml_file(xml_file, tags_file):
 
 
 def insert_tags(all_tags):
+	s = Session()
 	for tag in all_tags:
 		t = Tags(name=tag)
 		try:
 			s.add(t)
 			s.commit()
-		except:
+			print "Added:", tag
+		except IntegrityError as e:
+			s.rollback()
 			pass
 
 
 if __name__=="__main__":
-	tags = parse_xml_file(sys.argv[1], sys.argv[2])
-	insert_tags(tags)
+	#tags = parse_xml_file(sys.argv[1], sys.argv[2])
+	with open(sys.argv[2]) as f:
+		insert_tags([x.strip() for x in f])
 
