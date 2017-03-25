@@ -4,3 +4,6 @@ geopy
 geocoder
 sqlalchemy
 python-dateutil
+flask
+flask-sqlalchemy
+psycopg2
