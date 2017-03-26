@@ -81,11 +81,11 @@ def attach_foreignkeys(gen):
 				attach_question(s, post_object)
 			if post_object.get('PostTypeId') == "2":
 				attach_answer(s, post_object)
-		if index % 10000 == 0:
+		if index % 2000 == 0:
 			print index, "attached."
 			sys.stdout.flush()
 
-		if index % 100000 == 0:
+		if index % 50000 == 0:
 			s.commit()
 	s.commit()
 
