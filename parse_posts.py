@@ -39,8 +39,10 @@ def process_answers(s, post_object):
 def attach_question(s, post_object):
 	question = s.query(Questions).get(int(post_object["Id"]))
 	if "AcceptedAnswerId" in post_object:
-		question.accepted_answer_id = int(post_object["AcceptedAnswerId"])
-		s.add(question)
+		answer = s.query(Answers).get(int(post_object["AcceptedAnswerId"]))
+		if answer is not None:
+			question.accepted_answer_id = int(post_object["AcceptedAnswerId"])
+			s.add(question)
 
 def attach_answer(s, post_object):
 	answer = s.query(Answers).get(int(post_object["Id"]))
@@ -67,31 +69,30 @@ def parse_lines(gen):
 			s.commit()
 	s.commit()
 
-def attach_foreignkeys(xml_file):
+def attach_foreignkeys(gen):
 	s = Session()
-	with open(xml_file,'r') as f:
-		for index, line in enumerate(f):
-			line = line.strip()
-			if line.startswith("<row"):
-				node = etree.fromstring(line)
-				post_object = node.attrib
+	for index, line in enumerate(gen):
+		line = line.strip()
+		if line.startswith("<row"):
+			node = etree.fromstring(line)
+			post_object = node.attrib
 
-				if post_object.get('PostTypeId') == "1":
-					attach_question(s, post_object)
-				if post_object.get('PostTypeId') == "2":
-					attach_answer(s, post_object)
-			if index % 10000 == 0:
-				print index, "attached."
-				sys.stdout.flush()
+			if post_object.get('PostTypeId') == "1":
+				attach_question(s, post_object)
+			if post_object.get('PostTypeId') == "2":
+				attach_answer(s, post_object)
+		if index % 10000 == 0:
+			print index, "attached."
+			sys.stdout.flush()
 
-			if index % 100000 == 0:
-				s.commit()
-		s.commit()
+		if index % 100000 == 0:
+			s.commit()
+	s.commit()
 
 
 if __name__=="__main__":
 	with open(sys.argv[1]) as f:
 		gen = islice(f, int(sys.argv[2]), int(sys.argv[3]))
-		parse_lines(gen)
-		#attach_foreignkeys(sys.argv[1])
+		#parse_lines(gen)
+		attach_foreignkeys(gen)
 
