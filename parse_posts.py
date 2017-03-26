@@ -36,12 +36,12 @@ def process_answers(s, post_object):
 	answers = Answers(**params)
 	s.add(answers)
 
-def attach_question(s, post_object):
+def attach_question(s, post_object, all_answers):
 	question = s.query(Questions).get(int(post_object["Id"]))
 	if "AcceptedAnswerId" in post_object:
-		answer = s.query(Answers).get(int(post_object["AcceptedAnswerId"]))
-		if answer is not None:
-			question.accepted_answer_id = int(post_object["AcceptedAnswerId"])
+		val = int(post_object["AcceptedAnswerId"])
+		if val in all_answers:
+			question.accepted_answer_id = val
 			s.add(question)
 
 def attach_answer(s, post_object):
@@ -71,6 +71,9 @@ def parse_lines(gen):
 
 def attach_foreignkeys(gen):
 	s = Session()
+	all_answers = {x[0] for x in s.query(Answers.id).all()}
+	print "Answers loaded."
+
 	for index, line in enumerate(gen):
 		line = line.strip()
 		if line.startswith("<row"):
@@ -78,7 +81,7 @@ def attach_foreignkeys(gen):
 			post_object = node.attrib
 
 			if post_object.get('PostTypeId') == "1":
-				attach_question(s, post_object)
+				attach_question(s, post_object, all_answers)
 			if post_object.get('PostTypeId') == "2":
 				attach_answer(s, post_object)
 		if index % 2000 == 0:
