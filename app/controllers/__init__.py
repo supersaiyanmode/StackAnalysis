@@ -1,2 +1,2 @@
-from .static import static_handler
+from .static import root_handler
 

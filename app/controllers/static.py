@@ -4,7 +4,6 @@ from jinja2 import TemplateNotFound
 
 STATIC_PATH = "static"
 
-static_handler = Blueprint('static_files_handler', __name__, template_folder=STATIC_PATH)
 root_handler = Blueprint('root_handler', __name__)
 
 @root_handler.route('/')
