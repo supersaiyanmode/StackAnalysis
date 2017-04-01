@@ -1,6 +1,6 @@
 from operator import getitem
 
-def format_response(obj, *attrs, fn):
+def format_response(obj, fn, *attrs):
 	response = []
 	out_fields = [x[1] if isinstance(x, tuple) else x for x in attrs]
 	in_fields = [x[0] if isinstance(x, tuple) else x for x in attrs]
