@@ -1,9 +1,11 @@
+import json
+
 from flask.views import MethodView
 from flask import Blueprint
-from flask import jsonify
 from sqlalchemy import distinct
 
 from app.models.data import Location, Session  
+from app.utils import format_attrs
 
 location_handler = Blueprint('location_handler', __name__)
 
@@ -11,8 +13,9 @@ class CountryController(MethodView):
 	def get(self):
 		countries = Session.query(distinct(Location.country))\
 					.filter(Location.country != None)\
-					.all()		
-		return jsonify(countries=countries)
+					.all()
+		response = format_attrs(countries, ("country", "countries"))
+		return json.dumps(response)
 
 class StateController(MethodView):
 	def get(self, country):
@@ -20,7 +23,8 @@ class StateController(MethodView):
 					.filter(Location.country == country)\
 					.filter(Location.state != None)\
 					.all()
-		return jsonify(states=states)
+		response = format_attrs(countries, ("state", "states"))
+		return json.dumps(response)
 
 class CityController(MethodView):
 	def get(self, country, state):
@@ -29,7 +33,8 @@ class CityController(MethodView):
 					.filter(Location.state == state)\
 					.filter(Location.city != None)\
 					.all()
-		return jsonify(cities=cities)
+		response = format_attrs(countries, ("city", "cities"))
+		return json.dumps(response)
 
 location_handler.add_url_rule('/countries/',
 				view_func=CountryController.as_view('countries'))
