@@ -1,6 +1,7 @@
 from flask import Flask
 
 from controllers import root_handler
+from controllers import location_handler
 
 class Main(object):
 	def __init__(self, name=__name__):
@@ -8,6 +9,7 @@ class Main(object):
 
 	def register_modules(self):
 		self.app.register_blueprint(root_handler, url_prefix='')
+		self.app.register_blueprint(location_handler, url_prefix='')
 
 	def server_start(self):
 		self.app.run(host='0.0.0.0', threaded=True)
