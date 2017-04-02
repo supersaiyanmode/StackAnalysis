@@ -12,10 +12,4 @@ def hande_root():
 
 @root_handler.route('/main/')
 def hande_main():
-	try:
-		with open("static/index.html") as f:
-			return f.read()
-	except TemplateNotFound:
-		logger.error("Not able to find index.html page")
-		abort(404)
-
+	return send_from_directory(STATIC_PATH, 'index.html')

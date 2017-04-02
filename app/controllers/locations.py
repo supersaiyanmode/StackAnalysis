@@ -4,9 +4,9 @@ from flask.views import MethodView
 from flask import Blueprint
 from sqlalchemy import distinct
 
-from app.models.data import Location, Session
-from app.utils import format_attrs
-from app.core import register_queries, get_all_queries
+from models.data import Location, Session
+from utils import format_attrs
+from core import register_queries, get_all_queries
 
 
 class CountryController(MethodView):

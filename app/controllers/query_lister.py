@@ -3,9 +3,9 @@ import json
 from flask.views import MethodView
 from flask import Blueprint
 
-from app.models.data import Location, Session
-from app.utils import format_keys
-from app.core import get_all_queries
+from models.data import Location, Session
+from utils import format_keys
+from core import get_all_queries
 
 query_lister_handler = Blueprint('query_lister', __name__)
 
