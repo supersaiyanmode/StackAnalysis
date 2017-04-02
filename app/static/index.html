@@ -50,89 +50,24 @@
 			</div>
 			<!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
+				<div id="navbartemplate" style="display:none">
+					<li>
+						<a href="#" data-href="{{url}}"><i class="fa fa-fw fa-{{icon}}"><i>{{text}}</a>
+					</li>
+				</div>
 				<ul class="nav navbar-nav side-nav">
-					<li class="active">
-						<a href="/"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
-					</li>
-					<li>
-						<a href="/static/charts.html"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
-					</li>
-					<li>
-						<a href="/static/tables.html"><i class="fa fa-fw fa-table"></i> Tables</a>
-					</li>
-					<li>
-						<a href="/static/forms.html"><i class="fa fa-fw fa-edit"></i> Forms</a>
-					</li>
-					<li>
-						<a href="/static/bootstrap-elements.html"><i class="fa fa-fw fa-desktop"></i> Bootstrap Elements</a>
-					</li>
-					<li>
-						<a href="/static/bootstrap-grid.html"><i class="fa fa-fw fa-wrench"></i> Bootstrap Grid</a>
-					</li>
-					<li>
-						<a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Dropdown <i class="fa fa-fw fa-caret-down"></i></a>
-						<ul id="demo" class="collapse">
-							<li>
-								<a href="#">Dropdown Item</a>
-							</li>
-							<li>
-								<a href="#">Dropdown Item</a>
-							</li>
-						</ul>
-					</li>
-					<li>
-						<a href="/static/blank-page.html"><i class="fa fa-fw fa-file"></i> Blank Page</a>
-					</li>
-					<li>
-						<a href="/static/index-rtl.html"><i class="fa fa-fw fa-dashboard"></i> RTL Dashboard</a>
-					</li>
+                    <li>
+                        <a href="/static/charts.html"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
+                    </li>
+					<div style="text-align: center">
+						<i class="fa fa-circle-o-notch fa-spin" style="font-size: 32px"></i>
+					</div>
 				</ul>
 			</div>
 			<!-- /.navbar-collapse -->
 		</nav>
 
 		<div id="page-wrapper">
-
-			<div class="container-fluid" style="height:100%;">
-
-				<!-- Page Heading -->
-				<div class="row">
-					<div class="col-lg-12">
-						<h1 class="page-header">
-							Dashboard <small>Data Overview</small>
-						</h1>
-					</div>
-				</div>
-				<div style="display:none" class="template">
-					<div class="col-lg-3 col-md-6">
-						<div class="panel panel-{{color}}">
-							<div class="panel-heading">
-								<div class="row">
-									<div class="col-xs-3">
-										<i class="fa fa-{{icon}} fa-5x"></i>
-									</div>
-									<div class="col-xs-9 text-right">
-										<div class="huge">{{number}}</div>
-										<div>{{text}}</div>
-									</div>
-								</div>
-							</div>
-							<a href="#">
-								<div class="panel-footer">
-									<span class="pull-left">View Details</span>
-									<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-									<div class="clearfix"></div>
-								</div>
-							</a>
-						</div>
-					</div>
-				</div>
-				<div class="row dashboard-content">
-					<!-- JS inserts content. -->
-				</div>
-				<!-- /.row -->
-			</div>
-			<!-- /.container-fluid -->
 
 		</div>
 		<!-- /#page-wrapper -->
@@ -153,8 +88,7 @@
 	<!-- Mustache.js templating -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.1.3/mustache.js"></script>
 
-	<script src="/static/js/model.js"></script>
-	<script src="/static/js/dashboard.js"></script>
+	<script src="/static/js/main.js"></script>
 </body>
 
 </html>

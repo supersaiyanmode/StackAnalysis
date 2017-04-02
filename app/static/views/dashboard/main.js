@@ -1,3 +1,10 @@
+function getOverview(successFn, errorFn) {
+	$.ajax({
+		type: "GET",
+		url: "/overview/",
+	}).done(successFn).fail(errorFn);
+}
+
 function loadOverViewHTML() {
 	var htmlTemplate = $("#page-wrapper .template").html();
 	var output = $("#page-wrapper .dashboard-content");
@@ -31,7 +38,6 @@ function loadOverViewHTML() {
 function onload() {
 	loadOverViewHTML();
 }
-
 
 $(document).ready(onload);
 
