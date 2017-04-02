@@ -1,5 +1,3 @@
-import json
-
 from flask import Blueprint
 from flask.views import MethodView
 from flask import jsonify
@@ -24,7 +22,7 @@ class OverviewController(MethodView):
 			'answers':answers,
 			'locations':locations
 		}
-		return json.dumps(overview)
+		return jsonify(**overview)
 		
 overview_handler.add_url_rule('/overview/',
 	view_func=OverviewController.as_view('overview'))
