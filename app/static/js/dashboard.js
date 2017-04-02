@@ -5,7 +5,7 @@ function loadOverViewHTML() {
 		function success(obj) {
 			var arr = [
 				//key, DisplayName, color,
-				["questions", "Questions", "blue", "comments"],
+				["questions", "Questions", "blue", "question-circle"],
 				["answers", "Answers", "red", "comments"],
 				["users", "Users", "green", "user"],
 				["locations", "Locations", "grey", "map-marker"],
@@ -13,7 +13,7 @@ function loadOverViewHTML() {
 			];
 			var html = arr.map(function(x){
 				var params = {
-					number: obj[x[0]],
+					number: obj[x[0]].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"),
 					color: x[2],
 					text: x[1],
 					icon: x[3]
