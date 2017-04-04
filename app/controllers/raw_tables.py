@@ -51,7 +51,7 @@ class AnswersController(RawTableController):
 	table = Answers
 	input_fields = ['id', 'question_id', 'score', 'author_id']
 	output_fields = ['ID', 'Question ID', 'Score', 'Author ID']
-					
+
 raw_tables_handler = register_queries('RawTables', __name__,
 				('users', '/users/', UsersController),
 				('locations', '/locations/', LocationController),
