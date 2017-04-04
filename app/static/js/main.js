@@ -26,11 +26,15 @@ function loadNavigation() {
 	});
 	
 	$("ul.nav.navbar-nav.side-nav").on("click", "li a", function() {
+		$("ul.nav.navbar-nav.side-nav li.active").removeClass("active");
 		var view = $(this).data("view");
-		$("#page-wrapper").load("/static/views/" + view + "/page.html");
+		$(this).closest('li').addClass("active");
+		$.get("/static/views/" + view + "/page.html", function (data) {
+			$("#page-wrapper").html(data);
+		})
 	})
 	setTimeout(function() {
-		$("ul.nav.navbar-nav.side-nav li").addClass("active");
+		$("ul.nav.navbar-nav.side-nav li:first-child").addClass("active");
 		$("ul.nav.navbar-nav.side-nav li a")[0].click();
 	}, 10)
 }

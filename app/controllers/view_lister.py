@@ -12,6 +12,7 @@ view_lister_handler = Blueprint('view_lister', __name__)
 VIEWS = {
 	'data': [
 		("Dashboard", "dashboard", "dashboard"),
+		("Users", "users", "users"),
 		
 	]
 }
