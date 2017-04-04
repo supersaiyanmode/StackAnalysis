@@ -1,3 +1,12 @@
+/* Template Functions */
+
+function getTableHTML(params) {
+	var template = $("script#table-template").html();
+	return Mustache.render(template, params);
+}
+
+
+/* Nagivation relation stuff. */
 function getQueries(successFn, errorFn) {
 	$.ajax({
 		type: "GET",
@@ -40,3 +49,4 @@ function loadNavigation() {
 }
 
 $(document).ready(loadNavigation);
+
