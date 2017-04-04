@@ -8,7 +8,6 @@ from flask import jsonify
 
 from models.data import Session, Location, Tags, Users, Questions, Answers
 from utils import format_keys
-from core import register_queries
 
 raw_tables_handler = Blueprint('raw_tables_handler', __name__)
 
@@ -52,10 +51,19 @@ class AnswersController(RawTableController):
 	input_fields = ['id', 'question_id', 'score', 'author_id']
 	output_fields = ['ID', 'Question ID', 'Score', 'Author ID']
 
-raw_tables_handler = register_queries('RawTables', __name__,
-				('users', '/users/', UsersController),
-				('locations', '/locations/', LocationController),
-				('tags', '/tags/', TagsController),
-				('questions', '/questions/', QuestionsController),
-				('answers', '/answers/', AnswersController))
+				
+raw_tables_handler.add_url_rule( '/users/',
+	view_func=UsersController.as_view('users'))
+	
+raw_tables_handler.add_url_rule( '/locations/',
+	view_func=LocationController.as_view('locations'))
+	
+raw_tables_handler.add_url_rule( '/questions/',
+	view_func=QuestionsController.as_view('questions'))
+	
+raw_tables_handler.add_url_rule( '/answers/',
+	view_func=AnswersController.as_view('answers'))
+	
+raw_tables_handler.add_url_rule( '/tags/',
+	view_func=TagsController.as_view('tags'))
 

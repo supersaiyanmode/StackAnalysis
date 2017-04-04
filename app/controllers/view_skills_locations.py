@@ -8,7 +8,6 @@ from flask import jsonify
 
 from models.data import Session, Location, Tags
 from utils import format_keys
-from core import register_queries
 
 view_skills_locations_handler = Blueprint('tag_handler', __name__)
 
@@ -34,7 +33,7 @@ class ViewSkillsLocationsController(MethodView):
 
 view_skills_locations_handler.add_url_rule('/tags/',
 				view_func=ViewSkillsLocationsController.as_view('tags'))
-view_skills_locations_handler = register_queries(
-			'View_Skills_Locations_Handler', __name__,
-			('tags', '/view_skills_locations/', ViewSkillsLocationsController))
+
+view_skills_locations_handler.add_url_rule('/view_skills_locations/',
+				view_func=ViewSkillsLocationsController.as_view('view_skills_locations'))
 
