@@ -6,7 +6,7 @@ function getQueries(successFn, errorFn) {
 }
 
 function loadNavigation() {
-	var listItemTemplate = $("#navbartemplate").html();
+	var listItemTemplate = $("ul.nav.navbar-nav.side-nav").html();
 	var output = $("ul.nav.navbar-nav.side-nav");
 
 	var icons = {
@@ -24,7 +24,7 @@ function loadNavigation() {
 			};
 			return Mustache.render(listItemTemplate, params);
 		}).join("");
-		//output.html(html);
+		output.html(html);
 	}, function(obj) {
 		output.html("Unable to load data.");
 	});
