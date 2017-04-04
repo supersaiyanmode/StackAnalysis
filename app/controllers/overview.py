@@ -24,8 +24,10 @@ class OverviewController(MethodView):
 		}
 		return jsonify(**overview)
 		
-overview_handler.add_url_rule('/overview/',
-	view_func=OverviewController.as_view('overview'))
+overview_handler = register_queries(
+			'Overview_Handler', __name__,
+			('overview', '/overview/', OverviewController))
+
 
 		
 
