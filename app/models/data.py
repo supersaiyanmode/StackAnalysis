@@ -14,8 +14,8 @@ Base = declarative_base()
 
 
 poststags_table  = Table('poststags',Base.metadata,
-							Column('PostsId', Integer(), ForeignKey('questions.id')),
-							Column('TagsId', Integer(), ForeignKey('tags.id')))
+							Column('postsid', Integer(), ForeignKey('questions.id')),
+							Column('tagsid', Integer(), ForeignKey('tags.id')))
 
 
 class Questions(Base):
