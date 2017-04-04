@@ -18,7 +18,7 @@ class RawTableController(MethodView):
 		output_format = zip(range(len(columns)), self.output_fields)
 		objects = Session.query(*columns).limit(10)
 		response = format_keys(objects, *output_format)
-		return json.dumps(response)
+		return jsonify(**response)
 
 class UsersController(RawTableController):
 	table = Users
