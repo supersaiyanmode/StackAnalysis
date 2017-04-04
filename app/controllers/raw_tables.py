@@ -22,39 +22,40 @@ class RawTableController(MethodView):
 		return json.dumps(response)
 
 class UsersController(RawTableController):
-	 table = Users
-	 input_fields = ['id', 'reputation', 'location_id', 'views', 'upvotes',
-	 					'downvotes', 'age']
-	 output_fields = ['ID', 'Reputation', 'Location ID', 'Views', 'Upvotes',
-	 					'Downvotes', 'Age']
+	table = Users
+	input_fields = ['id', 'reputation', 'location_id', 'views', 'upvotes',
+						'downvotes', 'age']
+	output_fields = ['ID', 'Reputation', 'Location ID', 'Views', 'Upvotes',
+						'Downvotes', 'Age']
 
 class LocationController(RawTableController):
 	table = Location
 	input_fields = ['id', 'location', 'city', 'state', 'country', 'timezone']
-	out_fields = ['ID', 'Location', 'City', 'State', 'Country', 'Timezone']
+	output_fields = ['ID', 'Location', 'City', 'State', 'Country', 'Timezone']
 
 
 class TagsController(RawTableController):
 	table = Tags
 	input_fields = ['id', 'name']
-	out_fields = ['ID', 'Name']
+	output_fields = ['ID', 'Name']
 
 class QuestionsController(RawTableController):
 	table = Questions
 	input_fields = ['id', 'accepted_answer_id', 'score', 'author_id',
-					'creation_date', 'modified_date', 'answer_count']
-	out_fields = ['ID', 'Accepted Answer ID', 'Score', 'Author ID',
-					'Creation Date', 'Modified Date', 'Answer Count']
+					'answer_count']
+	output_fields = ['ID', 'Accepted Answer ID', 'Score', 'Author ID',
+					'Answer Count']
 
 
 class AnswersController(RawTableController):
 	table = Answers
-	input_fields = ['id', 'question_id', 'score', 'author_id', 'creation_date',
-					'modified_date']
-	out_fields = ['ID', 'Question ID', 'Score', 'Author ID', 'Creation Date',
-					'Modified Date']
-	
+	input_fields = ['id', 'question_id', 'score', 'author_id']
+	output_fields = ['ID', 'Question ID', 'Score', 'Author ID']
+					
+raw_tables_handler = register_queries('RawTables', __name__,
+				('users', '/users/', UsersController),
+				('locations', '/locations/', LocationController),
+				('tags', '/tags/', TagsController),
+				('questions', '/questions/', QuestionsController),
+				('answers', '/answers/', AnswersController))
 
-class PostsTagsController(RawTableController):
-	pass
-	
