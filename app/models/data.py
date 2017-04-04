@@ -1,8 +1,8 @@
 import os
 import sys
 
-from sqlalchemy import Column, ForeignKey, Integer, Float, String, DateTime
-from sqlalchemy import UniqueConstraint, Table
+from sqlalchemy import Column, ForeignKey, BigInteger, Integer, Float, String, DateTime
+from sqlalchemy import UniqueConstraint, PrimaryKeyConstraint, Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -76,26 +76,28 @@ class Users(Base):
 	questions = relationship('Questions', backref = 'users')
 	answers = relationship('Answers', backref = 'users')
 
-class View_answer_tags(Base):
+class ViewAnswerTags(Base):
 	__tablename__ = 'view_answer_tags_table'
 	
 	tag_id = Column(Integer)
 	tag_name = Column(String)
 	answer_id = Column(Integer)
 	answer_author_id = Column(Integer)
+	__table_args__ = (PrimaryKeyConstraint('tag_id', 'answer_id', name='view_answer_tags_pk'),)
 
-class View_answers_local_time(Base):
+class ViewAnswersLocalTime(Base):
 	__tablename__ = 'view_answers_local_time_table'
 
-	id = Column(Integer)
+	id = Column(Integer, primary_key=True)
 	question_id = Column(Integer)
 	score = Column(Integer)
 	author_id = Column(Integer)
 	creation_date = Column(DateTime)
 	modified_data = Column(DateTime)
 	local_creation_data = Column(DateTime)
+	__table_args__ = (PrimaryKeyConstraint('id', name='view_answers_local_time_table_pkey'),)
 
-class View_skills_locations(Base):
+class ViewSkillsLocations(Base):
 	__tablename__ = 'view_skills_locations_table'
 
 	city = Column(String)
@@ -103,14 +105,16 @@ class View_skills_locations(Base):
 	state = Column(String)
 	skill_id = Column(Integer)
 	total_score = Column(Float)
+	__table_args__ = (PrimaryKeyConstraint('city', 'state', 'country', name='view_skills_locations_pk'),)
 
-class View_user_skills(Base):
+class ViewUserSkills(Base):
 	__tablename__ = 'view_user_skills_table'
 
-	user_id = Column(Intger)
-	user_skill_id = Column(Intger)
-	answer_count = Column(BigIntger)
-	total_score = Column(BigIntger)
+	user_id = Column(Integer)
+	user_skill_id = Column(Integer)
+	answer_count = Column(BigInteger)
+	total_score = Column(BigInteger)
+	__table_args__ = (PrimaryKeyConstraint('user_id', 'user_skill_id', name='view_user_skills_pk'),)
 
 def get_sqlite3_session(path):
 	class ForeignKeysListener(PoolListener):
