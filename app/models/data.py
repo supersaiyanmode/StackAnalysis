@@ -76,7 +76,41 @@ class Users(Base):
 	questions = relationship('Questions', backref = 'users')
 	answers = relationship('Answers', backref = 'users')
 
+class View_answer_tags(Base):
+	__tablename__ = 'view_answer_tags_table'
+	
+	tag_id = Column(Integer)
+	tag_name = Column(String)
+	answer_id = Column(Integer)
+	answer_author_id = Column(Integer)
 
+class View_answers_local_time(Base):
+	__tablename__ = 'view_answers_local_time_table'
+
+	id = Column(Integer)
+	question_id = Column(Integer)
+	score = Column(Integer)
+	author_id = Column(Integer)
+	creation_date = Column(DateTime)
+	modified_data = Column(DateTime)
+	local_creation_data = Column(DateTime)
+
+class View_skills_locations(Base):
+	__tablename__ = 'view_skills_locations_table'
+
+	city = Column(String)
+	country = Column(String)
+	state = Column(String)
+	skill_id = Column(Integer)
+	total_score = Column(Float)
+
+class View_user_skills(Base):
+	__tablename__ = 'view_user_skills_table'
+
+	user_id = Column(Intger)
+	user_skill_id = Column(Intger)
+	answer_count = Column(BigIntger)
+	total_score = Column(BigIntger)
 
 def get_sqlite3_session(path):
 	class ForeignKeysListener(PoolListener):
