@@ -21,8 +21,8 @@ class RawTableController(MethodView):
 
 			args = zip(self.input_fields, self.output_fields)
 			kwargs = {
-				"preprocessors": getattr(self, "preprocessors", None),
-				"postprocessors": getattr(self, "postprocessors", None),
+				"preprocessors": getattr(self, "preprocessors", {}),
+				"postprocessors": getattr(self, "postprocessors",[]),
 			}
 			response = format_attrs(objects, *args, **kwargs)
 			return jsonify(**response)

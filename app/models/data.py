@@ -78,8 +78,6 @@ class Users(Base):
 	questions = relationship('Questions', backref = 'users')
 	answers = relationship('Answers', backref = 'users')
 
-
-
 class ViewAnswerTags(Base):
 	__tablename__ = 'view_answer_tags_table'
 
