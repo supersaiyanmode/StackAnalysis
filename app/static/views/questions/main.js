@@ -1,4 +1,4 @@
-function loadUsers(successFn, errorFn) {
+function loadQuestions(successFn, errorFn) {
 	$.ajax({
 		type: "GET",
 		url: "/questions/"
