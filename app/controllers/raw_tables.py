@@ -71,6 +71,10 @@ class QuestionsController(RawTableController):
 		"id": {
 			"type": "link_open",
 			"url": "//stackoverflow.com/questions/{{id}}",
+		},
+		"accepted_answer_id": {
+			"type": "link_open",
+			"url": "//stackoverflow.com/a/{{accepted_answer_id}}",
 		}
 	}
 
