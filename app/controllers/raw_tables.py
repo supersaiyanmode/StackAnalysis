@@ -63,9 +63,9 @@ class TagsController(RawTableController):
 
 class QuestionsController(RawTableController):
 	table = Questions
-	input_fields = ['id', 'accepted_answer_id', 'score', 'author_id',
+	input_fields = ['id', 'title', 'accepted_answer_id', 'score', 'author_id',
 					'answer_count']
-	output_fields = ['ID', 'Accepted Answer ID', 'Score', 'Author ID',
+	output_fields = ['ID', 'Title', 'Accepted Answer ID', 'Score', 'Author ID',
 					'Answer Count']
 	postprocessors = {
 		"id": {
