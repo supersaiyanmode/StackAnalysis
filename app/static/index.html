@@ -36,19 +36,29 @@
 		<table class="table table-bordered table-hover table-striped">
 			<thead>
 				<tr>
-					{{#fields}}
+					{{#each display}}
 					<th>{{.}}</th>
-					{{/fields}}
+					{{/each}}
 				</tr>
 			</thead>
 			<tbody>
-				{{#data}}
+				{{#each data}}
 				<tr>
-					{{#.}}
-					<td>{{.}}</td>
-					{{/.}}
+					{{#each .}}
+						{{#if ./type_text}}
+							<td>{{./value}}</td>
+						{{/if}}
+						{{#if ./type_link_replace}}
+							<td>
+							<a href="#" class="dyn-link-replace" 
+								data-href="{{./url}}" data-replace="{{./replace}}">
+							{{./value}}
+							</a>
+							</td>
+						{{/if}}
+					{{/each}}
 				</tr>
-				{{/data}}
+				{{/each}}
 			</tbody>
 		</table>
 	</script>
@@ -91,7 +101,7 @@
 	<!-- Morris Charts JavaScript -->
 	<script src="/static/js/plugins/morris/raphael.min.js"></script>
 	<script src="/static/js/plugins/morris/morris.min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.1.3/mustache.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.min.js"></script>
 
 	<script src="/static/js/main.js"></script>
 </body>
