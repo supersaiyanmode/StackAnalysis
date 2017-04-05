@@ -6,7 +6,7 @@ import sqlite3
 from sqlalchemy.sql import select,distinct
 from sqlalchemy import (update, insert, and_)
 import parser
-from data import Location, Session, Users
+from models.data import Location, Session, Users
 
 session = Session()
 
@@ -76,7 +76,28 @@ def parse_xml_file(xml_file):
 				print field_counter
 				user_object = {}
 
+def get_user_names(path):
+	user_obj = {}
+	with open(path, 'r') as f:
+		for line in f:
+			line= line.strip()
+			if line.startswith("<row"):
+				val = etree.fromstring(line)
+				key = val.attrib['Id']
+				if int(key)%1000==0:
+					print key
+				user_obj[key] = val.attrib['DisplayName']
+	with open(sys.argv[2], 'w') as o:
+		for item in user_obj:
+			if int(item)%1000==0:
+				print item
+			encoded_val = user_obj[item].replace("'","''").encode('utf-8')
+			sql_str = "update users set name = '"+ encoded_val +"' where id = "+item+";\n"
+			o.write(sql_str)
+	return "success"
+
 if __name__=="__main__":
+	print get_user_names(sys.argv[1])
 	#print insert_locations()
 	#print process_location_file(sys.argv[2])
-	print insert_processed_locations(sys.argv[2])
+	#print insert_processed_locations(sys.argv[2])
