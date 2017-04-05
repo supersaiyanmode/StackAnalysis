@@ -44,6 +44,10 @@ class UsersController(RawTableController):
 			"type": "link_replace",
 			"url": "/locations/{{location_id}}/",
 			"replace": "{{city}}, {{state}}, {{country}}",
+		},
+		"name": {
+			"type": "link_open",
+			"url": "//stackoverflow.com/users/{{id}}",
 		}
 	}
 
