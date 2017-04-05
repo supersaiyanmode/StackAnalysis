@@ -14,7 +14,6 @@ VIEWS = {
 		("Dashboard", "dashboard", "dashboard"),
 		("Users", "users", "users"),
 		("Questions", "questions", "question-circle"),
-		
 	]
 }
 
