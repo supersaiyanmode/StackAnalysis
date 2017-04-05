@@ -24,6 +24,13 @@ function getTableHTML(tableData) {
 						value: cell
 					};
 					return result;
+				} else if (colPostProc.type == "link_open") {
+					var result = {
+						type_link_open: "link_open",
+						url: Handlebars.compile(colPostProc.url)(curObj),
+						value: cell
+					};
+					return result;
 				}
 			});
 		})
@@ -47,6 +54,7 @@ function loadTable(selector, tableData) {
 			//nothing.
 		});
 	});
+
 	$(selector).html(html);
 }
 

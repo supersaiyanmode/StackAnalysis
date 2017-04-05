@@ -56,6 +56,13 @@
 							</a>
 							</td>
 						{{/if}}
+						{{#if ./type_link_open}}
+							<td>
+							<a target="_blank" href="{{./url}}">
+							{{./value}}
+							</a>
+							</td>
+						{{/if}}
 					{{/each}}
 				</tr>
 				{{/each}}

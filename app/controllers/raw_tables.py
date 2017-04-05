@@ -35,15 +35,19 @@ class RawTableController(MethodView):
 
 class UsersController(RawTableController):
 	table = Users
-	input_fields = ['id', 'reputation', 'location_id', 'views', 'upvotes',
+	input_fields = ['id', 'name', 'reputation', 'location_id', 'views', 'upvotes',
 						'downvotes', 'age']
-	output_fields = ['ID', 'Reputation', 'Location ID', 'Views', 'Upvotes',
+	output_fields = ['ID', 'Name', 'Reputation', 'Location ID', 'Views', 'Upvotes',
 						'Downvotes', 'Age']
 	postprocessors = {
 		"location_id": {
 			"type": "link_replace",
 			"url": "/locations/{{location_id}}/",
 			"replace": "{{city}}, {{state}}, {{country}}",
+		},
+		"name": {
+			"type": "link_open",
+			"url": "//stackoverflow.com/users/{{id}}",
 		}
 	}
 
