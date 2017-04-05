@@ -67,7 +67,12 @@ class QuestionsController(RawTableController):
 					'answer_count']
 	output_fields = ['ID', 'Accepted Answer ID', 'Score', 'Author ID',
 					'Answer Count']
-
+	postprocessors = {
+		"id": {
+			"type": "link_open",
+			"url": "//stackoverflow.com/questions/{{id}}",
+		}
+	}
 
 class AnswersController(RawTableController):
 	table = Answers
