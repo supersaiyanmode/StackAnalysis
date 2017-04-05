@@ -116,8 +116,8 @@ class ViewUserSkills(Base):
 
 	user_id = Column(Integer)
 	user_skill_id = Column(Integer)
-	answer_count = Column(BigInteger)
-	total_score = Column(BigInteger)
+	answer_count = Column(Integer)
+	total_score = Column(Integer)
 	__table_args__ = (PrimaryKeyConstraint('user_id', 'user_skill_id', name='view_user_skills_pk'),)
 
 def get_sqlite3_session(path):
