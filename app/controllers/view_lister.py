@@ -13,7 +13,7 @@ VIEWS = {
 	'data': [
 		("Dashboard", "dashboard", "dashboard"),
 		("Users", "users", "users"),
-		("Questions", "questions", "questions"),
+		("Questions", "questions", "question-circle"),
 		
 	]
 }
