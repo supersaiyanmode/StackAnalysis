@@ -2,78 +2,107 @@
 <html lang="en">
 
 <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+	<title>Stackoverflow Analysis</title>
 
-    <title>Stackoverflow Analysis</title>
+	<!-- Bootstrap Core CSS -->
+	<link href="/static/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Bootstrap Core CSS -->
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Custom CSS -->
+	<link href="/static/css/sb-admin.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link href="/static/css/sb-admin.css" rel="stylesheet">
+	<!-- Morris Charts CSS -->
+	<link href="/static/css/plugins/morris.css" rel="stylesheet">
 
-    <!-- Morris Charts CSS -->
-    <link href="/static/css/plugins/morris.css" rel="stylesheet">
+	<!-- Custom Fonts -->
+	<link href="/static/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
-    <!-- Custom Fonts -->
-    <link href="/static/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
 
 </head>
 
 <body>
+	<script id="table-template" type="text/template">
+		<table class="table table-bordered table-hover table-striped">
+			<thead>
+				<tr>
+					{{#each display}}
+					<th>{{.}}</th>
+					{{/each}}
+				</tr>
+			</thead>
+			<tbody>
+				{{#each data}}
+				<tr>
+					{{#each .}}
+						{{#if ./type_text}}
+							<td>{{./value}}</td>
+						{{/if}}
+						{{#if ./type_link_replace}}
+							<td>
+							<a href="#" class="dyn-link-replace" 
+								data-href="{{./url}}" data-replace="{{./replace}}">
+							{{./value}}
+							</a>
+							</td>
+						{{/if}}
+					{{/each}}
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</script>
+	<div id="wrapper">
 
-    <div id="wrapper">
+		<!-- Navigation -->
+		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/">Stackoverflow Analysis</a>
+			</div>
+			<!-- Top Menu Items -->
 
-        <!-- Navigation -->
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/">Stackoverflow Analysis</a>
-            </div>
-            <!-- Top Menu Items -->
-
-            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
-            <div class="collapse navbar-collapse navbar-ex1-collapse">
-                <ul class="nav navbar-nav side-nav">
-                    <li>
+			<!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+				<ul class="nav navbar-nav side-nav">
+					<li>
 						<a href="#" data-view="{{view}}"><i class="fa fa-fw fa-{{icon}}"></i>{{text}}</a>
 					</li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </nav>
+				</ul>
+			</div>
+			<!-- /.navbar-collapse -->
+		</nav>
 		<div id="page-wrapper">
 		</div>
-    </div>    <!-- /#wrapper -->
+	</div>	<!-- /#wrapper -->
 
-    <!-- jQuery -->
-    <script src="/static/js/jquery.js"></script>
+	<!-- jQuery -->
+	<script src="/static/js/jquery.js"></script>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="/static/js/bootstrap.min.js"></script>
+	<!-- Bootstrap Core JavaScript -->
+	<script src="/static/js/bootstrap.min.js"></script>
 
-    <!-- Morris Charts JavaScript -->
-    <script src="/static/js/plugins/morris/raphael.min.js"></script>
-    <script src="/static/js/plugins/morris/morris.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.1.3/mustache.js"></script>
+	<!-- Morris Charts JavaScript -->
+	<script src="/static/js/plugins/morris/raphael.min.js"></script>
+	<script src="/static/js/plugins/morris/morris.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.min.js"></script>
+
 	<script src="/static/js/main.js"></script>
 </body>
 

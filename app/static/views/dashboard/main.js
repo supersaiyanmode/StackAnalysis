@@ -25,7 +25,7 @@ function loadOverViewHTML() {
 					text: x[1],
 					icon: x[3]
 				}
-				return Mustache.render(htmlTemplate, params);
+				return Handlebars.compile(htmlTemplate)(params);
 			}).join('');
 			output.html(html);
 		},
