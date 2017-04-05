@@ -8,8 +8,7 @@ function loadUsers(successFn, errorFn) {
 function usersInit() {
 	var divSelector = "div.container-fluid div.table-row div.row";
 	loadUsers(function(data) {
-		var html = getTableHTML(data);
-		$(divSelector).html(html);
+		loadTable(divSelector, data);
 	}, function(data) {
 		$(divSelector).html("Unable to load data.");
 	});
