@@ -15,7 +15,7 @@ function loadTablePage(num) {
 }
 
 function loadPage(event, num) {
-	loadTable(num);
+	loadTablePage(num);
 }
 
 function tagsInit() {
