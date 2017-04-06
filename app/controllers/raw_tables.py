@@ -16,9 +16,10 @@ raw_tables_handler = Blueprint('raw_tables_handler', __name__)
 class RawTableController(MethodView):
 	def get(self, id=None):
 		if id is None:
+			page_size = 10
 			columns = [getattr(self.table, x) for x in self.input_fields]
-			objects = Session.query(*columns).limit(10)
-			objects = Paginator(10).paginate(objects)
+			base_query = Session.query(*columns)
+			objects = Paginator(page_size).paginate(base_query)
 
 			args = zip(self.input_fields, self.output_fields)
 			kwargs = {
@@ -26,6 +27,10 @@ class RawTableController(MethodView):
 				"postprocessors": getattr(self, "postprocessors",[]),
 			}
 			response = format_attrs(objects, *args, **kwargs)
+			response['meta'] = {
+				'rows': base_query.count(),
+				'page_size': page_size
+			}
 			return jsonify(**response)
 		else:
 			obj = Session.query(self.table).get(int(id))
