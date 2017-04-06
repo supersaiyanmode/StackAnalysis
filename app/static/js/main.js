@@ -58,10 +58,73 @@ function loadTable(selector, tableData) {
 	$(selector).html(html);
 }
 
+/* Pagination related stuff. */
 
 function loadPagination(selector, params, func) {
 	$(selector).bootpag(params).on("page", func);
 }
+
+
+/* Filter Query related stuff. */
+function addRowFilterQuery(selector, params) {
+	var templateRow = $("#filter-table-row-template").html();
+	var html = Handlebars.compile(templateRow)(params);
+	var rowNode = $.parseHTML(html);
+	
+	$(selector + " table tbody").append(rowNode);
+}
+
+function loadFilterQuery(selector, params, func) {
+	var templateTable = $("#filter-table-template").html();
+	var tableParams = {
+		filterJSON: JSON.stringify(params.filter)
+	};
+
+	var html = Handlebars.compile(templateTable)(tableParams);
+	var tableNode = $.parseHTML(html);
+	$(selector).append(tableNode);
+
+	addRowFilterQuery(selector, params);
+	
+	$(selector).on("click", "button.query-filter-add", function() {
+		addRowFilterQuery(selector, params);
+	});
+	
+	$(selector).on("click", "button.query-filter-go", function() {
+		var obj = $(selector + " tbody tr").map(function() {
+			var colSel = $(this).find(".query-filter-column-select option:selected");
+			var opSel = $(this).find(".query-filter-op-select option:selected");
+			var inp = $(this).find("input[name=operand]");
+			return {
+				col: colSel.attr("value"),
+				op: opSel.attr("value"),
+				val: inp.val()
+			};
+		}).get();
+		func(obj);
+	});
+	
+	$(selector).on("change", "select.query-filter-column-select", function() {
+		var table = $(this).closest('table');
+		var filt = table.data("ops");
+		var curId = $(this).find("option:selected").attr('value');
+		var curCol = filt.filter(function (x) { return x.id == curId; });
+		if (curCol.length == 0)
+			return;
+
+		var curCol = curCol[0];
+		var opsSelect = table.find(".query-filter-op-select");
+		opsSelect.html("");
+		opsSelect.prop("disabled", false);
+		curCol.valid_ops.forEach(function(x) {
+			opsSelect.append($('<option>', { 
+				value: x.id,
+				text : x.text 
+			}));
+		});
+	});
+}
+
 
 /* Nagivation relation stuff. */
 function getQueries(successFn, errorFn) {
