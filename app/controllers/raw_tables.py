@@ -6,8 +6,9 @@ from flask import Blueprint
 from flask.views import MethodView
 from flask import jsonify
 from flask import abort
+from flask_sqlalchemy_session import current_session as session
 
-from models.data import Session, Location, Tags, Users, Questions, Answers
+from models.data import Location, Tags, Users, Questions, Answers
 from utils import format_attrs, Paginator
 
 raw_tables_handler = Blueprint('raw_tables_handler', __name__)
@@ -18,7 +19,7 @@ class RawTableController(MethodView):
 		if id is None:
 			page_size = 10
 			columns = [getattr(self.table, x) for x in self.input_fields]
-			base_query = Session.query(*columns)
+			base_query = session.query(*columns)
 			objects = Paginator(page_size).paginate(base_query)
 
 			args = zip(self.input_fields, self.output_fields)
@@ -33,7 +34,7 @@ class RawTableController(MethodView):
 			}
 			return jsonify(**response)
 		else:
-			obj = Session.query(self.table).get(int(id))
+			obj = session.query(self.table).get(int(id))
 			if obj is not None:
 				return jsonify(**{x: getattr(obj, x) for x in self.input_fields})
 			else:

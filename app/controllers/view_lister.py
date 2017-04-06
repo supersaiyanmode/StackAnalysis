@@ -4,7 +4,7 @@ from flask.views import MethodView
 from flask import Blueprint
 from flask import jsonify
 
-from models.data import Location, Session
+from models.data import Location
 from utils import format_keys
 
 view_lister_handler = Blueprint('view_lister', __name__)

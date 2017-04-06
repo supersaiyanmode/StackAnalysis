@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_sqlalchemy_session import flask_scoped_session
 
 from controllers import root_handler
 from controllers import location_handler
@@ -7,10 +8,12 @@ from controllers import overview_handler
 from controllers import raw_tables_handler
 from controllers import view_lister_handler
 
+from models.data import session_factory
 
 class Main(object):
 	def __init__(self, name=__name__):
 		self.app = Flask(name)
+		self.session = flask_scoped_session(session_factory, self.app)
 
 	def register_modules(self):
 		self.app.register_blueprint(root_handler, url_prefix='')

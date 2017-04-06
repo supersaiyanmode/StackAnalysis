@@ -1,19 +1,20 @@
 from flask import Blueprint
 from flask.views import MethodView
 from flask import jsonify
+from flask_sqlalchemy_session import flask_scoped_session as session
 
-from models.data import Session, Location, Tags, Questions, Answers, Users
+from models.data import Location, Tags, Questions, Answers, Users
 from utils import format_keys
 
 overview_handler = Blueprint('overview_handler', __name__)
 
 class OverviewController(MethodView):
 	def get(self):
-		users = Session.query(Users.id).count()
-		tags = Session.query(Tags.id).count()
-		questions = Session.query(Questions.id).count()
-		answers = Session.query(Answers.id).count()
-		locations = Session.query(Location.id).count()
+		users = session.query(Users.id).count()
+		tags = session.query(Tags.id).count()
+		questions = session.query(Questions.id).count()
+		answers = session.query(Answers.id).count()
+		locations = session.query(Location.id).count()
 		overview = {"data": [
 			{
 				"id": "questions",
@@ -57,7 +58,4 @@ class OverviewController(MethodView):
 		
 overview_handler.add_url_rule('/overview/',
 	view_func=OverviewController.as_view('overview'))
-
-
-		
 

@@ -7,3 +7,4 @@ python-dateutil
 flask
 flask-sqlalchemy
 psycopg2
+Flask-SQLAlchemy-Session
