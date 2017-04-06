@@ -20,7 +20,12 @@ function loadTablePage(num) {
 }
 
 function loadPage(event, num) {
-	loadTablePage(num);
+	var divSelector = "div.container-fluid div.table-row div.row";
+	loadUsers(num, function(data) {
+		loadTable(divSelector, data);
+	}, function(data) {
+		$(divSelector).html("Unable to load data.");
+	});
 }
 
 function usersInit() {
