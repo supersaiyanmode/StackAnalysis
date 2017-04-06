@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask.views import MethodView
 from flask import jsonify
-from flask_sqlalchemy_session import flask_scoped_session as session
+from flask_sqlalchemy_session import current_session as session
 
 from models.data import Location, Tags, Questions, Answers, Users
 from utils import format_keys
@@ -55,7 +55,7 @@ class OverviewController(MethodView):
 		obj = jsonify(**overview)
 		obj.headers["cache-control"] = "max-age=86400"
 		return obj
-		
+
 overview_handler.add_url_rule('/overview/',
 	view_func=OverviewController.as_view('overview'))
 

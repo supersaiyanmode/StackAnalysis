@@ -5,7 +5,7 @@ import json
 from flask import Blueprint
 from flask.views import MethodView
 from flask import jsonify
-from flask_sqlalchemy_session import flask_scoped_session as session
+from flask_sqlalchemy_session import current_session as session
 
 from models.data import Location, Tags
 from utils import format_keys
