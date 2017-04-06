@@ -17,8 +17,8 @@ class RawTableController(MethodView):
 	def get(self, id=None):
 		if id is None:
 			columns = [getattr(self.table, x) for x in self.input_fields]
-			objects = Session.query(*columns).limit(10)
-			objects = Paginator(10).paginate(objects)
+			base_query = Session.query(*columns)
+			objects = Paginator(10).paginate(base_query)
 
 			args = zip(self.input_fields, self.output_fields)
 			kwargs = {
@@ -26,6 +26,7 @@ class RawTableController(MethodView):
 				"postprocessors": getattr(self, "postprocessors",[]),
 			}
 			response = format_attrs(objects, *args, **kwargs)
+			response['meta'] = {'rows': base_query.count()}
 			return jsonify(**response)
 		else:
 			obj = Session.query(self.table).get(int(id))
