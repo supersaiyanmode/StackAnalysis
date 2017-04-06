@@ -86,7 +86,21 @@ class AnswersController(RawTableController):
 	table = Answers
 	input_fields = ['id', 'question_id', 'score', 'author_id']
 	output_fields = ['ID', 'Question ID', 'Score', 'Author ID']
-
+	postprocessors = {
+		"author_id": {
+			"type": "link_open",
+			"url": "//stackoverflow.com/users/{{author_id}}",
+		},
+		"question_id": {
+			"type": "link_replace",
+			"url": "/questions/{{question_id}}/",
+			"replace": "{{title}}",
+		},
+		"id": {
+			"type": "link_open",
+			"url": "//stackoverflow.com/a/{{id}}",
+		},
+	}
 
 raw_tables_handler.add_url_rule( '/users/<int:id>/',
 	view_func=UsersController.as_view('users_id'))
