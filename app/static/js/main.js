@@ -59,6 +59,10 @@ function loadTable(selector, tableData) {
 }
 
 
+function loadPagination(selector, params, func) {
+	$(selector).bootpag(params).on("page", func);
+}
+
 /* Nagivation relation stuff. */
 function getQueries(successFn, errorFn) {
 	$.ajax({
@@ -106,4 +110,5 @@ function loadNavigation() {
 }
 
 $(document).ready(loadNavigation);
+
 
