@@ -14,13 +14,43 @@ class OverviewController(MethodView):
 		questions = Session.query(Questions.id).count()
 		answers = Session.query(Answers.id).count()
 		locations = Session.query(Location.id).count()
-		overview = {
-			'users':users,
-			'tags':tags,
-			'questions':questions,
-			'answers':answers,
-			'locations':locations
-		}
+		overview = {"data": [
+			{
+				"id": "questions",
+				"text": "Questions",
+				"color": "blue",
+				"icon": "question-circle",
+				"number": questions,
+			},
+			{
+				"id": "answers",
+				"text": "Answers",
+				"color": "red",
+				"icon": "comments",
+				"number": answers,
+			},
+			{
+				"id": "users",
+				"text": "Users",
+				"color": "green",
+				"icon": "user",
+				"number": users,
+			},
+			{
+				"id": "locations",
+				"text": "Locations",
+				"color": "grey",
+				"icon": "map-marker",
+				"number": locations,
+			},
+			{
+				"id": "tags",
+				"text": "Tags",
+				"color": "yellow",
+				"icon": "tag",
+				"number": tags,
+			}
+		]}
 		return jsonify(**overview)
 		
 overview_handler.add_url_rule('/overview/',
