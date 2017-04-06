@@ -51,7 +51,9 @@ class OverviewController(MethodView):
 				"number": tags,
 			}
 		]}
-		return jsonify(**overview)
+		obj = jsonify(**overview)
+		obj.headers["cache-control"] = "max-age=86400"
+		return obj
 		
 overview_handler.add_url_rule('/overview/',
 	view_func=OverviewController.as_view('overview'))
