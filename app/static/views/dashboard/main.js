@@ -10,22 +10,9 @@ function loadOverViewHTML() {
 	var output = $("#page-wrapper .dashboard-content");
 	getOverview(
 		function success(obj) {
-			var arr = [
-				//key, DisplayName, color,
-				["questions", "Questions", "blue", "question-circle"],
-				["answers", "Answers", "red", "comments"],
-				["users", "Users", "green", "user"],
-				["locations", "Locations", "grey", "map-marker"],
-				["tags", "Tags", "yellow", "tag"]
-			];
-			var html = arr.map(function(x){
-				var params = {
-					number: obj[x[0]].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"),
-					color: x[2],
-					text: x[1],
-					icon: x[3]
-				}
-				return Handlebars.compile(htmlTemplate)(params);
+			var html = obj.data.map(function(x){
+				x.number = x.number.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+				return Handlebars.compile(htmlTemplate)(x);
 			}).join('');
 			output.html(html);
 		},
@@ -33,6 +20,11 @@ function loadOverViewHTML() {
 			output.html("Unable to load data.");
 		}
 	);
+
+	$("#page-wrapper .dashboard-content").on("click", "a", function() {
+		var view = $(this).data('view');
+		setCentralView(view);
+	});
 }
 
 function onload() {
