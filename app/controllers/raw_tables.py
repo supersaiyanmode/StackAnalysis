@@ -9,7 +9,7 @@ from flask import abort
 from flask_sqlalchemy_session import current_session as session
 
 from models.data import Location, Tags, Users, Questions, Answers
-from utils import format_attrs, Paginator
+from utils import format_attrs, Paginator, QueryFilter
 
 raw_tables_handler = Blueprint('raw_tables_handler', __name__)
 
@@ -20,7 +20,9 @@ class RawTableController(MethodView):
 			page_size = 10
 			columns = [getattr(self.table, x) for x in self.input_fields]
 			base_query = session.query(*columns)
-			objects = Paginator(page_size).paginate(base_query)
+			query_filter = QueryFilter(base_query)
+			filtered_query = query_filter.filter()
+			objects = Paginator(page_size).paginate(filtered_query)
 
 			args = zip(self.input_fields, self.output_fields)
 			kwargs = {
@@ -32,6 +34,7 @@ class RawTableController(MethodView):
 				'rows': base_query.count(),
 				'page_size': page_size
 			}
+			response['filter'] = query_filter.filter_data()
 			return jsonify(**response)
 		else:
 			obj = session.query(self.table).get(int(id))
