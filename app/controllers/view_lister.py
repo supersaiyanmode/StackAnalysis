@@ -16,6 +16,7 @@ VIEWS = {
 		("Questions", "questions", "question-circle"),
 		("Answers", "answers", "comments"),
 		("Locations", "locations", "map-marker"),
+		("Tags", "tags", "tags"),
 	]
 }
 
