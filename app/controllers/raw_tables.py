@@ -55,6 +55,20 @@ class LocationController(RawTableController):
 	table = Location
 	input_fields = ['id', 'location', 'city', 'state', 'country', 'timezone']
 	output_fields = ['ID', 'Location', 'City', 'State', 'Country', 'Timezone']
+	postprocessors = {
+		"city": {
+			"type": "link_open",
+			"url": "//maps.google.com/maps/place/{{city}},{{state}},{{country}}",
+		},
+		"state": {
+			"type": "link_open",
+			"url": "//maps.google.com/maps/place/{{state}},{{country}}",
+		},
+		"country": {
+			"type": "link_open",
+			"url": "//maps.google.com/maps/place/{{country}}",
+		}
+	}
 
 class TagsController(RawTableController):
 	table = Tags
