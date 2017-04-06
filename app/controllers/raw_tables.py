@@ -74,7 +74,12 @@ class TagsController(RawTableController):
 	table = Tags
 	input_fields = ['id', 'name']
 	output_fields = ['ID', 'Name']
-
+	postprocessors = {
+		"name": {
+			"type": "link_open",
+			"url": "//stackoverflow.com/questions/tagged/{{name}}",
+		},
+	}
 class QuestionsController(RawTableController):
 	table = Questions
 	input_fields = ['id', 'title', 'accepted_answer_id', 'score', 'author_id',
