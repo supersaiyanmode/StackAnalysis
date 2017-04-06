@@ -15,7 +15,7 @@ class ViewSkillsLocationsController(MethodView):
 	def get(self):
 		view_skill_rows = []
 		tag_dict = self.tags_dict()
-		path = "./data/view_skills_locations.csv"
+		path = "../data/view_skills_locations.csv"
 		with open(path , "rb") as f:
 			fl = csv.reader(f)
 			for row in fl:
@@ -30,9 +30,6 @@ class ViewSkillsLocationsController(MethodView):
 	def tags_dict(self):
 		return {r.id: r.name for r in  Session.query(Tags.id, Tags.name).all()}
 
-
-view_skills_locations_handler.add_url_rule('/tags/',
-				view_func=ViewSkillsLocationsController.as_view('tags'))
 
 view_skills_locations_handler.add_url_rule('/view_skills_locations/',
 				view_func=ViewSkillsLocationsController.as_view('view_skills_locations'))
