@@ -5,8 +5,9 @@ import json
 from flask import Blueprint
 from flask.views import MethodView
 from flask import jsonify
+from flask_sqlalchemy_session import flask_scoped_session as session
 
-from models.data import Session, Location, Tags
+from models.data import Location, Tags
 from utils import format_keys
 
 view_skills_locations_handler = Blueprint('tag_handler', __name__)
@@ -28,7 +29,7 @@ class ViewSkillsLocationsController(MethodView):
 
 
 	def tags_dict(self):
-		return {r.id: r.name for r in  Session.query(Tags.id, Tags.name).all()}
+		return {r.id: r.name for r in  session.query(Tags.id, Tags.name).all()}
 
 
 view_skills_locations_handler.add_url_rule('/view_skills_locations/',

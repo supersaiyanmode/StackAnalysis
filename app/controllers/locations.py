@@ -2,16 +2,17 @@ import json
 
 from flask.views import MethodView
 from flask import Blueprint
+from flask_sqlalchemy_session import flask_scoped_session as session
 from sqlalchemy import distinct
 
-from models.data import Location, Session
+from models.data import Location
 from utils import format_attrs
 
 location_handler = Blueprint('location_handler', __name__)
 
 class CountryController(MethodView):
 	def get(self):
-		countries = Session.query(distinct(Location.country).label('country'))\
+		countries = session.query(distinct(Location.country).label('country'))\
 					.filter(Location.country != None)\
 					.all()
 		response = format_attrs(countries, ("country", "countries"))
@@ -19,7 +20,7 @@ class CountryController(MethodView):
 
 class StateController(MethodView):
 	def get(self, country):
-		states = Session.query(distinct(Location.state).label('state'))\
+		states = session.query(distinct(Location.state).label('state'))\
 					.filter(Location.country == country)\
 					.filter(Location.state != None)\
 					.all()
@@ -28,7 +29,7 @@ class StateController(MethodView):
 
 class CityController(MethodView):
 	def get(self, country, state):
-		cities = Session.query(distinct(Location.city).label('city'))\
+		cities = session.query(distinct(Location.city).label('city'))\
 					.filter(Location.country == country)\
 					.filter(Location.state == state)\
 					.filter(Location.city != None)\
