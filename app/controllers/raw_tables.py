@@ -43,7 +43,7 @@ class UsersController(RawTableController):
 		"location_id": {
 			"type": "link_replace",
 			"url": "/locations/{{location_id}}/",
-			"replace": "{{city}}, {{state}}, {{country}}",
+			"replace": "{{id}} ({{city}}, {{state}}, {{country}})",
 		},
 		"name": {
 			"type": "link_open",
