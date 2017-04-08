@@ -94,11 +94,12 @@ function makeTable(params) {
 			$(tableSelector).html(getTableHTML(tableData));
 			if (tableLoaded == false) {
 				attachTableContentEvents();
-				loadPagination(tableData);
 				loadFilterQueryView(tableData);
 				attachTableQueryFilterEvents(tableData);
 				tableLoaded = true;
 			}
+			$(paginationSelector).unbind('page');
+			loadPagination(tableData);
 		}, function() {
 			$(tableSelector).html("Failed to load data.");
 		});
@@ -121,15 +122,15 @@ function makeTable(params) {
 		var templateRow = $("#filter-table-row-template").html();
 		var html = Handlebars.compile(templateRow)(tableData);
 		var rowNode = $.parseHTML(html);
-		$(selector + " table tbody").append(rowNode);
+		$(queryFilterSelector + " table tbody").append(rowNode);
 	}
 
 	function attachTableQueryFilterEvents(tableData) {
-		$("#wrapper").on("click", "button.query-filter-add", function() {
+		$(queryFilterSelector).on("click", "button.query-filter-add", function() {
 			addRowFilterQuery(tableSelector, tableData);
 		});
 	
-		$("#wrapper").on("click", "button.query-filter-go", function() {
+		$(queryFilterSelector).on("click", "button.query-filter-go", function() {
 			var obj = $(queryFilterSelector + " tbody tr").map(function() {
 				var colSel = $(this).find(".query-filter-column-select option:selected");
 				var opSel = $(this).find(".query-filter-op-select option:selected");
@@ -140,19 +141,21 @@ function makeTable(params) {
 					val: inp.val()
 				};
 			}).get();
-			renderTableWithParams(0, obj);
+			tableFilterData = obj; //global variable update.
+			renderTableWithParams(0, tableFilterData);
 		});
 	
-		$("#wrapper").on("change", "select.query-filter-column-select", function() {
+		$(queryFilterSelector).on("change", "select.query-filter-column-select", function() {
 			var table = $(this).closest('table');
 			var filt = table.data("ops");
+			var row = $(this).closest('tr');
 			var curId = $(this).find("option:selected").attr('value');
 			var curCol = filt.filter(function (x) { return x.id == curId; });
 			if (curCol.length == 0)
-				return;tableObj = makeTable(params);
+				return;
 
 			var curCol = curCol[0];
-			var opsSelect = table.find(".query-filter-op-select");
+			var opsSelect = row.find(".query-filter-op-select");
 			opsSelect.html("");
 			opsSelect.prop("disabled", false);
 			curCol.valid_ops.forEach(function(x) {
