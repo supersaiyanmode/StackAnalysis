@@ -83,8 +83,9 @@ class QueryFilter(object):
 			Integer: [
 				{"id": "__eq__", "text": "Equals"},
 				{"id": "__lt__", "text": "Less Than"},
-				{"id": "__lte__", "text": "Less Than or Equal To"},
-				{"id": "__gte__", "text": "Greater Than or Equal To"},
+				{"id": "__le__", "text": "Less Than or Equal To"},
+				{"id": "__gt__", "text": "Greater Than"},
+				{"id": "__ge__", "text": "Greater Than or Equal To"},
 			],
 			String: [
 				{"id": "like", "text": "SQL Like"},
@@ -93,8 +94,8 @@ class QueryFilter(object):
 			DateTime: [
 				{"id": "__eq__", "text": "Equals"},
 				{"id": "__lt__", "text": "Less Than"},
-				{"id": "__lte__", "text": "Less Than or Equal To"},
-				{"id": "__gte__", "text": "Greater Than or Equal To"},
+				{"id": "__le__", "text": "Less Than or Equal To"},
+				{"id": "__ge__", "text": "Greater Than or Equal To"},
 			],
 		}.get(typ)
 
