@@ -1,35 +1,12 @@
-function loadLocations(page, successFn, errorFn) {
-	$.ajax({
-		type: "GET",
-		url: "/locations/?page=" +page
-	}).done(successFn).fail(errorFn);
-}
-
-function loadTablePage(num) {
-	var divSelector = "div.container-fluid div.table-row div.row";
-	loadLocations(num, function(data) {
-		loadTable(divSelector, data);
-		var params = {
-			total: Math.ceil(data.meta.rows / data.meta.page_size),
-			maxVisible: 10
-		};
-		loadPagination('#page-selection', params, loadPage);
-	}, function(data) {
-		$(divSelector).html("Unable to load data.");
-	});
-}
-
-function loadPage(event, num) {
-	var divSelector = "div.container-fluid div.table-row div.row";
-	loadLocations(num, function(data) {
-		loadTable(divSelector, data);
-	}, function(data) {
-		$(divSelector).html("Unable to load data.");
-	});
-}
-
 function locationsInit() {
-	loadTablePage(0);
+	var params = {
+		paginationSelector: 'div.container-fluid .pagination-bar',
+		queryFilterSelector: 'div.container-fluid .filter-query-table',
+		selector: "div.container-fluid div.table-row div.row",
+		url: "/locations/"
+	}
+	tableObj = makeTable(params);
+	tableObj.load();
 }
 
 $(locationsInit);
