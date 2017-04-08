@@ -31,7 +31,7 @@ class RawTableController(MethodView):
 			}
 			response = format_attrs(objects, *args, **kwargs)
 			response['meta'] = {
-				'rows': base_query.count(),
+				'rows': filtered_query.count(),
 				'page_size': page_size
 			}
 			response['filter'] = query_filter.filter_data()
