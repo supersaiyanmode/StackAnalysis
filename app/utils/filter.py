@@ -54,8 +54,8 @@ class QueryFilter(object):
 
 			col_data = self.cols[col]
 			mapped_col = getattr(col_data["table_cls"], col_data["attr_name"])
-
-			obj = obj.filter(getattr(mapped_col, operator)(operand))
+			operand_converted = col_data["convert"](operand)
+			obj = obj.filter(getattr(mapped_col, operator)(operand_converted))
 		return obj
 
 	def get_convert(self, attr_type):
