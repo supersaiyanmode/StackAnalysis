@@ -1,4 +1,3 @@
-
 function usersInit() {
 	var params = {
 		paginationSelector: 'div.container-fluid .pagination-bar',

@@ -1,39 +1,12 @@
-function loadQuestions(page, successFn, errorFn) {
-	$.ajax({
-		type: "GET",
-		url: "/questions/?page=" + page
-	}).done(successFn).fail(errorFn);
-}
-
-function loadTablePage(num) {
-	var divSelector = "div.container-fluid div.table-row div.row";
-	loadQuestions(num, function(data) {
-		loadTable(divSelector, data);
-		
-		var params = {
-			total: Math.ceil(data.meta.rows / data.meta.page_size),
-			maxVisible: 10
-		};
-		loadPagination('#page-selection', params, loadPage);
-	}, function(data) {
-		$(divSelector).html("Unable to load data.");
-	});
-}
-
-
-function loadPage(event, num) {
-	var divSelector = "div.container-fluid div.table-row div.row";
-	loadQuestions(num, function(data) {
-		loadTable(divSelector, data);
-	}, function(data) {
-		$(divSelector).html("Unable to load data.");
-	});
-}
-
 function questionsInit() {
-	loadTablePage(0);
-	
-
+	var params = {
+		paginationSelector: 'div.container-fluid .pagination-bar',
+		queryFilterSelector: 'div.container-fluid .filter-query-table',
+		selector: "div.container-fluid div.table-row div.row",
+		url: "/questions/"
+	}
+	tableObj = makeTable(params);
+	tableObj.load();
 }
 
 $(questionsInit);
