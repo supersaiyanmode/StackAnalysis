@@ -8,7 +8,7 @@ from flask import jsonify
 from flask import abort
 from flask_sqlalchemy_session import current_session as session
 
-from models.data import Location, Tags, Users, Questions, Answers
+from models.data import Location, Tags, Users, Questions, Answers, ViewSkillsLocations
 from utils import format_attrs, Paginator, QueryFilter
 
 raw_tables_handler = Blueprint('raw_tables_handler', __name__)
@@ -131,6 +131,14 @@ class AnswersController(RawTableController):
 		},
 	}
 
+
+class ViewSkillsLocationsController(RawTableController):
+	table = ViewSkillsLocations
+	input_fields = ['city', 'country', 'state', 'skill_id', 'total_score']
+	output_fields = ['City', 'Country', 'State', 'Skill ID', 'Total Score']
+		
+
+
 raw_tables_handler.add_url_rule( '/users/<int:id>/',
 	view_func=UsersController.as_view('users_id'))
 raw_tables_handler.add_url_rule( '/users/',
@@ -155,4 +163,9 @@ raw_tables_handler.add_url_rule( '/tags/<int:id>/',
 	view_func=TagsController.as_view('tags_id'))
 raw_tables_handler.add_url_rule( '/tags/',
 	view_func=TagsController.as_view('tags'))
+
+raw_tables_handler.add_url_rule( '/view_skills_locations/<int:id>/',
+	view_func=ViewSkillsLocationsController.as_view('view_skills_locations_id'))
+raw_tables_handler.add_url_rule( '/view_skills_locations/',
+	view_func=ViewSkillsLocationsController.as_view('view_skills_locations'))
 
