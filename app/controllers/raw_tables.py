@@ -135,7 +135,7 @@ class AnswersController(RawTableController):
 class ViewSkillsLocationsController(RawTableController):
 	table = ViewSkillsLocations
 	input_fields = ['city', 'country', 'state', 'skill_id', 'total_score']
-	output_fields = ['City', 'Country', 'State', 'SkillID', 'TotalScore']
+	output_fields = ['City', 'Country', 'State', 'Skill ID', 'Total Score']
 		
 
 
