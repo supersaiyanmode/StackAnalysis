@@ -8,6 +8,7 @@ class Paginator:
 	def paginate(self, obj):
 		page_num = self.extract_page_num(request)
 		offset = (page_num) * self.page_size
+		print "limit done"
 		return obj.offset(offset).limit(self.page_size)
 
 	def extract_page_num(self, request):
