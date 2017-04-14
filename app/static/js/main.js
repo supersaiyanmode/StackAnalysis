@@ -48,7 +48,7 @@ function loadNavigation() {
 
 /* map related stuff. */
 function drawRegionsMap(selector, dataList, title, options) {
-	dataList.unshift([region, score]);
+	dataList.unshift(title);
 	var data = google.visualization.arrayToDataTable(dataList);
 	if (options === undefined) {
 		options = {};

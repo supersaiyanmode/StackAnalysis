@@ -89,6 +89,18 @@ function makeTable(params) {
 		});
 	}
 	
+	function enableVisualizationsButton() {
+		$(".btn-group > a.btn.disabled").removeClass("disabled");
+		$('.btn-group a.btn').on('click', function(){
+			$(this).parent().find('.active').removeClass('active');
+			$(this).addClass('active');
+
+			var panelClass = $(this).data("panel-class");
+			$("div.tab-pane.active").removeClass("active");
+			$("." + panelClass).parent().addClass("active");
+		});
+	}
+
 	function renderTableWithParams(page, filter) {
 		fetchTableData(tableUrl, filter, page, function(tableData) {
 			$(tableSelector).html(getTableHTML(tableData));
@@ -100,6 +112,11 @@ function makeTable(params) {
 			}
 			$(paginationSelector).unbind('page');
 			loadPagination(tableData);
+
+			//check for tableData.location
+			if (tableData.location !== undefined) {
+				enableVisualizationsButton();
+			}
 		}, function() {
 			$(tableSelector).html("Failed to load data.");
 		});
