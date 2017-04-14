@@ -58,6 +58,18 @@ function drawRegionsMap(selector, dataList, title, options) {
 	chart.draw(data, options);
 }
 
+
+function drawTimeDistribution(selector, dataList, title, options) {
+	dataList.unshift(title);
+	var data = google.visualization.arrayToDataTable(dataList);
+	if (options === undefined) {
+		options = {};
+	}
+	var element = $(selector)[0];
+	var chart = new google.visualization.ComboChart(element);
+	chart.draw(data, options);
+
+}
 $(document).ready(loadNavigation);
 
 
