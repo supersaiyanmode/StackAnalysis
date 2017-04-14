@@ -35,6 +35,11 @@ class RawTableController(MethodView):
 				'page_size': page_size
 			}
 			response['filter'] = query_filter.filter_data()
+
+			if hasattr(self, "location"):
+				response['location'] = self.location
+				response['score'] = self.score
+
 			return jsonify(**response)
 		else:
 			obj = session.query(self.table).get(int(id))
@@ -79,6 +84,8 @@ class LocationController(RawTableController):
 			"url": "//maps.google.com/maps/place/{{country}}",
 		}
 	}
+	location = "{{city}}, {{state}}, {{country}}"
+	score = "1"
 
 class TagsController(RawTableController):
 	table = Tags
@@ -136,7 +143,8 @@ class ViewSkillsLocationsController(RawTableController):
 	table = ViewSkillsLocations
 	input_fields = ['city', 'country', 'state', 'skill_id', 'total_score']
 	output_fields = ['City', 'Country', 'State', 'Skill ID', 'Total Score']
-		
+	location = "{{city}}, {{state}}, {{country}}"
+	score = "{{total_score}}"
 
 
 raw_tables_handler.add_url_rule( '/users/<int:id>/',
