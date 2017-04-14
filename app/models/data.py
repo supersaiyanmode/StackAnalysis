@@ -96,7 +96,7 @@ class ViewAnswersLocalTime(Base):
 	author_id = Column(Integer)
 	creation_date = Column(DateTime)
 	modified_data = Column(DateTime)
-	local_creation_data = Column(DateTime)
+	local_creation_date = Column(DateTime)
 	__table_args__ = (PrimaryKeyConstraint('id', name='view_answers_local_time_table_pkey'),)
 
 class ViewSkillsLocations(Base):

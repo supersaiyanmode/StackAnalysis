@@ -8,7 +8,9 @@ from flask import jsonify
 from flask import abort
 from flask_sqlalchemy_session import current_session as session
 
-from models.data import Location, Tags, Users, Questions, Answers, ViewSkillsLocations
+from sqlalchemy import func, desc
+
+from models.data import Location, Tags, Users, Questions, Answers, ViewSkillsLocations, ViewAnswersLocalTime
 from utils import format_attrs, Paginator, QueryFilter
 
 raw_tables_handler = Blueprint('raw_tables_handler', __name__)
@@ -17,12 +19,12 @@ raw_tables_handler = Blueprint('raw_tables_handler', __name__)
 class RawTableController(MethodView):
 	def get(self, id=None):
 		if id is None:
-			page_size = 10
-			columns = [getattr(self.table, x) for x in self.input_fields]
-			base_query = session.query(*columns)
-			query_filter = QueryFilter(base_query)
-			filtered_query = query_filter.filter()
-			objects = Paginator(page_size).paginate(filtered_query)
+			base_query = self.select(session)
+			filtered_query = self.filter(base_query)
+			grouped_query = self.group(filtered_query)
+			ordered_query = self.order(grouped_query)
+			paginated_query = self.paginate(ordered_query)
+			objects = paginated_query
 
 			args = zip(self.input_fields, self.output_fields)
 			kwargs = {
@@ -47,6 +49,24 @@ class RawTableController(MethodView):
 				return jsonify(**{x: getattr(obj, x) for x in self.input_fields})
 			else:
 				abort(404)
+
+	def select(self, obj):
+		columns = [getattr(self.table, x) for x in self.input_fields]
+		return obj.query(*columns)
+
+	def filter(self, query):
+		query_filter = QueryFilter(query)
+		return query_filter.filter()
+
+	def group(self, x):
+		return x
+
+	def order(self, x):
+		return x
+
+	def paginate(self, query, page_size=10):
+		return Paginator(page_size).paginate(query)
+
 
 class UsersController(RawTableController):
 	table = Users
@@ -146,6 +166,27 @@ class ViewSkillsLocationsController(RawTableController):
 	location = "{{city}}, {{state}}, {{country}}"
 	score = "{{total_score}}"
 
+
+class ViewAnswersLocalTimeController(RawTableController):
+	table = ViewAnswersLocalTime
+	input_fields = ['id', 'question_id', 'score', 'author_id', 'creation_date', 'modified_date', 'local_creation_date']
+	output_fields = ['Id', 'Question Id', 'Score', 'Author Id', 'Creation Date', 'Modified Date', 'Local Creation Date'] 
+
+	activity = func.count(ViewAnswersLocalTime.id)
+	hour_part = func.date_part('hour', ViewAnswersLocalTime.local_creation_date)
+
+	def select(self, obj):
+		return obj.query(activity, hour_part)
+
+	def group(self, x):
+		return x.group_by(hour_part)
+
+	def order(self, x):
+		return x.order_by(desc(activity))
+
+	def filter(self, query):
+		query_filter = QueryFilter(query)
+		return query_filter.filter(ViewAnswersLocalTime.local_creation_date != None)
 
 raw_tables_handler.add_url_rule( '/users/<int:id>/',
 	view_func=UsersController.as_view('users_id'))
