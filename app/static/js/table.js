@@ -86,7 +86,7 @@ function makeTable(params) {
 			total: Math.ceil(tableData.meta.rows / tableData.meta.page_size),
 			maxVisible: 10
 		};
-		$(paginationSelector).bootpag(pagin ationParams).on("page", function(event, pageNumber) {
+		$(paginationSelector).bootpag(paginationParams).on("page", function(event, pageNumber) {
 			renderTableWithParams(pageNumber - 1, tableFilterData);
 		});
 	}

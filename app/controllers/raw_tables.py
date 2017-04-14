@@ -26,21 +26,16 @@ class RawTableController(MethodView):
 			paginated_query = self.paginate(ordered_query)
 			objects = paginated_query
 
+			self.row_count = ordered_query.count();
+
 			args = zip(self.input_fields, self.output_fields)
 			kwargs = {
 				"preprocessors": getattr(self, "preprocessors", {}),
 				"postprocessors": getattr(self, "postprocessors",[]),
 			}
 			response = format_attrs(objects, *args, **kwargs)
-			response['meta'] = {
-				'rows': filtered_query.count(),
-				'page_size': page_size
-			}
-			response['filter'] = query_filter.filter_data()
 
-			if hasattr(self, "location"):
-				response['location'] = self.location
-				response['score'] = self.score
+			response = self.postprocess(response)
 
 			return jsonify(**response)
 		else:
@@ -55,7 +50,7 @@ class RawTableController(MethodView):
 		return obj.query(*columns)
 
 	def filter(self, query):
-		query_filter = QueryFilter(query)
+		self.query_filter = QueryFilter(query)
 		return query_filter.filter()
 
 	def group(self, x):
@@ -65,7 +60,15 @@ class RawTableController(MethodView):
 		return x
 
 	def paginate(self, query, page_size=10):
-		return Paginator(page_size).paginate(query)
+		self.paginator = Paginator(page_size)
+		return self.paginator.paginate(query)
+
+	def postprocess(self, response):
+		if hasattr(self, 'query_filter'):
+			response['filter'] = self.query_filter.filter_data()
+
+		response["row_count"] = self.row_count
+		response["page_size"] = self.paginator.page_size
 
 
 class UsersController(RawTableController):
@@ -106,6 +109,14 @@ class LocationController(RawTableController):
 	}
 	location = "{{city}}, {{state}}, {{country}}"
 	score = "1"
+
+	def postprocess(self, response):
+		response = super(LocationController, self).postprocess(response)
+
+		response['location'] = self.location
+		response['score'] = self.score
+
+		return response
 
 class TagsController(RawTableController):
 	table = Tags
@@ -166,17 +177,26 @@ class ViewSkillsLocationsController(RawTableController):
 	location = "{{city}}, {{state}}, {{country}}"
 	score = "{{total_score}}"
 
+	def postprocess(self, response):
+		response = super(ViewSkillsLocationsController, self).postprocess(response)
+
+		response['location'] = self.location
+		response['score'] = self.score
+
+		return response
+
+
 
 class ViewAnswersLocalTimeController(RawTableController):
 	table = ViewAnswersLocalTime
 	input_fields = ['id', 'question_id', 'score', 'author_id', 'creation_date', 'modified_date', 'local_creation_date']
-	output_fields = ['Id', 'Question Id', 'Score', 'Author Id', 'Creation Date', 'Modified Date', 'Local Creation Date'] 
+	output_fields = ['Id', 'Question Id', 'Score', 'Author Id', 'Creation Date', 'Modified Date', 'Local Creation Date']
 
 	activity = func.count(ViewAnswersLocalTime.id)
 	hour_part = func.date_part('hour', ViewAnswersLocalTime.local_creation_date)
 
 	def select(self, obj):
-		return obj.query(activity, hour_part)
+		return obj.query(self.activity, self.hour_part)
 
 	def group(self, x):
 		return x.group_by(hour_part)
@@ -187,6 +207,11 @@ class ViewAnswersLocalTimeController(RawTableController):
 	def filter(self, query):
 		query_filter = QueryFilter(query)
 		return query_filter.filter(ViewAnswersLocalTime.local_creation_date != None)
+
+	def postprocess(self, response):
+		response = super(ViewAnswersLocalTimeController, self).postprocess(response)
+		response["timechart"] = True
+		return response
 
 raw_tables_handler.add_url_rule( '/users/<int:id>/',
 	view_func=UsersController.as_view('users_id'))
@@ -213,8 +238,8 @@ raw_tables_handler.add_url_rule( '/tags/<int:id>/',
 raw_tables_handler.add_url_rule( '/tags/',
 	view_func=TagsController.as_view('tags'))
 
-raw_tables_handler.add_url_rule( '/view_skills_locations/<int:id>/',
-	view_func=ViewSkillsLocationsController.as_view('view_skills_locations_id'))
 raw_tables_handler.add_url_rule( '/view_skills_locations/',
 	view_func=ViewSkillsLocationsController.as_view('view_skills_locations'))
 
+raw_tables_handler.add_url_rule( '/view_answers_local_time/',
+	view_func=ViewAnswersLocalTimeController.as_view('view_answers_local_time'))

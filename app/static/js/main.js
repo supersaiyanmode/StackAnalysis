@@ -76,7 +76,7 @@ function drawTimeDistribution(selector, dataList, title, opts) {
 			format:'HH',
 			gridlines: {
 				units: {
-					hours: {format: ['HH:mm', 'ha']}
+					hours: {format: ['HH', 'ha']}
 				}
 			},
 			ticks: ar
