@@ -2,9 +2,11 @@ function makeTable(params) {
 	var tableSelector = params.selector;
 	var paginationSelector = params.paginationSelector;
 	var queryFilterSelector = params.queryFilterSelector;
+	var visualizationSelector = params.visualizationSelector;
 	var tableUrl = params.url;
 	var tableFilterData = [];
 	var tableLoaded  = false;
+	var visualizationLoaded = false;
 	
 	function processCellContents(cell, curObj, colPostProc) {
 		if (colPostProc === undefined) {
@@ -84,12 +86,12 @@ function makeTable(params) {
 			total: Math.ceil(tableData.meta.rows / tableData.meta.page_size),
 			maxVisible: 10
 		};
-		$(paginationSelector).bootpag(paginationParams).on("page", function(event, pageNumber) {
+		$(paginationSelector).bootpag(pagin ationParams).on("page", function(event, pageNumber) {
 			renderTableWithParams(pageNumber - 1, tableFilterData);
 		});
 	}
 	
-	function enableVisualizationsButton() {
+	function enableVisualizations(tableData) {
 		$(".btn-group > a.btn.disabled").removeClass("disabled");
 		$('.btn-group a.btn').on('click', function(){
 			$(this).parent().find('.active').removeClass('active');
@@ -98,6 +100,28 @@ function makeTable(params) {
 			var panelClass = $(this).data("panel-class");
 			$("div.tab-pane.active").removeClass("active");
 			$("." + panelClass).parent().addClass("active");
+			
+			if (panelClass == "visualization-row") {
+				loadVisualization(tableData);
+			}
+		});
+	}
+
+	function loadVisualization(tableData) {
+		var templateLoc = Handlebars.compile(tableData.location);
+		var templateVal = Handlebars.compile(tableData.score);
+
+		var data = tableData.data.map(function(row) {
+			var curObj = {};
+			tableData.fields.forEach(function(key, index) {
+				curObj[key] = row[index];
+			});
+			return [templateLoc(curObj), +templateVal(curObj)];
+		});
+		
+		google.charts.load('45', {mapsApiKey:'AIzaSyCB_W92iIgF-ocGgjwSPLlxU_oGhMQ0lKo', 'packages':['geochart']});
+		google.charts.setOnLoadCallback(function() {
+			drawRegionsMap(visualizationSelector, data, ["Location", "Score"]);
 		});
 	}
 
@@ -115,7 +139,12 @@ function makeTable(params) {
 
 			//check for tableData.location
 			if (tableData.location !== undefined) {
-				enableVisualizationsButton();
+				if (visualizationLoaded == false) {
+					enableVisualizations(tableData);
+					visualizationLoaded = true;
+				} else {
+					loadVisualization(tableData);
+				}
 			}
 		}, function() {
 			$(tableSelector).html("Failed to load data.");
