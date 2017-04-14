@@ -51,10 +51,11 @@ class QueryFilter(object):
 			col = param["col"]
 			operator = param["op"]
 			operand = param["val"]
-
 			col_data = self.cols[col]
 			mapped_col = getattr(col_data["table_cls"], col_data["attr_name"])
 			operand_converted = col_data["convert"](operand)
+			if not operand_converted :
+				operand_converted = None
 			obj = obj.filter(getattr(mapped_col, operator)(operand_converted))
 		return obj
 
@@ -86,16 +87,19 @@ class QueryFilter(object):
 				{"id": "__le__", "text": "Less Than or Equal To"},
 				{"id": "__gt__", "text": "Greater Than"},
 				{"id": "__ge__", "text": "Greater Than or Equal To"},
+				{"id": "__neq__", "text": "Not Equal To"},
 			],
 			String: [
 				{"id": "like", "text": "SQL Like"},
 				{"id": "__eq__", "text": "Equals"},
+				{"id": "__neq__", "text": "Not Equal To"},
 			],
 			DateTime: [
 				{"id": "__eq__", "text": "Equals"},
 				{"id": "__lt__", "text": "Less Than"},
 				{"id": "__le__", "text": "Less Than or Equal To"},
 				{"id": "__ge__", "text": "Greater Than or Equal To"},
+				{"id": "__neq__", "text": "Not Equal To"},
 			],
 		}.get(typ)
 
