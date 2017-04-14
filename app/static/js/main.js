@@ -45,6 +45,16 @@ function loadNavigation() {
 	}, 10)
 }
 
+function drawRegionsMap(selector, dataList, title, options){
+	dataList.unshift([region, score]);
+	var data = google.visualization.arrayToDataTable(dataList);
+	if (options === undefined){
+		options = {}
+	}
+	var chart = new google.visualization.GeoChart(document.getElementById(selector));
+	chart.draw(data, options);
+}
+
 $(document).ready(loadNavigation);
 
 
