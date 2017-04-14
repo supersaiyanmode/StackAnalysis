@@ -46,15 +46,15 @@ function loadNavigation() {
 }
 
 function drawRegionsMap(selector, dataList, title, options){
-   dataList.unshift([region, score]);
-   var data = google.visualization.arrayToDataTable(dataList);
-   if (options === undefined){
-       options = {}
-   }
- 
+	dataList.unshift([region, score]);
+	var data = google.visualization.arrayToDataTable(dataList);
+	if (options === undefined){
+		options = {}
+	}
 	var chart = new google.visualization.GeoChart(document.getElementById(selector));
 	chart.draw(data, options);
 }
+
 $(document).ready(loadNavigation);
 
 
