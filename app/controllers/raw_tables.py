@@ -181,6 +181,9 @@ class ViewSkillsLocationsController(RawTableController):
 	location = "{{city}}, {{state}}, {{country}}"
 	score = "{{total_score}}"
 
+	def order(self, obj):
+		return obj.order_by(desc(ViewSkillsLocations.total_score))
+
 	def postprocess(self, response):
 		response = super(ViewSkillsLocationsController, self).postprocess(response)
 
