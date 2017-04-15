@@ -125,9 +125,10 @@ function makeTable(params) {
 	}
 	
 	function loadTimeChart(tableData) {
-		google.charts.load('45', {mapsApiKey:'AIzaSyCB_W92iIgF-ocGgjwSPLlxU_oGhMQ0lKo', 'packages':['combochart']});
+		google.charts.load('45', {mapsApiKey:'AIzaSyCB_W92iIgF-ocGgjwSPLlxU_oGhMQ0lKo', 'packages':['corechart']});
 		google.charts.setOnLoadCallback(function() {
-			drawTimeDistribution(timechartSelector, tableData.data, ["Activity", "Posts"]);
+			var data = tableData.data.map(function (x) { return [x[1], x[0]]; });
+			drawTimeDistribution(timeChartSelector, data, ["Activity", "Posts"]);
 		});
 	}
 	

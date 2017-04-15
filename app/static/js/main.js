@@ -66,7 +66,15 @@ function drawRegionsMap(selector, dataList, title, opts) {
 }
 
 function drawTimeDistribution(selector, dataList, title, opts) {
-	dataList = dataList.slice();
+	dataList = dataList.map(function(obj) {
+		obj[0] = new Date(0, 0, 0, obj[0], 0, 0, 0);
+		return obj;
+	});
+	
+	var allHours = dataList.map(function (_, i) {
+		return new Date(0, 0, 0, i, 0, 0, 0);
+	});
+	
 	dataList.unshift(title);
 	var data = google.visualization.arrayToDataTable(dataList);
 	var options = {
@@ -79,8 +87,9 @@ function drawTimeDistribution(selector, dataList, title, opts) {
 					hours: {format: ['HH', 'ha']}
 				}
 			},
-			ticks: ar
+			ticks: allHours
 		},
+		height: 480,
 		seriesType: 'bars',
 		series: {3: {type: 'line'}}
 	};
