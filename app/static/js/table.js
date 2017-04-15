@@ -2,10 +2,18 @@ function makeTable(params) {
 	var tableSelector = params.selector;
 	var paginationSelector = params.paginationSelector;
 	var queryFilterSelector = params.queryFilterSelector;
+	var visualizationSelector = params.visualizationSelector;
+	var timeChartSelector = params.timeChartSelector;
 	var tableUrl = params.url;
 	var tableFilterData = [];
-	var tableLoaded  = false;
+	var currentView  = 'table-row';
+	var graphicsLoaded = {
+		visualization: false,
+		timechart: false,
+		table: false
+	};
 	
+
 	function processCellContents(cell, curObj, colPostProc) {
 		if (colPostProc === undefined) {
 			return {
@@ -81,7 +89,7 @@ function makeTable(params) {
 	
 	function loadPagination(tableData) {
 		var paginationParams = {
-			total: Math.ceil(tableData.meta.rows / tableData.meta.page_size),
+			total: Math.ceil(tableData.row_count / tableData.page_size),
 			maxVisible: 10
 		};
 		$(paginationSelector).bootpag(paginationParams).on("page", function(event, pageNumber) {
@@ -89,34 +97,102 @@ function makeTable(params) {
 		});
 	}
 	
-	function enableVisualizationsButton() {
-		$(".btn-group > a.btn.disabled").removeClass("disabled");
-		$('.btn-group a.btn').on('click', function(){
-			$(this).parent().find('.active').removeClass('active');
-			$(this).addClass('active');
+	function loadTable(tableData) {
+		$(tableSelector).html(getTableHTML(tableData));
+		if (graphicsLoaded.table == false) {
+			attachTableContentEvents();
+			loadFilterQueryView(tableData);
+			attachTableQueryFilterEvents(tableData);
+		}
+	}
+	
+	function loadVisualization(tableData) {
+		var templateLoc = Handlebars.compile(tableData.location);
+		var templateVal = Handlebars.compile(tableData.score);
 
-			var panelClass = $(this).data("panel-class");
-			$("div.tab-pane.active").removeClass("active");
-			$("." + panelClass).parent().addClass("active");
+		var data = tableData.data.map(function(row) {
+			var curObj = {};
+			tableData.fields.forEach(function(key, index) {
+				curObj[key] = row[index];
+			});
+			return [templateLoc(curObj), +templateVal(curObj)];
 		});
+		
+		google.charts.load('45', {mapsApiKey:'AIzaSyCB_W92iIgF-ocGgjwSPLlxU_oGhMQ0lKo', 'packages':['geochart']});
+		google.charts.setOnLoadCallback(function() {
+			drawRegionsMap(visualizationSelector, data, ["Location", "Score"]);
+		});
+	}
+	
+	function loadTimeChart(tableData) {
+		google.charts.load('45', {mapsApiKey:'AIzaSyCB_W92iIgF-ocGgjwSPLlxU_oGhMQ0lKo', 'packages':['corechart']});
+		google.charts.setOnLoadCallback(function() {
+			var data = tableData.data.map(function (x) { return [x[1], x[0]]; });
+			drawTimeDistribution(timeChartSelector, data, ["Activity", "Posts"]);
+		});
+	}
+	
+	function refreshViews(tableData) {
+		var views = {
+			location: {
+				fn: loadVisualization,
+				cls: 'visualization-row',
+				loadedKey: 'visualization'
+			},
+			timechart: {
+				fn: loadTimeChart,
+				cls: 'timechart-row',
+				loadedKey: 'timechart'
+			},
+			table: {
+				fn: loadTable,
+				cls: 'table-row',
+				loadedKey: 'table'
+			}
+		}
+		Object.keys(views).forEach(function(key) {
+			if (tableData[key] === undefined) {
+				return;
+			}
+
+			var func = views[key].fn;
+			var cls = views[key].cls;
+			var loadedKey = views[key].loadedKey;
+
+			var selector = (".btn-group > a.btn[data-panel-class=" 
+						+ cls + "]");
+			$(selector).removeClass("disabled");
+			if (graphicsLoaded[loadedKey] == false) {
+				$(selector).on('click', function(){
+					$(this).parent().find('.active').removeClass('active');
+					$(this).addClass('active');
+
+					var panelClass = $(this).data("panel-class");
+					$("div.tab-pane.active").removeClass("active");
+					$("." + panelClass).parent().addClass("active");
+
+					func(tableData);
+				});
+				
+				if ($(selector).data("panel-class") == currentView) {
+					func(tableData);
+				}
+				
+				graphicsLoaded[loadedKey] = true;
+			} else {
+				func(tableData);
+			}
+		});
+		
 	}
 
 	function renderTableWithParams(page, filter) {
 		fetchTableData(tableUrl, filter, page, function(tableData) {
-			$(tableSelector).html(getTableHTML(tableData));
-			if (tableLoaded == false) {
-				attachTableContentEvents();
-				loadFilterQueryView(tableData);
-				attachTableQueryFilterEvents(tableData);
-				tableLoaded = true;
-			}
 			$(paginationSelector).unbind('page');
 			loadPagination(tableData);
 
 			//check for tableData.location
-			if (tableData.location !== undefined) {
-				enableVisualizationsButton();
-			}
+			refreshViews(tableData);
 		}, function() {
 			$(tableSelector).html("Failed to load data.");
 		});

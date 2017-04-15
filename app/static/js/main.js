@@ -47,14 +47,59 @@ function loadNavigation() {
 
 
 /* map related stuff. */
-function drawRegionsMap(selector, dataList, title, options) {
+function drawRegionsMap(selector, dataList, title, opts) {
+	dataList = dataList.slice();
 	dataList.unshift(title);
 	var data = google.visualization.arrayToDataTable(dataList);
-	if (options === undefined) {
-		options = {};
+	var options = {
+		displayMode: "markers",
+		height: 480
+	};
+	
+	if (opts !== undefined) {
+		$.extend(options, opts);
 	}
+
 	var element = $(selector)[0];
 	var chart = new google.visualization.GeoChart(element);
+	chart.draw(data, options);
+}
+
+function drawTimeDistribution(selector, dataList, title, opts) {
+	dataList = dataList.map(function(obj) {
+		obj[0] = new Date(0, 0, 0, obj[0], 0, 0, 0);
+		return obj;
+	});
+	
+	var allHours = dataList.map(function (_, i) {
+		return new Date(0, 0, 0, i, 0, 0, 0);
+	});
+	
+	dataList.unshift(title);
+	var data = google.visualization.arrayToDataTable(dataList);
+	var options = {
+		vAxis: {title: 'Frequency'},
+		hAxis: {
+			title: 'Time',
+			format:'HH',
+			gridlines: {
+				units: {
+					hours: {format: ['HH', 'ha']}
+				}
+			},
+			ticks: allHours
+		},
+		height: 480,
+		seriesType: 'bars',
+		series: {3: {type: 'line'}}
+	};
+	
+	if (opts !== undefined) {
+		$.extend(options, opts);
+	}
+
+	var element = $(selector)[0];
+	var chart = new google.visualization.ComboChart(element);
 	chart.draw(data, options);
 }
 

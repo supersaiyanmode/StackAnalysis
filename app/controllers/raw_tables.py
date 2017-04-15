@@ -8,7 +8,9 @@ from flask import jsonify
 from flask import abort
 from flask_sqlalchemy_session import current_session as session
 
-from models.data import Location, Tags, Users, Questions, Answers, ViewSkillsLocations
+from sqlalchemy import func, desc
+
+from models.data import Location, Tags, Users, Questions, Answers, ViewSkillsLocations, ViewAnswersLocalTime
 from utils import format_attrs, Paginator, QueryFilter
 
 raw_tables_handler = Blueprint('raw_tables_handler', __name__)
@@ -17,12 +19,14 @@ raw_tables_handler = Blueprint('raw_tables_handler', __name__)
 class RawTableController(MethodView):
 	def get(self, id=None):
 		if id is None:
-			page_size = 10
-			columns = [getattr(self.table, x) for x in self.input_fields]
-			base_query = session.query(*columns)
-			query_filter = QueryFilter(base_query)
-			filtered_query = query_filter.filter()
-			objects = Paginator(page_size).paginate(filtered_query)
+			base_query = self.select(session)
+			filtered_query = self.filter(base_query)
+			grouped_query = self.group(filtered_query)
+			ordered_query = self.order(grouped_query)
+			paginated_query = self.paginate(ordered_query)
+			objects = paginated_query
+
+			self.row_count = ordered_query.count();
 
 			args = zip(self.input_fields, self.output_fields)
 			kwargs = {
@@ -30,15 +34,8 @@ class RawTableController(MethodView):
 				"postprocessors": getattr(self, "postprocessors",[]),
 			}
 			response = format_attrs(objects, *args, **kwargs)
-			response['meta'] = {
-				'rows': filtered_query.count(),
-				'page_size': page_size
-			}
-			response['filter'] = query_filter.filter_data()
 
-			if hasattr(self, "location"):
-				response['location'] = self.location
-				response['score'] = self.score
+			response = self.postprocess(response)
 
 			return jsonify(**response)
 		else:
@@ -47,6 +44,36 @@ class RawTableController(MethodView):
 				return jsonify(**{x: getattr(obj, x) for x in self.input_fields})
 			else:
 				abort(404)
+
+	def select(self, obj):
+		columns = [getattr(self.table, x).label(x) for x in self.input_fields]
+		return obj.query(*columns)
+
+	def filter(self, query):
+		self.query_filter = QueryFilter(query)
+		return self.query_filter.filter()
+
+	def group(self, x):
+		return x
+
+	def order(self, x):
+		return x
+
+	def paginate(self, query, page_size=10):
+		self.paginator = Paginator(page_size)
+		return self.paginator.paginate(query)
+
+	def postprocess(self, response):
+		if hasattr(self, 'query_filter'):
+			response['filter'] = self.query_filter.filter_data()
+		else:
+			response['filter'] = []
+
+		response["row_count"] = self.row_count
+		response["page_size"] = self.paginator.page_size
+		response["table"] = True
+		return response
+
 
 class UsersController(RawTableController):
 	table = Users
@@ -86,6 +113,14 @@ class LocationController(RawTableController):
 	}
 	location = "{{city}}, {{state}}, {{country}}"
 	score = "1"
+
+	def postprocess(self, response):
+		response = super(LocationController, self).postprocess(response)
+
+		response['location'] = self.location
+		response['score'] = self.score
+
+		return response
 
 class TagsController(RawTableController):
 	table = Tags
@@ -146,6 +181,44 @@ class ViewSkillsLocationsController(RawTableController):
 	location = "{{city}}, {{state}}, {{country}}"
 	score = "{{total_score}}"
 
+	def postprocess(self, response):
+		response = super(ViewSkillsLocationsController, self).postprocess(response)
+
+		response['location'] = self.location
+		response['score'] = self.score
+
+		return response
+
+
+
+class ViewAnswersLocalTimeController(RawTableController):
+	table = ViewAnswersLocalTime
+	input_fields = ["activity", "hour"]
+	output_fields = ["Activity", "Hour"]
+
+	activity = func.count(ViewAnswersLocalTime.id).label("activity")
+	hour_part = func.date_part('hour', ViewAnswersLocalTime.local_creation_date).label("hour")
+
+	def select(self, obj):
+		return obj.query(self.activity, self.hour_part)
+
+	def group(self, obj):
+		return obj.group_by(self.hour_part)
+
+	def order(self, obj):
+		return obj.order_by(desc(self.activity))
+
+	def filter(self, query):
+		filtered = super(ViewAnswersLocalTimeController, self).filter(query)
+		return filtered.filter(ViewAnswersLocalTime.local_creation_date != None)
+
+	def paginate(self, query):
+		return super(ViewAnswersLocalTimeController, self).paginate(query, 24)
+
+	def postprocess(self, response):
+		response = super(ViewAnswersLocalTimeController, self).postprocess(response)
+		response["timechart"] = True
+		return response
 
 raw_tables_handler.add_url_rule( '/users/<int:id>/',
 	view_func=UsersController.as_view('users_id'))
@@ -172,8 +245,8 @@ raw_tables_handler.add_url_rule( '/tags/<int:id>/',
 raw_tables_handler.add_url_rule( '/tags/',
 	view_func=TagsController.as_view('tags'))
 
-raw_tables_handler.add_url_rule( '/view_skills_locations/<int:id>/',
-	view_func=ViewSkillsLocationsController.as_view('view_skills_locations_id'))
 raw_tables_handler.add_url_rule( '/view_skills_locations/',
 	view_func=ViewSkillsLocationsController.as_view('view_skills_locations'))
 
+raw_tables_handler.add_url_rule( '/view_answers_local_time/',
+	view_func=ViewAnswersLocalTimeController.as_view('view_answers_local_time'))
