@@ -17,7 +17,8 @@ VIEWS = {
 		("Answers", "answers", "comments"),
 		("Locations", "locations", "map-marker"),
 		("Tags", "tags", "tags"),
-		("Skill Distribution", "view_skills_locations","globe"), 
+		("Skill Distribution", "view_skills_locations","globe"),
+		("Time Distribution", "view_answers_local_time", "clock-o"),
 	]
 }
 
