@@ -162,24 +162,20 @@ function makeTable(params) {
 			var selector = (".btn-group > a.btn[data-panel-class=" 
 						+ cls + "]");
 			$(selector).removeClass("disabled");
-			if (graphicsLoaded[loadedKey] == false) {
-				$(selector).on('click', function(){
-					$(this).parent().find('.active').removeClass('active');
-					$(this).addClass('active');
+			$(selector).unbind('click');
+			$(selector).on('click', function(){
+				currentView = $(this).data("panel-class");
+				$(this).parent().find('.active').removeClass('active');
+				$(this).addClass('active');
 
-					var panelClass = $(this).data("panel-class");
-					$("div.tab-pane.active").removeClass("active");
-					$("." + panelClass).parent().addClass("active");
+				var panelClass = $(this).data("panel-class");
+				$("div.tab-pane.active").removeClass("active");
+				$("." + panelClass).parent().addClass("active");
 
-					func(tableData);
-				});
-				
-				if ($(selector).data("panel-class") == currentView) {
-					func(tableData);
-				}
-				
-				graphicsLoaded[loadedKey] = true;
-			} else {
+				func(tableData);
+			});
+			
+			if ($(selector).data("panel-class") == currentView) {
 				func(tableData);
 			}
 		});
