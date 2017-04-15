@@ -19,20 +19,18 @@ class QueryFilter(object):
 		res = []
 
 		for col in obj.cte().columns:
-			table_name = col.base_columns.pop().table.name
-			attr_name = col.name
+			mapped_col = col.base_columns.pop()
+			attr_name = col.description
 			attr_type = col.type
-			table_cls = self.get_table_class(table_name)
 			convert = self.get_convert(attr_type)
 			res.append({
-				"table_name": table_name,
+				"mapped_col": mapped_col,
 				"attr_name": attr_name,
 				"attr_type": attr_type,
-				"table_cls": table_cls,
 				"convert": convert,
 			})
 
-		return {x["table_name"] + "." + x["attr_name"]: x for x in res}
+		return {x["attr_name"]: x for x in res}
 
 	def get_table_class(self, name):
 		for c in Base._decl_class_registry.values():
@@ -52,7 +50,7 @@ class QueryFilter(object):
 			operator = param["op"]
 			operand = param["val"]
 			col_data = self.cols[col]
-			mapped_col = getattr(col_data["table_cls"], col_data["attr_name"])
+			mapped_col = col_data["mapped_col"]
 
 			if operand == "$$NONE$$" and operator in ('__eq__', '__ne__'):
 				operand_converted = None
@@ -77,7 +75,7 @@ class QueryFilter(object):
 		for key, col_data in self.cols.items():
 			res.append({
 				"id": key,
-				"text": col_data["table_cls"].__name__ + ", " + col_data["attr_name"],
+				"text": col_data["attr_name"],
 				"valid_ops": self.get_valid_ops(type(col_data["attr_type"]))
 			})
 		return res

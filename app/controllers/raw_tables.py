@@ -46,12 +46,12 @@ class RawTableController(MethodView):
 				abort(404)
 
 	def select(self, obj):
-		columns = [getattr(self.table, x) for x in self.input_fields]
+		columns = [getattr(self.table, x).label(x) for x in self.input_fields]
 		return obj.query(*columns)
 
 	def filter(self, query):
 		self.query_filter = QueryFilter(query)
-		return query_filter.filter()
+		return self.query_filter.filter()
 
 	def group(self, x):
 		return x
@@ -66,9 +66,13 @@ class RawTableController(MethodView):
 	def postprocess(self, response):
 		if hasattr(self, 'query_filter'):
 			response['filter'] = self.query_filter.filter_data()
+		else:
+			response['filter'] = []
 
 		response["row_count"] = self.row_count
 		response["page_size"] = self.paginator.page_size
+		response["table"] = True
+		return response
 
 
 class UsersController(RawTableController):
@@ -189,24 +193,27 @@ class ViewSkillsLocationsController(RawTableController):
 
 class ViewAnswersLocalTimeController(RawTableController):
 	table = ViewAnswersLocalTime
-	input_fields = ['id', 'question_id', 'score', 'author_id', 'creation_date', 'modified_date', 'local_creation_date']
-	output_fields = ['Id', 'Question Id', 'Score', 'Author Id', 'Creation Date', 'Modified Date', 'Local Creation Date']
+	input_fields = ["activity", "hour"]
+	output_fields = ["Activity", "Hour"]
 
-	activity = func.count(ViewAnswersLocalTime.id)
-	hour_part = func.date_part('hour', ViewAnswersLocalTime.local_creation_date)
+	activity = func.count(ViewAnswersLocalTime.id).label("activity")
+	hour_part = func.date_part('hour', ViewAnswersLocalTime.local_creation_date).label("hour")
 
 	def select(self, obj):
 		return obj.query(self.activity, self.hour_part)
 
-	def group(self, x):
-		return x.group_by(hour_part)
+	def group(self, obj):
+		return obj.group_by(self.hour_part)
 
-	def order(self, x):
-		return x.order_by(desc(activity))
+	def order(self, obj):
+		return obj.order_by(desc(self.activity))
 
 	def filter(self, query):
-		query_filter = QueryFilter(query)
-		return query_filter.filter(ViewAnswersLocalTime.local_creation_date != None)
+		filtered = super(ViewAnswersLocalTimeController, self).filter(query)
+		return filtered.filter(ViewAnswersLocalTime.local_creation_date != None)
+
+	def paginate(self, query):
+		return super(ViewAnswersLocalTimeController, self).paginate(query, 24)
 
 	def postprocess(self, response):
 		response = super(ViewAnswersLocalTimeController, self).postprocess(response)
