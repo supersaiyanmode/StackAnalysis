@@ -280,7 +280,6 @@ function makeTable(params) {
 				}));
 			});
 		});
-
 	}
 	
 	return {
