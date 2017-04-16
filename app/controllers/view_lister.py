@@ -11,14 +11,75 @@ view_lister_handler = Blueprint('view_lister', __name__)
 
 VIEWS = {
 	'data': [
-		("Dashboard", "dashboard", "dashboard"),
-		("Users", "users", "users"),
-		("Questions", "questions", "question-circle"),
-		("Answers", "answers", "comments"),
-		("Locations", "locations", "map-marker"),
-		("Tags", "tags", "tags"),
-		("Skill Distribution", "view_skills_locations","globe"),
-		("Time Distribution", "view_answers_local_time", "clock-o"),
+		{
+			"text": "Dashboard",
+			"view": "/static/views/dashboard/page.html",
+			"icon": "dashboard",
+			"sub": {}
+		},
+		{
+			"text": "Users",
+			"view": "/static/views/generic.html",
+			"icon": "users",
+			"sub": {
+				"title": "Users",
+				"javascript": "/static/views/users/main.js"
+			}
+		},
+		{
+			"text": "Questions",
+			"view": "/static/views/generic.html",
+			"icon": "question-circle",
+			"sub": {
+				"title": "Questions",
+				"javascript": "/static/views/questions/main.js"
+			}
+		},
+		{
+			"text": "Answers",
+			"view": "/static/views/generic.html",
+			"icon": "comments",
+			"sub": {
+				"title": "Answers",
+				"javascript": "/static/views/answers/main.js"
+			}
+		},
+		{
+			"text": "Locations",
+			"view": "/static/views/generic.html",
+			"icon": "map-marker",
+			"sub": {
+				"title": "Locations",
+				"javascript": "/static/views/locations/main.js"
+			}
+		},
+		{
+			"text": "Tags",
+			"view": "/static/views/generic.html",
+			"icon": "tags",
+			"sub": {
+				"title": "Tags",
+				"javascript": "/static/views/tags/main.js"
+			}
+		},
+		{
+			"text": "Skill Distribution",
+			"view": "/static/views/generic.html",
+			"icon": "globe",
+			"sub": {
+				"title": "Skill Distribution",
+				"javascript": "/static/views/view_skills_locations/main.js"
+			}
+		},
+		{
+			"text": "Time Distribution",
+			"view": "/static/views/generic.html",
+			"icon": "clock-o",
+			"sub": {
+				"title": "Time Distribution",
+				"javascript": "/static/views/view_answers_local_time/main.js"
+			}
+		},
 	]
 }
 
