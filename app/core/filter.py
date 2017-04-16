@@ -31,7 +31,7 @@ class QueryFilter(object):
 			operand = param["val"]
 			col_data = self.cols[col]
 			mapped_col = col_data["mapped_col"]
-
+			
 			if operand == "$$NONE$$" and operator in ('__eq__', '__ne__'):
 				operand_converted = None
 			else:

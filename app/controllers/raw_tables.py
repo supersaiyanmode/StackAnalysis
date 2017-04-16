@@ -11,7 +11,7 @@ from flask_sqlalchemy_session import current_session as session
 from sqlalchemy import func, desc
 
 from models.data import Location, Tags, Users, Questions, Answers, ViewSkillsLocations, ViewAnswersLocalTime
-from core import format_attrs, Paginator, QueryFilter
+from core import format_attrs, Paginator, QueryFilter, Sort
 
 raw_tables_handler = Blueprint('raw_tables_handler', __name__)
 
@@ -56,8 +56,9 @@ class RawTableController(MethodView):
 	def group(self, x):
 		return x
 
-	def order(self, x):
-		return x
+	def order(self, query):
+		self.sorted_query = Sort(query)
+		return self.sorted_query.order()
 
 	def paginate(self, query, page_size=10):
 		self.paginator = Paginator(page_size)

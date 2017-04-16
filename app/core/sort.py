@@ -1,12 +1,16 @@
 import json
 
 from flask import request
+from sqlalchemy.sql.sqltypes import Integer, String, DateTime
 
 from models.data import Base
+from core.inspector import ColumnsInspector
 
 class Sort(object):
 	def __init__(self, obj):
 		self.obj = obj
+		self.inspector = ColumnsInspector(obj)
+		self.cols = self.inspector.get_colums(obj)
 
 	def parse_request(self, request):
 		req = request.args.get('sort')
@@ -15,20 +19,21 @@ class Sort(object):
 
 		return json.loads(req)
 
-	def get_colums(self, obj):
-		res = []
+	def apply_order(self, obj, params):
+		for param in params:
+			col = param["col"]
+			order = param["order"]
+			col_data = self.cols[col]
+			mapped_col = col_data["mapped_col"]
 
-		for col in obj.cte().columns:
-			mapped_col = col.base_columns.pop()
-			attr_name = col.description
-			attr_type = col.type
-			convert = self.get_convert(attr_type)
-			res.append({
-				"mapped_col": mapped_col,
-				"attr_name": attr_name,
-				"attr_type": attr_type,
-				"convert": convert,
-			})
+			if order == "desc":
+				obj = obj.order_by(desc(mapped_col))
+			elif order == "asc":
+				obj = obj.order_by(mapped_col)
 
-def order(self):
-		
+		return obj
+
+	def order(self):
+		params = self.parse_request(request)
+		return self.apply_order(self.obj, params)
+
