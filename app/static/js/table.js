@@ -4,13 +4,24 @@ function makeTable(params) {
 	var queryFilterSelector = params.queryFilterSelector;
 	var visualizationSelector = params.visualizationSelector;
 	var timeChartSelector = params.timeChartSelector;
-	var trueLocationSelector = params.trueLocationSelector;
+	var orderBySelector = params.orderBySelector;
 	var tableUrl = params.url;
+	
 	var tableFilterData = [];
+	var tableOrderData = [];
+	
 	var currentView  = 'table-row';
 	var singleLoad = [
 		{
 			fn: loadFilterQueryView,
+			loaded: false
+		},
+		{
+			fn: loadOrderByView,
+			loaded: false
+		},
+		{
+			fn: attachParamUpdateEvent,
 			loaded: false
 		}
 	];
@@ -56,10 +67,13 @@ function makeTable(params) {
 		return Handlebars.compile(template)(params);
 	}
 	
-	function fetchTableData(url, filter, page, successFn, errorFn) {
+	function fetchTableData(url, filter, order, page, successFn, errorFn) {
 		var getParams = {};
 		if (filter != null) {
 			getParams.filter = JSON.stringify(filter);
+		}
+		if (order != null) {
+			getParams.order = JSON.stringify(order);
 		}
 		if (page != null) {
 			getParams.page = page;
@@ -100,7 +114,7 @@ function makeTable(params) {
 			maxVisible: 10
 		};
 		$(paginationSelector).bootpag(paginationParams).on("page", function(event, pageNumber) {
-			renderTableWithParams(pageNumber - 1, tableFilterData);
+			renderTableWithParams(pageNumber - 1, tableFilterData, tableFilterData);
 		});
 	}
 	
@@ -117,7 +131,7 @@ function makeTable(params) {
 			var curObj = {};
 			tableData.fields.forEach(function(key, index) {
 				curObj[key] = row[index];
-			});
+			});attachTableOrderByEvents
 			return [templateLoc(curObj), +templateVal(curObj)];
 		});
 		
@@ -159,7 +173,7 @@ function makeTable(params) {
 		Object.keys(views).forEach(function(key) {
 			if (tableData[key] === undefined) {
 				return;
-			}
+			}attachTableOrderByEvents
 
 			var func = views[key].fn;
 			var cls = views[key].cls;
@@ -195,8 +209,8 @@ function makeTable(params) {
 		});
 	}
 
-	function renderTableWithParams(page, filter) {
-		fetchTableData(tableUrl, filter, page, function(tableData) {
+	function renderTableWithParams(page, filter, order) {
+		fetchTableData(tableUrl, filter, order, page, function(tableData) {
 			$(paginationSelector).unbind('page');
 			loadRowCount(tableData);
 			loadPagination(tableData);
@@ -205,6 +219,33 @@ function makeTable(params) {
 			refreshViews(tableData);
 		}, function() {
 			$(tableSelector).html("Failed to load data.");
+		});
+	}
+	
+	function attachParamUpdateEvent(tableData) {
+		$(".container-fluid").on("click", "button.parameter-update", function() {
+			var obj = $(queryFilterSelector + " tbody tr").map(function() {
+				var colSel = $(this).find(".query-filter-column-select option:selected");
+				var opSel = $(this).find(".query-filter-op-select option:selected");
+				var inp = $(this).find("input[name=operand]");
+				return {
+					col: colSel.attr("value"),
+					op: opSel.attr("value"),
+					val: inp.val()
+				};
+			}).get();
+			tableFilterData = obj; //global variable update.
+			
+			var order = $(queryOrderBySelector + " tbody tr").map(function() {
+				var colSel = $(this).find(".query-filter-column-select option:selected");
+				var order = $(this).find("input[type=hidden]");
+				return {
+					col: colSel.attr("value"),
+					order: order
+				};
+			}).get();
+			tableOrderData = order; //global variable update.
+			renderTableWithParams(0, tableFilterData, order);
 		});
 	}
 	
@@ -231,28 +272,10 @@ function makeTable(params) {
 	}
 
 	function attachTableQueryFilterEvents(tableData) {
-		$(queryFilterSelector).on("click", "button.query-filter-add");
 		$(queryFilterSelector).on("click", "button.query-filter-add", function() {
 			addRowFilterQuery(tableSelector, tableData);
 		});
 
-		$(queryFilterSelector).on("click", "button.query-filter-go");
-		$(queryFilterSelector).on("click", "button.query-filter-go", function() {
-			var obj = $(queryFilterSelector + " tbody tr").map(function() {
-				var colSel = $(this).find(".query-filter-column-select option:selected");
-				var opSel = $(this).find(".query-filter-op-select option:selected");
-				var inp = $(this).find("input[name=operand]");
-				return {
-					col: colSel.attr("value"),
-					op: opSel.attr("value"),
-					val: inp.val()
-				};
-			}).get();
-			tableFilterData = obj; //global variable update.
-			renderTableWithParams(0, tableFilterData);
-		});
-
-		$(queryFilterSelector).on("change", "select.query-filter-column-select");
 		$(queryFilterSelector).on("change", "select.query-filter-column-select", function() {
 			var table = $(this).closest('table');
 			var filt = table.data("ops");
@@ -275,10 +298,37 @@ function makeTable(params) {
 		});
 	}
 	
+	function loadOrderByView(tableData) {
+		var templateTable = $("#order-by-table-template").html();
+		var html = Handlebars.compile(templateTable)();
+		var tableNode = $.parseHTML(html);
+		$(orderBySelector).append(tableNode);
+
+		addRowOrderBy(orderBySelector, tableData);
+		
+		attachTableOrderByEvents(tableData);
+	}
+	
+	function addRowOrderBy(selector, tableData) {
+		var templateRow = $("#order-by-table-row-template").html();
+		var html = Handlebars.compile(templateRow)(tableData);
+		var rowNode = $.parseHTML(html);
+		$(selector + " table tbody").append(rowNode);
+	}
+
+	function attachTableOrderByEvents(tableData) {
+		$(orderBySelector).on("click", "button.order-by-add", function() {
+			addRowOrderBy(orderBySelector, tableData);
+		});
+	}
+	
+	
+	
 	return {
 		load: function() {
 			tableFilterData = [];
-			renderTableWithParams(0, tableFilterData);
+			tableOrderData = [];
+			renderTableWithParams(0, tableFilterData, tableOrderData);
 		}
 	}
 }
