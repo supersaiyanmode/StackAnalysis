@@ -89,6 +89,11 @@ function makeTable(params) {
 		});
 	}
 	
+	function loadRowCount(tableData){
+		var total_rows = tableData.row_count;
+		$(".row-count-display").html("(" + total_rows + " rows)");
+	}
+	
 	function loadPagination(tableData) {
 		var paginationParams = {
 			total: Math.ceil(tableData.row_count / tableData.page_size),
@@ -190,6 +195,7 @@ function makeTable(params) {
 	function renderTableWithParams(page, filter) {
 		fetchTableData(tableUrl, filter, page, function(tableData) {
 			$(paginationSelector).unbind('page');
+			loadRowCount(tableData);
 			loadPagination(tableData);
 
 			//check for tableData.location
