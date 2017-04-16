@@ -7,11 +7,12 @@ function makeTable(params) {
 	var tableUrl = params.url;
 	var tableFilterData = [];
 	var currentView  = 'table-row';
-	var graphicsLoaded = {
-		visualization: false,
-		timechart: false,
-		table: false
-	};
+	var singleLoad = [
+		{
+			fn: loadFilterQueryView,
+			loaded: false
+		}
+	];
 	
 
 	function processCellContents(cell, curObj, colPostProc) {
@@ -72,6 +73,7 @@ function makeTable(params) {
 	
 	function attachTableContentEvents() {
 		//Link-Replace
+		$(tableSelector).off("click", "a.dyn-link-replace");
 		$(tableSelector).on("click", "a.dyn-link-replace", function() {
 			var element = $(this);
 			$.ajax({
@@ -99,11 +101,7 @@ function makeTable(params) {
 	
 	function loadTable(tableData) {
 		$(tableSelector).html(getTableHTML(tableData));
-		if (graphicsLoaded.table == false) {
-			attachTableContentEvents();
-			loadFilterQueryView(tableData);
-			attachTableQueryFilterEvents(tableData);
-		}
+		attachTableContentEvents();
 	}
 	
 	function loadVisualization(tableData) {
@@ -162,7 +160,7 @@ function makeTable(params) {
 			var selector = (".btn-group > a.btn[data-panel-class=" 
 						+ cls + "]");
 			$(selector).removeClass("disabled");
-			$(selector).unbind('click');
+			$(selector).off('click');
 			$(selector).on('click', function(){
 				currentView = $(this).data("panel-class");
 				$(this).parent().find('.active').removeClass('active');
@@ -174,12 +172,19 @@ function makeTable(params) {
 
 				func(tableData);
 			});
-			
+		
 			if ($(selector).data("panel-class") == currentView) {
 				func(tableData);
 			}
 		});
 		
+		singleLoad.forEach(function(obj) {
+			if (obj.loaded == true) {
+				return;
+			}
+			obj.fn(tableData);
+			obj.loaded = true;
+		});
 	}
 
 	function renderTableWithParams(page, filter) {
@@ -205,6 +210,8 @@ function makeTable(params) {
 		$(queryFilterSelector).append(tableNode);
 
 		addRowFilterQuery(queryFilterSelector, tableData);
+		
+		attachTableQueryFilterEvents(tableData);
 	}
 	
 	function addRowFilterQuery(selector, tableData) {
@@ -215,10 +222,12 @@ function makeTable(params) {
 	}
 
 	function attachTableQueryFilterEvents(tableData) {
+		$(queryFilterSelector).on("click", "button.query-filter-add");
 		$(queryFilterSelector).on("click", "button.query-filter-add", function() {
 			addRowFilterQuery(tableSelector, tableData);
 		});
-	
+
+		$(queryFilterSelector).on("click", "button.query-filter-go");
 		$(queryFilterSelector).on("click", "button.query-filter-go", function() {
 			var obj = $(queryFilterSelector + " tbody tr").map(function() {
 				var colSel = $(this).find(".query-filter-column-select option:selected");
@@ -233,7 +242,8 @@ function makeTable(params) {
 			tableFilterData = obj; //global variable update.
 			renderTableWithParams(0, tableFilterData);
 		});
-	
+
+		$(queryFilterSelector).on("change", "select.query-filter-column-select");
 		$(queryFilterSelector).on("change", "select.query-filter-column-select", function() {
 			var table = $(this).closest('table');
 			var filt = table.data("ops");
