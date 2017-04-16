@@ -137,10 +137,6 @@ function makeTable(params) {
 				drawMultiBarDistribution(timeChartSelector, data, tableData.display);
 		});
 	}
-	
-	function loadTrueLocation(tableData){
-		console.log(tableData);
-	}
 
 	function refreshViews(tableData) {
 		var views = {
@@ -158,7 +154,7 @@ function makeTable(params) {
 				fn: loadTable,
 				cls: 'table-row',
 				loadedKey: 'table'
-			},
+			}
 		}
 		Object.keys(views).forEach(function(key) {
 			if (tableData[key] === undefined) {
