@@ -53,7 +53,8 @@ function drawRegionsMap(selector, dataList, title, opts) {
 	var data = google.visualization.arrayToDataTable(dataList);
 	var options = {
 		displayMode: "markers",
-		height: 480
+		height: 480,
+		colorAxis: {colors: ['red','blue']}
 	};
 	
 	if (opts !== undefined) {
