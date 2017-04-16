@@ -12,6 +12,10 @@ function makeTable(params) {
 		{
 			fn: loadFilterQueryView,
 			loaded: false
+		},
+		{
+			fn: removeFilterRow,
+			loaded: false
 		}
 	];
 
@@ -35,6 +39,13 @@ function makeTable(params) {
 				value: cell
 			};
 		}
+	}
+		
+	function removeFilterRow(){	
+		$(queryFilterSelector).on("click", "button.remove-row", function(){
+			var tr = $(this).closest("tr");
+			tr.remove();
+		});
 	}
 	
 	function getTableHTML(tableData) {
@@ -87,8 +98,7 @@ function makeTable(params) {
 			});
 		});
 	}
-	
-	
+
 	function loadRowCount(tableData){
 		var total_rows = tableData.row_count;
 		$(".row-count-display").html("(" + total_rows + " rows)");
@@ -233,11 +243,6 @@ function makeTable(params) {
 	function attachTableQueryFilterEvents(tableData) {
 		$(queryFilterSelector).on("click", "button.query-filter-add", function() {
 			addRowFilterQuery(tableSelector, tableData);
-		});
-		
-		$(queryFilterSelector).on("click", "button.remove-row", function(){
-			var tr = $(this).closest("tr");
-			tr.remove();
 		});
 		
 		$(queryFilterSelector).on("click", "button.query-filter-go", function() {
