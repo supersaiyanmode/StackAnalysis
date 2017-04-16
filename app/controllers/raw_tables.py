@@ -212,6 +212,37 @@ class ViewSkillsLocationsController(RawTableController):
 		return response
 
 
+class ViewReputationDistributionController(RawTableController):
+	table = ViewSkillsLocations
+	input_fields = ['city', 'country', 'state', 'skill_id', 'avg_score']
+	output_fields = ['City', 'Country', 'State', 'Skill ID', 'Average Score']
+	location = "{{city}}, {{state}}, {{country}}"
+	score = "{{avg_score}}"
+	
+	def postprocess(self, response):
+		response = super(ViewReputationDistributionController, self).postprocess(response)
+
+		response['location'] = self.location
+		response['score'] = self.score
+
+		return response
+
+
+class ViewPostsCountDistributionController(RawTableController):
+	table = ViewSkillsLocations
+	input_fields = ['city', 'country', 'state', 'skill_id', 'posts_count']
+	output_fields = ['City', 'Country', 'State', 'Skill ID', 'Posts Count']
+	location = "{{city}}, {{state}}, {{country}}"
+	score = "{{posts_count}}"
+
+	def postprocess(self, response):
+		response = super(ViewPostsCountDistributionController, self).postprocess(response)
+
+		response['location'] = self.location
+		response['score'] = self.score
+
+		return response
+
 class TrueLocationReputationController (RawTableController):
 	table = TrueLocationReputation
 	input_fields = ["range", "no_location", "has_location"]
@@ -292,5 +323,12 @@ raw_tables_handler.add_url_rule( '/view_skills_locations/',
 raw_tables_handler.add_url_rule( '/view_answers_local_time/',
 	view_func=ViewAnswersLocalTimeController.as_view('view_answers_local_time'))
 
+raw_tables_handler.add_url_rule( '/view_average_score_locations/',
+	view_func=ViewReputationDistributionController.as_view('view_average_score_locations'))
+
+raw_tables_handler.add_url_rule( '/view_posts_count_locations/',
+	view_func=ViewPostsCountDistributionController.as_view('view_posts_count_locations'))
+
 raw_tables_handler.add_url_rule( '/true_location_reputation/',
 	view_func=TrueLocationReputationController.as_view('true_location_reputation'))
+

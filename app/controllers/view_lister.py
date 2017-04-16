@@ -81,6 +81,23 @@ VIEWS = {
 			}
 		},
 		{
+			"text": "Posts Count Distribution",
+			"view": "/static/views/generic.html",
+			"icon": "clock-o",
+			"sub": {
+				"title": "Time Distribution",
+				"javascript": "/static/views/view_posts_count_locations/main.js"
+			}
+		},
+		{
+			"text": "Average Score Distribution",
+			"view": "/static/views/generic.html",
+			"icon": "clock-o",
+			"sub": {
+				"title": "Average Distribution",
+				"javascript": "/static/views/view_average_score_locations/main.js"
+			}
+		},
 			"text": "Reputation v/s Fake Location",
 			"view": "/static/views/generic.html",
 			"icon": "bar-chart",
