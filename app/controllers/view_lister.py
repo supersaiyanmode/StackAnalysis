@@ -5,7 +5,7 @@ from flask import Blueprint
 from flask import jsonify
 
 from models.data import Location
-from utils import format_keys
+from core import format_keys
 
 view_lister_handler = Blueprint('view_lister', __name__)
 
