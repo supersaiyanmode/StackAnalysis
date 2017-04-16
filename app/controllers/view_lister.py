@@ -80,6 +80,15 @@ VIEWS = {
 				"javascript": "/static/views/view_answers_local_time/main.js"
 			}
 		},
+		{
+			"text": "Reputation v/s Fake Location",
+			"view": "/static/views/generic.html",
+			"icon": "bar-chart",
+			"sub": {
+				"title": "Reputation v/s Fake Location",
+				"javascript": "/static/views/true_location_reputation/main.js"
+			}
+		}
 	]
 }
 
