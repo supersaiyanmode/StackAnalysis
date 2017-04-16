@@ -180,6 +180,25 @@ class ViewSkillsLocationsController(RawTableController):
 	output_fields = ['City', 'Country', 'State', 'Skill ID', 'Total Score']
 	location = "{{city}}, {{state}}, {{country}}"
 	score = "{{total_score}}"
+	postprocessors = {
+		"skill_id": {
+			"type": "link_replace",
+			"url" :"/tags/{{skill_id}}/",
+			"replace": "{{name}}",
+			},
+		"city": {
+			"type": "link_open",
+			"url": "//maps.google.com/maps/place/{{city}},{{state}},{{country}}",
+		},
+		"state": {
+			"type": "link_open",
+			"url": "//maps.google.com/maps/place/{{state}},{{country}}",
+		},
+		"country": {
+			"type": "link_open",
+			"url": "//maps.google.com/maps/place/{{country}}",
+		}
+	}
 
 	def order(self, obj):
 		return obj.order_by(desc(ViewSkillsLocations.total_score))
