@@ -25,7 +25,7 @@ function makeTable(params) {
 				type_link_replace: "link_replace",
 				url: Handlebars.compile(colPostProc.url)(curObj),
 				replace: colPostProc.replace,
-				vapaginationSelectorlue: cell
+				value: cell
 			};
 		} else if (colPostProc.type == "link_open") {
 			return {
