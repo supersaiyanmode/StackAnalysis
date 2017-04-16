@@ -221,8 +221,8 @@ class TrueLocationReputationController (RawTableController):
 		range_obj = func.concat(TrueLocationReputation.low,
 							'-',
 							TrueLocationReputation.high).label('range')
-		no_loc = TrueLocationReputation.no_location
-		has_loc = TrueLocationReputation.has_location
+		no_loc = func.log(TrueLocationReputation.no_location + 1).label('no_location')
+		has_loc = func.log(TrueLocationReputation.has_location + 1).label('has_location')
 		return obj.query(range_obj, no_loc, has_loc)
 
 	def postprocess(self, response):
