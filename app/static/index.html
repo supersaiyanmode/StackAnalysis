@@ -49,7 +49,6 @@
 			</tbody>
 		</table>
 		<button class="btn btn-default query-filter-add">Add Row</button>
-		<button class="btn btn-default query-filter-go">Update</button>
 	</div>
 	</script>
 	
@@ -70,6 +69,49 @@
 		</td>
 		<td>
 			<input class="form-control" type="text" name="operand" />
+		</td>
+	</tr>
+	</script>
+	
+	
+	<script id="order-by-table-template" type="text/template">
+	<h4>Order</h4>
+	<div class="table-responsive">
+		<table class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>Column</th>
+					<th>Order</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				
+			</tbody>
+		</table>
+		<button class="btn btn-default order-by-add">Add Row</button>
+	</div>
+	</script>
+	
+	<script id="order-by-table-row-template" type="text/template">
+	<tr>
+		<td>
+			<select class="form-control query-filter-column-select">
+				<option value="">Select</option>
+				{{#each filter}}
+				<option value={{id}}>{{text}}</option>
+				{{/each}}
+			</select>
+		</td>
+		<td>
+			<input type="hidden" name="order" />
+			<div class="btn-group pagination" style="margin: 0px">
+				<a class="btn btn-default active" href="#">Ascending</a>
+				<a class="btn btn-default" href="#">Descending</a>
+			</div>
+		</td>
+		<td>
+			<button>X</button>
 		</td>
 	</tr>
 	</script>
