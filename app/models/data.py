@@ -106,7 +106,7 @@ class ViewSkillsLocations(Base):
 	country = Column(String)
 	state = Column(String)
 	skill_id = Column(Integer)
-	total_score = Column(Float)
+	total_score = Column(Integer)
 	__table_args__ = (PrimaryKeyConstraint('city', 'state', 'country', name='view_skills_locations_pk'),)
 
 class ViewUserSkills(Base):
