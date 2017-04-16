@@ -218,6 +218,25 @@ class ViewReputationDistributionController(RawTableController):
 	output_fields = ['City', 'Country', 'State', 'Skill ID', 'Average Score']
 	location = "{{city}}, {{state}}, {{country}}"
 	score = "{{avg_score}}"
+	postprocessors = {
+		"skill_id": {
+			"type": "link_replace",
+			"url" :"/tags/{{skill_id}}/",
+			"replace": "{{name}}",
+			},
+		"city": {
+			"type": "link_open",
+			"url": "//maps.google.com/maps/place/{{city}},{{state}},{{country}}",
+		},
+		"state": {
+			"type": "link_open",
+			"url": "//maps.google.com/maps/place/{{state}},{{country}}",
+		},
+		"country": {
+			"type": "link_open",
+			"url": "//maps.google.com/maps/place/{{country}}",
+		}
+	}
 	
 	def postprocess(self, response):
 		response = super(ViewReputationDistributionController, self).postprocess(response)
@@ -234,6 +253,25 @@ class ViewPostsCountDistributionController(RawTableController):
 	output_fields = ['City', 'Country', 'State', 'Skill ID', 'Posts Count']
 	location = "{{city}}, {{state}}, {{country}}"
 	score = "{{posts_count}}"
+	postprocessors = {
+		"skill_id": {
+			"type": "link_replace",
+			"url" :"/tags/{{skill_id}}/",
+			"replace": "{{name}}",
+			},
+		"city": {
+			"type": "link_open",
+			"url": "//maps.google.com/maps/place/{{city}},{{state}},{{country}}",
+		},
+		"state": {
+			"type": "link_open",
+			"url": "//maps.google.com/maps/place/{{state}},{{country}}",
+		},
+		"country": {
+			"type": "link_open",
+			"url": "//maps.google.com/maps/place/{{country}}",
+		}
+	}
 
 	def postprocess(self, response):
 		response = super(ViewPostsCountDistributionController, self).postprocess(response)
