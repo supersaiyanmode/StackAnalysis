@@ -12,6 +12,10 @@ function makeTable(params) {
 		{
 			fn: loadFilterQueryView,
 			loaded: false
+		},
+		{
+			fn: removeFilterRow,
+			loaded: false
 		}
 	];
 
@@ -35,6 +39,13 @@ function makeTable(params) {
 				value: cell
 			};
 		}
+	}
+		
+	function removeFilterRow(){	
+		$(queryFilterSelector).on("click", "button.remove-row", function(){
+			var tr = $(this).closest("tr");
+			tr.remove();
+		});
 	}
 	
 	function getTableHTML(tableData) {
@@ -73,7 +84,6 @@ function makeTable(params) {
 	
 	function attachTableContentEvents() {
 		//Link-Replace
-		$(tableSelector).off("click", "a.dyn-link-replace");
 		$(tableSelector).on("click", "a.dyn-link-replace", function() {
 			var element = $(this);
 			$.ajax({
@@ -88,7 +98,7 @@ function makeTable(params) {
 			});
 		});
 	}
-	
+
 	function loadRowCount(tableData){
 		var total_rows = tableData.row_count;
 		$(".row-count-display").html("(" + total_rows + " rows)");
@@ -222,7 +232,7 @@ function makeTable(params) {
 		
 		attachTableQueryFilterEvents(tableData);
 	}
-	
+
 	function addRowFilterQuery(selector, tableData) {
 		var templateRow = $("#filter-table-row-template").html();
 		var html = Handlebars.compile(templateRow)(tableData);
@@ -231,12 +241,10 @@ function makeTable(params) {
 	}
 
 	function attachTableQueryFilterEvents(tableData) {
-		$(queryFilterSelector).on("click", "button.query-filter-add");
 		$(queryFilterSelector).on("click", "button.query-filter-add", function() {
 			addRowFilterQuery(tableSelector, tableData);
 		});
-
-		$(queryFilterSelector).on("click", "button.query-filter-go");
+		
 		$(queryFilterSelector).on("click", "button.query-filter-go", function() {
 			var obj = $(queryFilterSelector + " tbody tr").map(function() {
 				var colSel = $(this).find(".query-filter-column-select option:selected");
@@ -252,7 +260,6 @@ function makeTable(params) {
 			renderTableWithParams(0, tableFilterData);
 		});
 
-		$(queryFilterSelector).on("change", "select.query-filter-column-select");
 		$(queryFilterSelector).on("change", "select.query-filter-column-select", function() {
 			var table = $(this).closest('table');
 			var filt = table.data("ops");

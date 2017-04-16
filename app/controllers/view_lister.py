@@ -98,6 +98,7 @@ VIEWS = {
 				"javascript": "/static/views/view_average_score_locations/main.js"
 			}
 		},
+		{
 			"text": "Reputation v/s Fake Location",
 			"view": "/static/views/generic.html",
 			"icon": "bar-chart",
