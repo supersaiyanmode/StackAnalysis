@@ -4,7 +4,7 @@ from flask import jsonify
 from flask_sqlalchemy_session import current_session as session
 
 from models.data import Location, Tags, Questions, Answers, Users
-from utils import format_keys
+from core import format_keys
 
 overview_handler = Blueprint('overview_handler', __name__)
 

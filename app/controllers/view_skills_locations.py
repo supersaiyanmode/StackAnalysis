@@ -8,7 +8,7 @@ from flask import jsonify
 from flask_sqlalchemy_session import current_session as session
 
 from models.data import Location, Tags
-from utils import format_keys
+from core import format_keys
 
 view_skills_locations_handler = Blueprint('tag_handler', __name__)
 

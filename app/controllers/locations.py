@@ -6,7 +6,7 @@ from flask_sqlalchemy_session import current_session as session
 from sqlalchemy import distinct
 
 from models.data import Location
-from utils import format_attrs
+from core import format_attrs
 
 location_handler = Blueprint('location_handler', __name__)
 

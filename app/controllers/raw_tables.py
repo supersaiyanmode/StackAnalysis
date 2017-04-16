@@ -11,7 +11,7 @@ from flask_sqlalchemy_session import current_session as session
 from sqlalchemy import func, desc
 
 from models.data import Location, Tags, Users, Questions, Answers, ViewSkillsLocations, ViewAnswersLocalTime
-from utils import format_attrs, Paginator, QueryFilter
+from core import format_attrs, Paginator, QueryFilter
 
 raw_tables_handler = Blueprint('raw_tables_handler', __name__)
 
