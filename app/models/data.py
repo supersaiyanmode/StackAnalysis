@@ -120,6 +120,15 @@ class ViewUserSkills(Base):
 	total_score = Column(Integer)
 	__table_args__ = (PrimaryKeyConstraint('user_id', 'user_skill_id', name='view_user_skills_pk'),)
 
+class TrueLocationReputation(Base):
+	__tablename__ = 'true_location_reputation'
+
+	low = Column(Integer)
+	high = Column(Integer)
+	no_location = Column(Integer)
+	has_location = Column(Integer)
+	__table_args__ = (PrimaryKeyConstraint('low', 'high', name = 'true_location_reputation_pk'),)
+
 def get_sqlite3_session(path):
 	class ForeignKeysListener(PoolListener):
 		def connect(self, dbapi_con, con_record):
