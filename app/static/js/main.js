@@ -7,29 +7,25 @@ function getQueries(successFn, errorFn) {
 	}).done(successFn).fail(errorFn);
 }
 
-function setCentralView(view) {
+function setCentralView(view, sub) {
 	$("ul.nav.navbar-nav.side-nav li.active").removeClass("active");
-	$("ul.nav.navbar-nav.side-nav li a[data-view='" + view + "']").parent().addClass("active");
-	$.get("/static/views/" + view + "/page.html", function (data) {
-		$("#page-wrapper").html(data);
+	$("ul.nav.navbar-nav.side-nav li a[data-view='" + view + "']" +
+		"[data-sub='" + JSON.stringify(sub) + "']").parent().addClass("active");
+	$.get(view, function (data) {
+		var html = Handlebars.compile(data)(sub);
+		$("#page-wrapper").html(html);
 	});
 }
 
 function loadNavigation() {
 	var listItemTemplate = $("ul.nav.navbar-nav.side-nav").html();
 	var output = $("ul.nav.navbar-nav.side-nav");
+	var template = Handlebars.compile(listItemTemplate);
 
 	getQueries(function(obj) {
-		var fields = obj.fields;
-		var data = obj.data;
-		var html = data.map(function(x) {
-			var params = {
-				text: x[0],
-				view: x[1],
-				icon: x[2]
-			};
-			var template = Handlebars.compile(listItemTemplate);
-			return template(params);
+		var html = obj.data.map(function(x) {
+			x.sub = JSON.stringify(x.sub);
+			return template(x);
 		}).join("");
 		output.html(html);
 	}, function(obj) {
@@ -38,10 +34,11 @@ function loadNavigation() {
 	
 	$("ul.nav.navbar-nav.side-nav").on("click", "li a", function() {
 		var view = $(this).data("view");
-		setCentralView(view);
+		var sub = $(this).data("sub");
+		setCentralView(view, sub);
 	})
 	setTimeout(function() {
-		setCentralView('dashboard');
+		$($('a', output)[0]).click();
 	}, 10)
 }
 
