@@ -101,6 +101,27 @@ function drawTimeDistribution(selector, dataList, title, opts) {
 	chart.draw(data, options);
 }
 
+function drawMultiBarDistribution (selector, dataList, title, opts){
+	var data = dataList.slice();
+	data.unshift(title);
+	data = google.visualization.arrayToDataTable(data);
+	var options = {
+		title : 'Reputation vs Fake Locations',
+		vAxis: {title: 'Locations'},
+		hAxis: {title: 'Reputation'},
+		seriesType: 'bars',
+		series: {5: {type: 'line'}},
+		height: 480
+	};
+	if (opts !== undefined) {
+		$.extend(options, opts);
+	}
+
+	var element = $(selector)[0];
+	var chart = new google.visualization.ComboChart(element);
+	chart.draw(data, options);
+}
+
 $(document).ready(loadNavigation);
 
 

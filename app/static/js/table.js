@@ -4,6 +4,7 @@ function makeTable(params) {
 	var queryFilterSelector = params.queryFilterSelector;
 	var visualizationSelector = params.visualizationSelector;
 	var timeChartSelector = params.timeChartSelector;
+	var trueLocationSelector = params.trueLocationSelector;
 	var tableUrl = params.url;
 	var tableFilterData = [];
 	var currentView  = 'table-row';
@@ -13,7 +14,6 @@ function makeTable(params) {
 			loaded: false
 		}
 	];
-	
 
 	function processCellContents(cell, curObj, colPostProc) {
 		if (colPostProc === undefined) {
@@ -130,11 +130,14 @@ function makeTable(params) {
 	function loadTimeChart(tableData) {
 		google.charts.load('45', {mapsApiKey:'AIzaSyCB_W92iIgF-ocGgjwSPLlxU_oGhMQ0lKo', 'packages':['corechart']});
 		google.charts.setOnLoadCallback(function() {
-			var data = tableData.data.map(function (x) { return [x[1], x[0]]; });
-			drawTimeDistribution(timeChartSelector, data, ["Activity", "Posts"]);
+			var data = tableData.data;
+			if (tableData.charttype == "timechart")
+				drawTimeDistribution(timeChartSelector, data, tableData.display);
+			else
+				drawMultiBarDistribution(timeChartSelector, data, tableData.display);
 		});
 	}
-	
+
 	function refreshViews(tableData) {
 		var views = {
 			location: {

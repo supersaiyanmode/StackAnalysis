@@ -10,8 +10,11 @@ from flask_sqlalchemy_session import current_session as session
 
 from sqlalchemy import func, desc
 
-from models.data import Location, Tags, Users, Questions, Answers, ViewSkillsLocations, ViewAnswersLocalTime
+from models.data import Location, Tags, Users, Questions, Answers
+from models.data import ViewSkillsLocations, ViewAnswersLocalTime
+from models.data import TrueLocationReputation
 from core import format_attrs, Paginator, QueryFilter, Sort
+
 
 raw_tables_handler = Blueprint('raw_tables_handler', __name__)
 
@@ -36,7 +39,6 @@ class RawTableController(MethodView):
 			response = format_attrs(objects, *args, **kwargs)
 
 			response = self.postprocess(response)
-
 			return jsonify(**response)
 		else:
 			obj = session.query(self.table).get(int(id))
@@ -210,11 +212,29 @@ class ViewSkillsLocationsController(RawTableController):
 		return response
 
 
+class TrueLocationReputationController (RawTableController):
+	table = TrueLocationReputation
+	input_fields = ["range", "no_location", "has_location"]
+	output_fields = ["Reputation Range", "No Location", "Has Location"]
+
+	def select(self, obj):
+		range_obj = func.concat(TrueLocationReputation.low,
+							'-',
+							TrueLocationReputation.high).label('range')
+		no_loc = TrueLocationReputation.no_location
+		has_loc = TrueLocationReputation.has_location
+		return obj.query(range_obj, no_loc, has_loc)
+
+	def postprocess(self, response):
+		response = super(TrueLocationReputationController, self).postprocess(response)
+		response["timechart"] = True
+		response["charttype"] = "multibar"
+		return response
 
 class ViewAnswersLocalTimeController(RawTableController):
 	table = ViewAnswersLocalTime
-	input_fields = ["activity", "hour"]
-	output_fields = ["Activity", "Hour"]
+	input_fields = ["hour", "activity"]
+	output_fields = ["Hour", "Activity"]
 
 	activity = func.count(ViewAnswersLocalTime.id).label("activity")
 	hour_part = func.date_part('hour', ViewAnswersLocalTime.local_creation_date).label("hour")
@@ -238,6 +258,7 @@ class ViewAnswersLocalTimeController(RawTableController):
 	def postprocess(self, response):
 		response = super(ViewAnswersLocalTimeController, self).postprocess(response)
 		response["timechart"] = True
+		response["charttype"] = "timechart"
 		return response
 
 raw_tables_handler.add_url_rule( '/users/<int:id>/',
@@ -270,3 +291,6 @@ raw_tables_handler.add_url_rule( '/view_skills_locations/',
 
 raw_tables_handler.add_url_rule( '/view_answers_local_time/',
 	view_func=ViewAnswersLocalTimeController.as_view('view_answers_local_time'))
+
+raw_tables_handler.add_url_rule( '/true_location_reputation/',
+	view_func=TrueLocationReputationController.as_view('true_location_reputation'))
