@@ -1,6 +1,7 @@
 import json
 
 from flask import request
+from sqlalchemy import desc
 from sqlalchemy.sql.sqltypes import Integer, String, DateTime
 
 from models.data import Base
