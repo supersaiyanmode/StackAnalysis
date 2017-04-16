@@ -6,11 +6,12 @@ function getOverview(successFn, errorFn) {
 }
 
 function loadOverViewHTML() {
-	var htmlTemplate = $("#page-wrapper .template").html();
+	var htmlTemplate = $("#overview-template").html();
 	var output = $("#page-wrapper .dashboard-content");
 	getOverview(
 		function success(obj) {
 			var html = obj.data.map(function(x){
+				x.sub = JSON.stringify(x.sub);
 				x.number = x.number.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
 				return Handlebars.compile(htmlTemplate)(x);
 			}).join('');
@@ -23,7 +24,8 @@ function loadOverViewHTML() {
 
 	$("#page-wrapper .dashboard-content").on("click", "a", function() {
 		var view = $(this).data('view');
-		setCentralView(view);
+		var sub = $(this).data('sub');
+		setCentralView(view, sub);
 	});
 }
 
@@ -32,4 +34,4 @@ function onload() {
 }
 
 $(document).ready(onload);
-
+//# sourceURL=dashboard.js
