@@ -129,6 +129,14 @@ class TrueLocationReputation(Base):
 	has_location = Column(Integer)
 	__table_args__ = (PrimaryKeyConstraint('low', 'high', name = 'true_location_reputation_pk'),)
 
+class UsersMultipleTags(Base):
+	__tablename__ = 'users_multiple_tags'
+
+	low = Column(Integer)
+	high = Column(Integer)
+	users = Column(Integer)
+	__table_args__ = (PrimaryKeyConstraint('low', 'high', name = 'users_multiple_tags_pk'),)
+
 def get_sqlite3_session(path):
 	class ForeignKeysListener(PoolListener):
 		def connect(self, dbapi_con, con_record):
