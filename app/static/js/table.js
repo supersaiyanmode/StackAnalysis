@@ -2,6 +2,7 @@ function makeTable(params) {
 	var tableSelector = params.selector;
 	var paginationSelector = params.paginationSelector;
 	var queryFilterSelector = params.queryFilterSelector;
+	var orderBySelector = params.orderBySelector;
 	var visualizationSelector = params.visualizationSelector;
 	var timeChartSelector = params.timeChartSelector;
 	var orderBySelector = params.orderBySelector;
@@ -84,7 +85,7 @@ function makeTable(params) {
 			getParams.filter = JSON.stringify(filter);
 		}
 		if (order != null) {
-			getParams.order = JSON.stringify(order);
+			getParams.sort = JSON.stringify(order);
 		}
 		if (page != null) {
 			getParams.page = page;
@@ -245,17 +246,21 @@ function makeTable(params) {
 					op: opSel.attr("value"),
 					val: inp.val()
 				};
-			}).get();
+			}).get().filter(function(obj) {
+				return obj.op !== undefined && obj.op.length > 0;
+			});
 			tableFilterData = obj; //global variable update.
 			
-			var order = $(queryOrderBySelector + " tbody tr").map(function() {
+			var order = $(orderBySelector + " tbody tr").map(function() {
 				var colSel = $(this).find(".query-filter-column-select option:selected");
 				var order = $(this).find("input[type=hidden]");
 				return {
 					col: colSel.attr("value"),
-					order: order
+					order: order.val()
 				};
-			}).get();
+			}).get().filter(function(obj) {
+				return obj.order !== undefined && obj.order.length > 0;
+			});;
 			tableOrderData = order; //global variable update.
 			renderTableWithParams(0, tableFilterData, order);
 		});
@@ -349,6 +354,13 @@ function makeTable(params) {
 	function attachTableOrderByEvents(tableData) {
 		$(orderBySelector).on("click", "button.order-by-add", function() {
 			addRowOrderBy(orderBySelector, tableData);
+		});
+
+		$(orderBySelector).on("click", "div.order-by-buttons a", function() {
+			var val = $(this).data("value");
+			$(this).parent().find(".active").removeClass("active");
+			$(this).addClass("active");
+			$(this).closest("tr").find("input[name=order]").val(val);
 		});
 	}
 	
