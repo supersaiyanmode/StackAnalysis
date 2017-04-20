@@ -307,8 +307,7 @@ class UsersMultipleTagsController (RawTableController):
 
 	def select(self,obj):
 		range_obj = func.concat(UsersMultipleTags.low,
-							'-',
-							UsersMultipleTags.high).label('range')
+							'-',UsersMultipleTags.high).label('range')
 		users = UsersMultipleTags.users
 		return obj.query(range_obj, users)
 
