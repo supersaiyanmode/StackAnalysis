@@ -28,8 +28,16 @@ function makeTable(params) {
 		{
 			fn: removeFilterRow,
 			loaded: false
+		},
+		{
+			fn: setTableStyle,
+			loaded: false
 		}
 	];
+	
+	function setTableStyle() {
+		$(".container-fluid table th:last-child").css("width", "32px");
+	}
 
 	function processCellContents(cell, curObj, colPostProc) {
 		if (colPostProc === undefined) {
