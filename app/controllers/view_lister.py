@@ -81,12 +81,39 @@ VIEWS = {
 			}
 		},
 		{
+			"text": "Posts Count Distribution",
+			"view": "/static/views/generic.html",
+			"icon": "clipboard",
+			"sub": {
+				"title": "Time Distribution",
+				"javascript": "/static/views/view_posts_count_locations/main.js"
+			}
+		},
+		{
+			"text": "Average Score Distribution",
+			"view": "/static/views/generic.html",
+			"icon": "star-half-o",
+			"sub": {
+				"title": "Average Distribution",
+				"javascript": "/static/views/view_average_score_locations/main.js"
+			}
+		},
+		{
 			"text": "Reputation v/s Fake Location",
 			"view": "/static/views/generic.html",
 			"icon": "bar-chart",
 			"sub": {
 				"title": "Reputation v/s Fake Location",
 				"javascript": "/static/views/true_location_reputation/main.js"
+			}
+		},
+		{
+			"text": "Users And Multiple Tags",
+			"view": "/static/views/generic.html",
+			"icon": "bar-chart",
+			"sub": {
+				"title": "Users And Multiple Tags",
+				"javascript": "/static/views/users_multiple_tags/main.js"
 			}
 		}
 	]

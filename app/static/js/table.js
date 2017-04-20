@@ -23,6 +23,10 @@ function makeTable(params) {
 		{
 			fn: attachParamUpdateEvent,
 			loaded: false
+		},
+		{
+			fn: removeFilterRow,
+			loaded: false
 		}
 	];
 
@@ -46,6 +50,13 @@ function makeTable(params) {
 				value: cell
 			};
 		}
+	}
+		
+	function removeFilterRow(){	
+		$(queryFilterSelector).on("click", "button.remove-row", function(){
+			var tr = $(this).closest("tr");
+			tr.remove();
+		});
 	}
 	
 	function getTableHTML(tableData) {
@@ -87,7 +98,6 @@ function makeTable(params) {
 	
 	function attachTableContentEvents() {
 		//Link-Replace
-		$(tableSelector).off("click", "a.dyn-link-replace");
 		$(tableSelector).on("click", "a.dyn-link-replace", function() {
 			var element = $(this);
 			$.ajax({
@@ -102,7 +112,7 @@ function makeTable(params) {
 			});
 		});
 	}
-	
+
 	function loadRowCount(tableData){
 		var total_rows = tableData.row_count;
 		$(".row-count-display").html("(" + total_rows + " rows)");
@@ -147,8 +157,10 @@ function makeTable(params) {
 			var data = tableData.data;
 			if (tableData.charttype == "timechart")
 				drawTimeDistribution(timeChartSelector, data, tableData.display);
-			else
+			else if(tableData.charttype == "multibar")
 				drawMultiBarDistribution(timeChartSelector, data, tableData.display);
+			else if (tableData.charttype == "histogram")
+				drawMultipleTagsBarDistribution(timeChartSelector, data, tableData.display);
 		});
 	}
 
@@ -263,7 +275,7 @@ function makeTable(params) {
 		
 		attachTableQueryFilterEvents(tableData);
 	}
-	
+
 	function addRowFilterQuery(selector, tableData) {
 		var templateRow = $("#filter-table-row-template").html();
 		var html = Handlebars.compile(templateRow)(tableData);
@@ -275,6 +287,24 @@ function makeTable(params) {
 		$(queryFilterSelector).on("click", "button.query-filter-add", function() {
 			addRowFilterQuery(tableSelector, tableData);
 		});
+<<<<<<< HEAD
+=======
+		
+		$(queryFilterSelector).on("click", "button.query-filter-go", function() {
+			var obj = $(queryFilterSelector + " tbody tr").map(function() {
+				var colSel = $(this).find(".query-filter-column-select option:selected");
+				var opSel = $(this).find(".query-filter-op-select option:selected");
+				var inp = $(this).find("input[name=operand]");
+				return {
+					col: colSel.attr("value"),
+					op: opSel.attr("value"),
+					val: inp.val()
+				};
+			}).get();
+			tableFilterData = obj; //global variable update.
+			renderTableWithParams(0, tableFilterData);
+		});
+>>>>>>> master
 
 		$(queryFilterSelector).on("change", "select.query-filter-column-select", function() {
 			var table = $(this).closest('table');

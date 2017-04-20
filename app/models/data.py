@@ -107,6 +107,8 @@ class ViewSkillsLocations(Base):
 	state = Column(String)
 	skill_id = Column(Integer)
 	total_score = Column(Integer)
+	avg_score = Column(Integer)
+	posts_count = Column(Integer)
 	__table_args__ = (PrimaryKeyConstraint('city', 'state', 'country', name='view_skills_locations_pk'),)
 
 class ViewUserSkills(Base):
@@ -126,6 +128,14 @@ class TrueLocationReputation(Base):
 	no_location = Column(Integer)
 	has_location = Column(Integer)
 	__table_args__ = (PrimaryKeyConstraint('low', 'high', name = 'true_location_reputation_pk'),)
+
+class UsersMultipleTags(Base):
+	__tablename__ = 'view_users_multiple_tags'
+
+	low = Column(Integer)
+	high = Column(Integer)
+	users = Column(Integer)
+	__table_args__ = (PrimaryKeyConstraint('low', 'high', name = 'users_multiple_tags_pk'),)
 
 def get_sqlite3_session(path):
 	class ForeignKeysListener(PoolListener):

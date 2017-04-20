@@ -11,7 +11,7 @@ from flask_sqlalchemy_session import current_session as session
 from sqlalchemy import func, desc
 
 from models.data import Location, Tags, Users, Questions, Answers
-from models.data import ViewSkillsLocations, ViewAnswersLocalTime
+from models.data import ViewSkillsLocations, ViewAnswersLocalTime, UsersMultipleTags
 from models.data import TrueLocationReputation
 from core import format_attrs, Paginator, QueryFilter, Sort
 
@@ -212,6 +212,75 @@ class ViewSkillsLocationsController(RawTableController):
 		return response
 
 
+class ViewReputationDistributionController(RawTableController):
+	table = ViewSkillsLocations
+	input_fields = ['city', 'country', 'state', 'skill_id', 'avg_score']
+	output_fields = ['City', 'Country', 'State', 'Skill ID', 'Average Score']
+	location = "{{city}}, {{state}}, {{country}}"
+	score = "{{avg_score}}"
+	postprocessors = {
+		"skill_id": {
+			"type": "link_replace",
+			"url" :"/tags/{{skill_id}}/",
+			"replace": "{{name}}",
+			},
+		"city": {
+			"type": "link_open",
+			"url": "//maps.google.com/maps/place/{{city}},{{state}},{{country}}",
+		},
+		"state": {
+			"type": "link_open",
+			"url": "//maps.google.com/maps/place/{{state}},{{country}}",
+		},
+		"country": {
+			"type": "link_open",
+			"url": "//maps.google.com/maps/place/{{country}}",
+		}
+	}
+	
+	def postprocess(self, response):
+		response = super(ViewReputationDistributionController, self).postprocess(response)
+
+		response['location'] = self.location
+		response['score'] = self.score
+
+		return response
+
+
+class ViewPostsCountDistributionController(RawTableController):
+	table = ViewSkillsLocations
+	input_fields = ['city', 'country', 'state', 'skill_id', 'posts_count']
+	output_fields = ['City', 'Country', 'State', 'Skill ID', 'Posts Count']
+	location = "{{city}}, {{state}}, {{country}}"
+	score = "{{posts_count}}"
+	postprocessors = {
+		"skill_id": {
+			"type": "link_replace",
+			"url" :"/tags/{{skill_id}}/",
+			"replace": "{{name}}",
+			},
+		"city": {
+			"type": "link_open",
+			"url": "//maps.google.com/maps/place/{{city}},{{state}},{{country}}",
+		},
+		"state": {
+			"type": "link_open",
+			"url": "//maps.google.com/maps/place/{{state}},{{country}}",
+		},
+		"country": {
+			"type": "link_open",
+			"url": "//maps.google.com/maps/place/{{country}}",
+		}
+	}
+
+	def postprocess(self, response):
+		response = super(ViewPostsCountDistributionController, self).postprocess(response)
+
+		response['location'] = self.location
+		response['score'] = self.score
+
+		return response
+
 class TrueLocationReputationController (RawTableController):
 	table = TrueLocationReputation
 	input_fields = ["range", "no_location", "has_location"]
@@ -221,14 +290,32 @@ class TrueLocationReputationController (RawTableController):
 		range_obj = func.concat(TrueLocationReputation.low,
 							'-',
 							TrueLocationReputation.high).label('range')
-		no_loc = TrueLocationReputation.no_location
-		has_loc = TrueLocationReputation.has_location
+		no_loc = func.log(TrueLocationReputation.no_location + 1).label('no_location')
+		has_loc = func.log(TrueLocationReputation.has_location + 1).label('has_location')
 		return obj.query(range_obj, no_loc, has_loc)
 
 	def postprocess(self, response):
 		response = super(TrueLocationReputationController, self).postprocess(response)
 		response["timechart"] = True
 		response["charttype"] = "multibar"
+		return response
+
+class UsersMultipleTagsController (RawTableController):
+	table = UsersMultipleTags
+	input_fields = ["range", "users"]
+	output_fields = ["Tags Range", "Users"]
+
+	def select(self,obj):
+		range_obj = func.concat(UsersMultipleTags.low,
+					'-',
+					UsersMultipleTags.high).label('range')
+		users = UsersMultipleTags.users
+		return obj.query(range_obj, users)
+
+	def postprocess(self, response):
+		response = super(UsersMultipleTagsController, self).postprocess(response)
+		response["timechart"] = True
+		response["charttype"] = "histogram"
 		return response
 
 class ViewAnswersLocalTimeController(RawTableController):
@@ -292,5 +379,15 @@ raw_tables_handler.add_url_rule( '/view_skills_locations/',
 raw_tables_handler.add_url_rule( '/view_answers_local_time/',
 	view_func=ViewAnswersLocalTimeController.as_view('view_answers_local_time'))
 
+raw_tables_handler.add_url_rule( '/view_average_score_locations/',
+	view_func=ViewReputationDistributionController.as_view('view_average_score_locations'))
+
+raw_tables_handler.add_url_rule( '/view_posts_count_locations/',
+	view_func=ViewPostsCountDistributionController.as_view('view_posts_count_locations'))
+
 raw_tables_handler.add_url_rule( '/true_location_reputation/',
 	view_func=TrueLocationReputationController.as_view('true_location_reputation'))
+
+raw_tables_handler.add_url_rule( '/users_multiple_tags/',
+	view_func=UsersMultipleTagsController.as_view('users_multiple_tags'))
+
