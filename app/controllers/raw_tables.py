@@ -300,7 +300,7 @@ class TrueLocationReputationController (RawTableController):
 		response["charttype"] = "multibar"
 		return response
 
-class UsersMultipleTags (RawTableController):
+class UsersMultipleTagsController (RawTableController):
 	table = UsersMultipleTags
 	input_fields = ["range", "users"]
 	output_fields = ["Tags Range", "Users"]
@@ -313,9 +313,10 @@ class UsersMultipleTags (RawTableController):
 		return obj.query(range_obj, users)
 
 	def postprocess(self, response):
-		response = super(UsersMultipleTags, self).postprocess(response)
+		response = super(UsersMultipleTagsController, self).postprocess(response)
 		response["timechart"] = True
-		response["charttype"] = "timechart"
+		response["charttype"] = "histogram"
+		return response
 
 class ViewAnswersLocalTimeController(RawTableController):
 	table = ViewAnswersLocalTime
@@ -386,4 +387,7 @@ raw_tables_handler.add_url_rule( '/view_posts_count_locations/',
 
 raw_tables_handler.add_url_rule( '/true_location_reputation/',
 	view_func=TrueLocationReputationController.as_view('true_location_reputation'))
+
+raw_tables_handler.add_url_rule( '/users_multiple_tags/',
+	view_func=UsersMultipleTagsController.as_view('users_multiple_tags'))
 

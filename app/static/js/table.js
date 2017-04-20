@@ -143,8 +143,10 @@ function makeTable(params) {
 			var data = tableData.data;
 			if (tableData.charttype == "timechart")
 				drawTimeDistribution(timeChartSelector, data, tableData.display);
-			else
+			else if(tableData.charttype == "multibar")
 				drawMultiBarDistribution(timeChartSelector, data, tableData.display);
+			else if (tableData.charttype == "histogram")
+				drawMultipleTagsBarDistribution(timeChartSelector, data, tableData.display);
 		});
 	}
 

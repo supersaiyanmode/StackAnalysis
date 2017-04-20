@@ -130,7 +130,7 @@ class TrueLocationReputation(Base):
 	__table_args__ = (PrimaryKeyConstraint('low', 'high', name = 'true_location_reputation_pk'),)
 
 class UsersMultipleTags(Base):
-	__tablename__ = 'users_multiple_tags'
+	__tablename__ = 'view_users_multiple_tags'
 
 	low = Column(Integer)
 	high = Column(Integer)
