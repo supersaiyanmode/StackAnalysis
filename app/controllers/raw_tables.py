@@ -11,7 +11,7 @@ from flask_sqlalchemy_session import current_session as session
 from sqlalchemy import func, desc
 
 from models.data import Location, Tags, Users, Questions, Answers
-from models.data import ViewSkillsLocations, ViewAnswersLocalTime
+from models.data import ViewSkillsLocations, ViewAnswersLocalTime, UsersMultipleTags
 from models.data import TrueLocationReputation
 from core import format_attrs, Paginator, QueryFilter, Sort
 
@@ -300,6 +300,24 @@ class TrueLocationReputationController (RawTableController):
 		response["charttype"] = "multibar"
 		return response
 
+class UsersMultipleTagsController (RawTableController):
+	table = UsersMultipleTags
+	input_fields = ["range", "users"]
+	output_fields = ["Tags Range", "Users"]
+
+	def select(self,obj):
+		range_obj = func.concat(UsersMultipleTags.low,
+					'-',
+					UsersMultipleTags.high).label('range')
+		users = UsersMultipleTags.users
+		return obj.query(range_obj, users)
+
+	def postprocess(self, response):
+		response = super(UsersMultipleTagsController, self).postprocess(response)
+		response["timechart"] = True
+		response["charttype"] = "histogram"
+		return response
+
 class ViewAnswersLocalTimeController(RawTableController):
 	table = ViewAnswersLocalTime
 	input_fields = ["hour", "activity"]
@@ -369,4 +387,7 @@ raw_tables_handler.add_url_rule( '/view_posts_count_locations/',
 
 raw_tables_handler.add_url_rule( '/true_location_reputation/',
 	view_func=TrueLocationReputationController.as_view('true_location_reputation'))
+
+raw_tables_handler.add_url_rule( '/users_multiple_tags/',
+	view_func=UsersMultipleTagsController.as_view('users_multiple_tags'))
 

@@ -106,6 +106,15 @@ VIEWS = {
 				"title": "Reputation v/s Fake Location",
 				"javascript": "/static/views/true_location_reputation/main.js"
 			}
+		},
+		{
+			"text": "Users And Multiple Tags",
+			"view": "/static/views/generic.html",
+			"icon": "bar-chart",
+			"sub": {
+				"title": "Users And Multiple Tags",
+				"javascript": "/static/views/users_multiple_tags/main.js"
+			}
 		}
 	]
 }
