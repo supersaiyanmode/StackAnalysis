@@ -29,6 +29,7 @@ class Questions(Base):
 	modified_date = Column(DateTime)
 	answer_count = Column(Integer) # TODO: To remove post-verification using joins
 	title = Column(String)
+	tags = relationship("Tags", secondary = poststags_table)
 
 
 class Answers(Base):
