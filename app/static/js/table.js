@@ -150,7 +150,7 @@ function makeTable(params) {
 			var curObj = {};
 			tableData.fields.forEach(function(key, index) {
 				curObj[key] = row[index];
-			});attachTableOrderByEvents
+			});
 			return [templateLoc(curObj), +templateVal(curObj)];
 		});
 		
@@ -194,7 +194,7 @@ function makeTable(params) {
 		Object.keys(views).forEach(function(key) {
 			if (tableData[key] === undefined) {
 				return;
-			}attachTableOrderByEvents
+			}
 
 			var func = views[key].fn;
 			var cls = views[key].cls;
