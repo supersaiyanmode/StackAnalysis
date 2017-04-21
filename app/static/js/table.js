@@ -130,7 +130,11 @@ function makeTable(params) {
 	function loadPagination(tableData) {
 		var paginationParams = {
 			total: Math.ceil(tableData.row_count / tableData.page_size),
-			maxVisible: 10
+			page:1,
+			maxVisible: 10,
+			href: "#pro-page-{{number}}",
+			next: 'next',
+			prev: null
 		};
 		$(paginationSelector).bootpag(paginationParams).on("page", function(event, pageNumber) {
 			renderTableWithParams(pageNumber - 1, tableFilterData, tableOrderData);
