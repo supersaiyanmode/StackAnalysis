@@ -106,6 +106,12 @@ VIEWS = {
 				"title": "Reputation v/s Fake Location",
 				"javascript": "/static/views/true_location_reputation/main.js"
 			}
+		},
+		{
+			"text": "Tags Cluster",
+			"view": "/static/views/tagscluster/page.html",
+			"icon": "bar-chart",
+			"sub": {}
 		}
 	]
 }
