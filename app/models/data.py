@@ -130,6 +130,21 @@ class TrueLocationReputation(Base):
 	has_location = Column(Integer)
 	__table_args__ = (PrimaryKeyConstraint('low', 'high', name = 'true_location_reputation_pk'),)
 
+
+class ItemSets1(Base):
+	__tablename__ = 'itemsets_1'
+
+	tag1 = Column(Integer, ForeignKey('tags.id'))
+	frequency = Column(Integer)
+
+
+class ItemSets2(Base):
+	__tablename__ = 'itemsets_2'
+
+	tag1 = Column(Integer, ForeignKey('tags.id'))
+	tag2 = Column(Integer, ForeignKey('tags.id'))
+	frequency = Column(Integer)
+
 def get_sqlite3_session(path):
 	class ForeignKeysListener(PoolListener):
 		def connect(self, dbapi_con, con_record):
