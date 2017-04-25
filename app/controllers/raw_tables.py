@@ -237,7 +237,7 @@ class ViewReputationDistributionController(RawTableController):
 			"url": "//maps.google.com/maps/place/{{country}}",
 		}
 	}
-	
+
 	def postprocess(self, response):
 		response = super(ViewReputationDistributionController, self).postprocess(response)
 

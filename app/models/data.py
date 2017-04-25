@@ -29,6 +29,7 @@ class Questions(Base):
 	modified_date = Column(DateTime)
 	answer_count = Column(Integer) # TODO: To remove post-verification using joins
 	title = Column(String)
+	tags = relationship("Tags", secondary = poststags_table)
 
 
 class Answers(Base):
@@ -129,6 +130,23 @@ class TrueLocationReputation(Base):
 	has_location = Column(Integer)
 	__table_args__ = (PrimaryKeyConstraint('low', 'high', name = 'true_location_reputation_pk'),)
 
+
+class ItemSets1(Base):
+	__tablename__ = 'itemsets_1'
+
+	tag = Column(Integer, ForeignKey('tags.id'), primary_key=True)
+	frequency = Column(Integer)
+
+
+class ItemSets2(Base):
+	__tablename__ = 'itemsets_2'
+
+	tag1 = Column(Integer, ForeignKey('tags.id'))
+	tag2 = Column(Integer, ForeignKey('tags.id'))
+	frequency = Column(Integer)
+	__table_args__ = (PrimaryKeyConstraint('tag1', 'tag2', name = 'itemset2_pk'),)
+
+
 class UsersMultipleTags(Base):
 	__tablename__ = 'view_users_multiple_tags'
 
@@ -136,6 +154,7 @@ class UsersMultipleTags(Base):
 	high = Column(Integer)
 	users = Column(Integer)
 	__table_args__ = (PrimaryKeyConstraint('low', 'high', name = 'users_multiple_tags_pk'),)
+
 
 def get_sqlite3_session(path):
 	class ForeignKeysListener(PoolListener):
@@ -155,5 +174,5 @@ def get_postgres_session(host, port, username, password, db):
 	Base.metadata.create_all(engine)
 	return scoped_session(sessionmaker(bind=engine))
 
-session_factory = get_postgres_session("db.slis.indiana.edu", 5433, 'rangira', 'iDNKrQa4', 'rangira')
+session_factory = get_postgres_session("localhost", 5433, 'rangira', 'iDNKrQa4', 'rangira')
 
