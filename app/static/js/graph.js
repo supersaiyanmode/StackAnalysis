@@ -27,6 +27,7 @@ function loadGraph(selector, data, params) {
 	var width = params.width || 500;
 	var height = params.height || 500;
 
+	d3.select(selector).selectAll("*").remove();
 	var svg = d3.select(selector).append("svg")
 	    .attr("width", "100%")
 	    .attr("height", "800px");
