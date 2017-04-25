@@ -134,7 +134,7 @@ class TrueLocationReputation(Base):
 class ItemSets1(Base):
 	__tablename__ = 'itemsets_1'
 
-	tag1 = Column(Integer, ForeignKey('tags.id'))
+	tag1 = Column(Integer, ForeignKey('tags.id'), primary_key=True)
 	frequency = Column(Integer)
 
 
@@ -144,6 +144,17 @@ class ItemSets2(Base):
 	tag1 = Column(Integer, ForeignKey('tags.id'))
 	tag2 = Column(Integer, ForeignKey('tags.id'))
 	frequency = Column(Integer)
+	__table_args__ = (PrimaryKeyConstraint('tag1', 'tag2', name = 'itemset2_pk'),)
+
+
+class UsersMultipleTags(Base):
+	__tablename__ = 'view_users_multiple_tags'
+
+	low = Column(Integer)
+	high = Column(Integer)
+	users = Column(Integer)
+	__table_args__ = (PrimaryKeyConstraint('low', 'high', name = 'users_multiple_tags_pk'),)
+
 
 def get_sqlite3_session(path):
 	class ForeignKeysListener(PoolListener):
@@ -163,5 +174,5 @@ def get_postgres_session(host, port, username, password, db):
 	Base.metadata.create_all(engine)
 	return scoped_session(sessionmaker(bind=engine))
 
-session_factory = get_postgres_session("db.slis.indiana.edu", 5433, 'rangira', 'iDNKrQa4', 'rangira')
+session_factory = get_postgres_session("localhost", 5433, 'rangira', 'iDNKrQa4', 'rangira')
 

@@ -122,6 +122,26 @@ function drawMultiBarDistribution (selector, dataList, title, opts){
 	chart.draw(data, options);
 }
 
+function drawMultipleTagsBarDistribution (selector, dataList, title, opts){
+	var data = dataList.slice();
+	data.unshift(title);
+	data = google.visualization.arrayToDataTable(data);
+	var options = {
+		title: 'Users Contribution In Multiple tags',
+		height: 480,
+		seriesType: 'bars',
+		series: {5: {type: 'line'}}
+	};
+
+	if (opts !== undefined) {
+		$.extend(options, opts);
+	}
+
+	var element = $(selector)[0];
+	var chart = new google.visualization.ComboChart(element);
+	chart.draw(data, options);
+}
+
 $(document).ready(loadNavigation);
 
 
