@@ -108,12 +108,12 @@ VIEWS = {
 			}
 		},
 		{
-<<<<<<< HEAD
 			"text": "Tags Cluster",
 			"view": "/static/views/tagscluster/page.html",
 			"icon": "bar-chart",
-			"sub": {}
-=======
+			"sub": {},
+		},
+		{
 			"text": "Users And Multiple Tags",
 			"view": "/static/views/generic.html",
 			"icon": "bar-chart",
@@ -121,7 +121,6 @@ VIEWS = {
 				"title": "Users And Multiple Tags",
 				"javascript": "/static/views/users_multiple_tags/main.js"
 			}
->>>>>>> master
 		}
 	]
 }
