@@ -134,7 +134,7 @@ class TrueLocationReputation(Base):
 class ItemSets1(Base):
 	__tablename__ = 'itemsets_1'
 
-	tag1 = Column(Integer, ForeignKey('tags.id'), primary_key=True)
+	tag = Column(Integer, ForeignKey('tags.id'), primary_key=True)
 	frequency = Column(Integer)
 
 
