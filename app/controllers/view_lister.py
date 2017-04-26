@@ -20,8 +20,11 @@ VIEWS = {
 		{
 			"text": "User Details",
 			"view": "/static/views/user_details/page.html",
-			"icon": "dashboard",
-			"sub": {}
+			"icon": "user",
+			"sub": {
+				"title": "User Details",
+				"javascript": "/static/views/user_details/main.js"
+			}
 		},
 		{
 			"text": "Users",
