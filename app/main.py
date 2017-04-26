@@ -6,6 +6,7 @@ from controllers import location_handler
 from controllers import overview_handler
 from controllers import raw_tables_handler
 from controllers import view_lister_handler
+from controllers import tags_cluster_handler
 
 from models.data import session_factory
 
@@ -19,7 +20,8 @@ class Main(object):
 		self.app.register_blueprint(location_handler, url_prefix='')
 		self.app.register_blueprint(overview_handler, url_prefix='')
 		self.app.register_blueprint(raw_tables_handler, url_prefix='')
-		self.app.register_blueprint(view_lister_handler,url_prefix='')
+		self.app.register_blueprint(view_lister_handler, url_prefix='')
+		self.app.register_blueprint(tags_cluster_handler, url_prefix='')
 
 	def server_start(self):
 		self.app.run(host='0.0.0.0', threaded=True)
