@@ -125,7 +125,7 @@ VIEWS = {
 		{
 			"text": "View Frequent Tags",
 			"view": "/static/views/generic.html",
-			"icon": "bar-chart",
+			"icon": "icon-sitemap",
 			"sub": {
 				"title": "View Frequent Tags",
 				"javascript": "/static/views/view_frequent_tags/main.js"
