@@ -399,4 +399,4 @@ raw_tables_handler.add_url_rule( '/users_multiple_tags/',
 	view_func=UsersMultipleTagsController.as_view('users_multiple_tags'))
 
 raw_tables_handler.add_url_rule( '/view_frequent_tags/',
-	view_func=UsersMultipleTagsController.as_view('view_frequent_tags'))
+	view_func=ViewFrequentTagsController.as_view('view_frequent_tags'))
