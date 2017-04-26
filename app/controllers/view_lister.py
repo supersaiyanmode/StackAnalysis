@@ -121,6 +121,15 @@ VIEWS = {
 				"title": "Users And Multiple Tags",
 				"javascript": "/static/views/users_multiple_tags/main.js"
 			}
+		},
+		{
+			"text": "View Frequent Tags",
+			"view": "/static/views/generic.html",
+			"icon": "bar-chart",
+			"sub": {
+				"title": "View Frequent Tags",
+				"javascript": "/static/views/view_frequent_tags/main.js"
+			}
 		}
 	]
 }

@@ -348,6 +348,13 @@ class ViewAnswersLocalTimeController(RawTableController):
 		response["charttype"] = "timechart"
 		return response
 
+def ViewFrequentTagsController(RawTableController):
+	output_fields = ["Tag Id", "Tag Name", "Frequency"]
+
+	def select(self, obj):
+		return obj.query(ItemSets1.tag, Tags.name , ItemSets1.frequency).filter(ItemSets1.tag == Tags.id)
+
+
 raw_tables_handler.add_url_rule( '/users/<int:id>/',
 	view_func=UsersController.as_view('users_id'))
 raw_tables_handler.add_url_rule( '/users/',
@@ -391,3 +398,5 @@ raw_tables_handler.add_url_rule( '/true_location_reputation/',
 raw_tables_handler.add_url_rule( '/users_multiple_tags/',
 	view_func=UsersMultipleTagsController.as_view('users_multiple_tags'))
 
+raw_tables_handler.add_url_rule( '/view_frequent_tags/',
+	view_func=UsersMultipleTagsController.as_view('view_frequent_tags'))
