@@ -348,7 +348,7 @@ class ViewAnswersLocalTimeController(RawTableController):
 		response["charttype"] = "timechart"
 		return response
 
-def ViewFrequentTagsController(RawTableController):
+class ViewFrequentTagsController(RawTableController):
 	output_fields = ["Tag Id", "Tag Name", "Frequency"]
 
 	def select(self, obj):
