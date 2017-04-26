@@ -11,7 +11,7 @@ from flask_sqlalchemy_session import current_session as session
 from sqlalchemy import func, desc
 
 from models.data import Location, Tags, Users, Questions, Answers
-from models.data import ViewSkillsLocations, ViewAnswersLocalTime, UsersMultipleTags
+from models.data import ViewSkillsLocations, ViewAnswersLocalTime, UsersMultipleTags, ItemSets1
 from models.data import TrueLocationReputation
 from core import format_attrs, Paginator, QueryFilter, Sort
 
@@ -349,6 +349,7 @@ class ViewAnswersLocalTimeController(RawTableController):
 		return response
 
 class ViewFrequentTagsController(RawTableController):
+	input_fields = ["tag", "name", "frequency"]
 	output_fields = ["Tag Id", "Tag Name", "Frequency"]
 
 	def select(self, obj):

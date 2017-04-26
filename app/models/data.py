@@ -174,5 +174,5 @@ def get_postgres_session(host, port, username, password, db):
 	Base.metadata.create_all(engine)
 	return scoped_session(sessionmaker(bind=engine))
 
-session_factory = get_postgres_session("localhost", 5433, 'rangira', 'iDNKrQa4', 'rangira')
+session_factory = get_postgres_session("db.slis.indiana.edu", 5433, 'rangira', 'iDNKrQa4', 'rangira')
 
