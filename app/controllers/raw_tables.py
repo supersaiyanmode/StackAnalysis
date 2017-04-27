@@ -12,7 +12,7 @@ from sqlalchemy import func, desc
 
 from models.data import Location, Tags, Users, Questions, Answers
 from models.data import ViewSkillsLocations, ViewAnswersLocalTime, UsersMultipleTags
-from models.data import TrueLocationReputation, ViewUserSkills
+from models.data import TrueLocationReputation, ViewUserSkills, ItemSets1
 from core import format_attrs, Paginator, QueryFilter, Sort
 
 
@@ -360,6 +360,17 @@ class ViewUserSkillsController(RawTableController):
 		]
 		return obj.query(*sel).filter(ViewUserSkills.user_skill_id == Tags.id)
 
+class ViewFrequentTagsController(RawTableController):
+	input_fields = ["tag", "name", "frequency"]
+	output_fields = ["Tag Id", "Tag Name", "Frequency"]
+
+	def select(self, obj):
+		return obj.query(ItemSets1.tag, Tags.name , ItemSets1.frequency).filter(ItemSets1.tag == Tags.id)
+
+	def paginate(self, query, page_size=1000):
+		self.paginator = Paginator(page_size)
+		return self.paginator.paginate(query)
+
 
 raw_tables_handler.add_url_rule( '/users/<int:id>/',
 	view_func=UsersController.as_view('users_id'))
@@ -406,4 +417,7 @@ raw_tables_handler.add_url_rule( '/users_multiple_tags/',
 
 raw_tables_handler.add_url_rule( '/users_tags/',
 	view_func=ViewUserSkillsController.as_view('view_user_tags'))
+
+raw_tables_handler.add_url_rule( '/view_frequent_tags/',
+	view_func=ViewFrequentTagsController.as_view('view_frequent_tags'))
 

@@ -28,18 +28,18 @@ function loadNavigation() {
 			return template(x);
 		}).join("");
 		output.html(html);
+		
+		$("ul.nav.navbar-nav.side-nav").on("click", "li a", function() {
+			var view = $(this).data("view");
+			var sub = $(this).data("sub");
+			setCentralView(view, sub);
+		});
+		setTimeout(function() {
+			$($('a', output)[0]).click();
+		}, 10);
 	}, function(obj) {
 		output.html("Unable to load data.");
 	});
-	
-	$("ul.nav.navbar-nav.side-nav").on("click", "li a", function() {
-		var view = $(this).data("view");
-		var sub = $(this).data("sub");
-		setCentralView(view, sub);
-	})
-	setTimeout(function() {
-		$($('a', output)[0]).click();
-	}, 10)
 }
 
 
