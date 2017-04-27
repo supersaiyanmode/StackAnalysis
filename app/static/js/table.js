@@ -9,8 +9,8 @@ function makeTable(params) {
 	var rowCountSelector = params.rowCountSelector;
 	var tableUrl = params.url;
 	
-	var tableFilterData = [];
-	var tableOrderData = [];
+	var tableFilterData = params.tableFilterData || [];
+	var tableOrderData = params.tableOrderData || [];
 	
 	var currentView  = 'table-row';
 	var singleLoad = [
@@ -362,8 +362,6 @@ function makeTable(params) {
 	
 	return {
 		load: function() {
-			tableFilterData = [];
-			tableOrderData = [];
 			renderTableWithParams(0, tableFilterData, tableOrderData);
 		}
 	}
