@@ -154,6 +154,13 @@
 								</a>
 								</td>
 							{{/if}}
+							{{#if ./type_link_hash}}
+								<td>
+								<a href="#{{./url}}">
+								{{./value}}
+								</a>
+								</td>
+							{{/if}}
 						{{/each}}
 					</tr>
 					{{/each}}

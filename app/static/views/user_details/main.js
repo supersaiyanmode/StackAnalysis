@@ -90,7 +90,12 @@ function loadUserAnswerdetails(userId) {
 
 
 function onload() {
-	var userId = 227884;
+	var match = location.hash.match(/#\/user-details\/(.*)/);
+	if (!match) {
+		alert("Invalid hash.");
+		return;
+	}
+	var userId = match[1];
 	loadUserQuestiondetails(userId);
 	loadUserAnswerdetails(userId);
 	loadUserInfoDetails(userId, loadUserInfo, function(data) {alert("Error..");});
