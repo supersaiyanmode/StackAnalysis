@@ -34,7 +34,7 @@ function loadLocationInfo(data) {
 	$(".user-location").html(data.location);
 	var location = [data.city, data.state, data.country].map(function(x) {
 			return x || "";
-		}).filter(function(x) { return !!x; }).join("");
+		}).filter(function(x) { return !!x; }).join(" ");
 	$(".user-resolved-location").html(location);
 }
 
