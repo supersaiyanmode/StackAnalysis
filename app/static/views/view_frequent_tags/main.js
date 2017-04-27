@@ -14,7 +14,7 @@ function viewFrequentTagsInit() {
 			for(var item in data){
 				json[data[item][1]] = data[item][2];
 			}
-			loadBubbleGraph(selector, json)
+			loadBubbleGraph(selector, json, {})
 		},
 		function fail(obj) {
 			$(selector).html("Failed to load data")
