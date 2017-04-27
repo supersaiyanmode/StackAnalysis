@@ -1,3 +1,7 @@
+'''
+Outputs the top skills for a user
+'''
+
 import sys
 sys.path.insert(0, '../models')
 from data import session_factory as session, ViewUserSkills as Skills, Users, Tags

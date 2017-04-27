@@ -1,3 +1,8 @@
+'''
+Defines the logic for the default paginator used in the 
+application interface.
+'''
+
 from flask import request
 
 

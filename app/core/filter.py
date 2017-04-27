@@ -1,3 +1,8 @@
+'''
+Defines the logic for the default sqlAlchemy filter used in the 
+application interface.
+'''
+
 from datetime import datetime
 import json
 

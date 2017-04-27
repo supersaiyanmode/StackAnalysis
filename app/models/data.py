@@ -1,3 +1,9 @@
+'''
+The model of the application.
+Contains the ORM classes for each table in the database.
+Creates the scoped session when application is started.
+'''
+
 import os
 import sys
 

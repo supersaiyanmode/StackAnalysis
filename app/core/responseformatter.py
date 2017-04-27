@@ -1,3 +1,7 @@
+'''
+Specifies the format of json response for each view. 
+'''
+
 from operator import getitem
 
 def format_response(obj, fn, *attrs, **kwargs):

@@ -1,3 +1,10 @@
+'''
+Controllers in this file
+RawTableController returns the response on the get request
+Other classes in this files are inherited from RawTableController
+and override the select, filter, order and paginate methods if required
+'''
+
 import sys
 import csv
 import json

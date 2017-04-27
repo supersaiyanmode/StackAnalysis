@@ -1,3 +1,7 @@
+'''
+Specifies the view , icon and related javascript page for each view.
+'''
+
 import json
 
 from flask.views import MethodView

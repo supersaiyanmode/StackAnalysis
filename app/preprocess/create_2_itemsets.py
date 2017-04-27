@@ -1,3 +1,7 @@
+'''
+Creates 2-Itemsets from the and prints the tags and the frequency.
+'''
+
 import sys
 import json
 sys.path.insert(0, '..')
