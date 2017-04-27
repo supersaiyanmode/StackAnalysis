@@ -18,7 +18,10 @@ function loadBubbleGraph(selector, json) {
 
 	var bubble = d3.layout.pack()
 			.size([diameter, diameter])
-			.value(function(d) {return d.size;}) 
+			.value(function(d) {return d.size;})
+			.sort(function(a, b) {
+				return -(a.value - b.value)
+			}) 
 			.padding(3);
   
   // generate data with calculated layout values
@@ -27,7 +30,7 @@ function loadBubbleGraph(selector, json) {
 
 	var vis = svg.selectAll('circle')
 			.data(nodes);
-					 
+
 	vis.enter().append('circle')
 			.attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; })
 			.attr('r', function(d) { return d.r; })
