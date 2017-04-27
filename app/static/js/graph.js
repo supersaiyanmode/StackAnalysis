@@ -71,13 +71,13 @@ function loadGraph(selector, data, params) {
 				.text(function(d) { return d.name });
 
 	force.on("tick", function() {
-		link.attr("x1", function(d) { return d.source.x; })
-		    .attr("y1", function(d) { return d.source.y; })
-		    .attr("x2", function(d) { return d.target.x; })
-		    .attr("y2", function(d) { return d.target.y; });
+		link.attr("x1", function(d) { return d.source.x + 500; })
+		    .attr("y1", function(d) { return d.source.y + 100; })
+		    .attr("x2", function(d) { return d.target.x + 500; })
+		    .attr("y2", function(d) { return d.target.y + 100; });
 
 		node.attr("transform", function(d) {
-			return "translate(" + d.x + "," + d.y + ")";
+			return "translate(" + (500 + d.x) + "," + (100 + d.y) + ")";
 		});
 	});
 }
