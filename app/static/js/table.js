@@ -232,6 +232,7 @@ function makeTable(params) {
 				$("." + panelClass).parent().addClass("active");
 
 				func(tableData);
+				return false;
 			});
 		
 			if ($(selector).data("panel-class") == currentView) {
