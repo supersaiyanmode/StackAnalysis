@@ -17,55 +17,35 @@ class OverviewController(MethodView):
 		locations = session.query(Location.id).count()
 		overview = {"data": [
 			{
-				"view": "/static/views/generic.html",
-				"sub": {
-					"title": "Questions",
-					"javascript": "/static/views/questions/main.js"
-				},
+				"href": "/questions",
 				"text": "Questions",
 				"color": "blue",
 				"icon": "question-circle",
 				"number": questions,
 			},
 			{
-				"view": "/static/views/generic.html",
-				"sub": {
-					"title": "Answers",
-					"javascript": "/static/views/answers/main.js"
-				},
+				"href": "/answers",
 				"text": "Answers",
 				"color": "red",
 				"icon": "comments",
 				"number": answers,
 			},
 			{
-				"view": "/static/views/generic.html",
-				"sub": {
-					"title": "Users",
-					"javascript": "/static/views/users/main.js"
-				},
+				"href": "/users",
 				"text": "Users",
 				"color": "green",
 				"icon": "user",
 				"number": users,
 			},
 			{
-				"view": "/static/views/generic.html",
-				"sub": {
-					"title": "Locations",
-					"javascript": "/static/views/locations/main.js"
-				},
+				"href": "/locations",
 				"text": "Locations",
 				"color": "grey",
 				"icon": "map-marker",
 				"number": locations,
 			},
 			{
-				"view": "/static/views/generic.html",
-				"sub": {
-					"title": "Tags",
-					"javascript": "/static/views/tags/main.js"
-				},
+				"href": "/tags",
 				"text": "Tags",
 				"color": "yellow",
 				"icon": "tag",

@@ -59,6 +59,12 @@ function makeTable(params) {
 				url: Handlebars.compile(colPostProc.url)(curObj),
 				value: cell
 			};
+		} else if (colPostProc.type == "link_hash") {
+			return {
+				type_link_hash: "link_hash",
+				url: Handlebars.compile(colPostProc.url)(curObj),
+				value: cell
+			}
 		}
 	}
 		

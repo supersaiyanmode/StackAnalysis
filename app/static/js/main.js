@@ -7,14 +7,29 @@ function getQueries(successFn, errorFn) {
 	}).done(successFn).fail(errorFn);
 }
 
-function setCentralView(view, sub) {
+function setCentralView(view, sub, hash) {
 	$("ul.nav.navbar-nav.side-nav li.active").removeClass("active");
-	$("ul.nav.navbar-nav.side-nav li a[data-view='" + view + "']" +
-		"[data-sub='" + JSON.stringify(sub) + "']").parent().addClass("active");
+	$("ul.nav.navbar-nav.side-nav li a[href='#" + hash + "']").parent().addClass("active");
 	$.get(view, function (data) {
 		var html = Handlebars.compile(data)(sub);
 		$("#page-wrapper").html(html);
 	});
+}
+
+function loadRoutes(data) {
+	data.forEach(function(x) {
+		crossroads.addRoute(x.hashurl, function() {
+			setCentralView(x.view, x.sub, x.hashurl);
+		});
+	});
+
+	//setup hasher
+	function parseHash(newHash, oldHash){
+		crossroads.parse(newHash);
+	}
+	hasher.initialized.add(parseHash); // parse initial hash
+	hasher.changed.add(parseHash); //parse hash changes
+	hasher.init(); //start listening for history change
 }
 
 function loadNavigation() {
@@ -24,18 +39,14 @@ function loadNavigation() {
 
 	getQueries(function(obj) {
 		var html = obj.data.map(function(x) {
-			x.sub = JSON.stringify(x.sub);
-			return template(x);
+			return x.hashparam? "": template(x);
 		}).join("");
 		output.html(html);
 		
-		$("ul.nav.navbar-nav.side-nav").on("click", "li a", function() {
-			var view = $(this).data("view");
-			var sub = $(this).data("sub");
-			setCentralView(view, sub);
-		});
+		loadRoutes(obj.data);
+		
 		setTimeout(function() {
-			$($('a', output)[0]).click();
+			hasher.setHash('/');
 		}, 10);
 	}, function(obj) {
 		output.html("Unable to load data.");
