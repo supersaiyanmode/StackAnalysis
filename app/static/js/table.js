@@ -130,7 +130,18 @@ function makeTable(params) {
 	function loadPagination(tableData) {
 		var paginationParams = {
 			total: Math.ceil(tableData.row_count / tableData.page_size),
-			maxVisible: 10
+			maxVisible: 10,
+			leaps: true,
+			firstLastUse: true,
+			first: '←',
+			last: '→',
+			wrapClass: 'pagination',
+			activeClass: 'active',
+			disabledClass: 'disabled',
+			nextClass: 'next',
+			prevClass: 'prev',
+			lastClass: 'last',
+			firstClass: 'first'
 		};
 		$(paginationSelector).bootpag(paginationParams).on("page", function(event, pageNumber) {
 			renderTableWithParams(pageNumber - 1, tableFilterData, tableOrderData);
@@ -245,6 +256,7 @@ function makeTable(params) {
 	
 	function attachParamUpdateEvent(tableData) {
 		$(".container-fluid").on("click", "button.parameter-update", function() {
+			$('ul.bootpag>li').not('.prev').first().trigger('click');
 			var obj = $(queryFilterSelector + " tbody tr").map(function() {
 				var colSel = $(this).find(".query-filter-column-select option:selected");
 				var opSel = $(this).find(".query-filter-op-select option:selected");
