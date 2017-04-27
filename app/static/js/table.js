@@ -6,6 +6,7 @@ function makeTable(params) {
 	var visualizationSelector = params.visualizationSelector;
 	var timeChartSelector = params.timeChartSelector;
 	var orderBySelector = params.orderBySelector;
+	var rowCountSelector = params.rowCountSelector;
 	var tableUrl = params.url;
 	
 	var tableFilterData = [];
@@ -124,7 +125,7 @@ function makeTable(params) {
 
 	function loadRowCount(tableData){
 		var total_rows = tableData.row_count;
-		$(".row-count-display").html("(" + total_rows + " rows)");
+		$(rowCountSelector).html("(" + total_rows + " rows)");
 	}
 	
 	function loadPagination(tableData) {
@@ -289,7 +290,6 @@ function makeTable(params) {
 		$(queryFilterSelector).append(tableNode);
 
 		addRowFilterQuery(queryFilterSelector, tableData);
-		
 		attachTableQueryFilterEvents(tableData);
 	}
 
