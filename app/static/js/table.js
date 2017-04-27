@@ -232,12 +232,20 @@ function makeTable(params) {
 				$("." + panelClass).parent().addClass("active");
 
 				func(tableData);
+				return false;
 			});
 		
 			if ($(selector).data("panel-class") == currentView) {
 				func(tableData);
 			}
 		});
+		
+		//Remove disabled buttons
+		var selector = $(".btn-group > a.btn.disabled").remove();
+		var remainingButtons = $(".btn-group > a.btn");
+		if (remainingButtons.length <= 1) {
+			$(".btn-group").remove();
+		}
 		
 		singleLoad.forEach(function(obj) {
 			if (obj.loaded == true) {
