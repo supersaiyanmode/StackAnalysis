@@ -1,3 +1,7 @@
+'''
+Contains the functions related to Google Geocoders.
+'''
+
 import lxml
 import geocoder
 import sqlite3

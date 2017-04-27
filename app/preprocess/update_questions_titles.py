@@ -1,3 +1,7 @@
+'''
+Updates the title for table 'questions' 
+'''
+
 import re
 import sys
 

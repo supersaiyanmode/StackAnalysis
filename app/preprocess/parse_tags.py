@@ -1,3 +1,7 @@
+'''
+Parses the tags from Posts.xml
+'''
+
 import re
 import sys
 

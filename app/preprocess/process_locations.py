@@ -1,3 +1,7 @@
+'''
+Parses the locations and inserts into database
+'''
+
 import json
 import sys
 

@@ -1,3 +1,7 @@
+'''
+Apriori algorithm implementation for getting the tags clusters.
+'''
+
 from numpy import *
 import sys
 from collections import defaultdict

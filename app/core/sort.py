@@ -1,3 +1,8 @@
+'''
+Defines the logic for the default sqlAlchemy order_by(sort) function 
+used in the application interface.
+'''
+
 import json
 
 from flask import request

@@ -1,3 +1,7 @@
+'''
+Common helper functions for all the classes in core.
+'''
+
 from sqlalchemy.sql.sqltypes import Integer, String, DateTime
 
 from flask import request

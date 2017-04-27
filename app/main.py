@@ -1,3 +1,7 @@
+'''
+Application Entry Point
+'''
+
 from flask import Flask
 from flask_sqlalchemy_session import flask_scoped_session
 

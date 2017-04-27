@@ -1,3 +1,7 @@
+'''
+Parses the Posts.xml for answers and questions
+'''
+
 import re
 import sys
 from itertools import islice

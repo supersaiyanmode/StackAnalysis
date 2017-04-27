@@ -1,3 +1,7 @@
+'''
+Updates the referential fields in tables 'questions' and 'answers' 
+'''
+
 import re
 import sys
 from itertools import islice

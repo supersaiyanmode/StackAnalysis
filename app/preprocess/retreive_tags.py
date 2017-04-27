@@ -1,3 +1,8 @@
+'''
+Retreives tags for each user from posts.xml and processes the bulk 
+insert for poststags
+'''
+
 import re
 import sys
 
