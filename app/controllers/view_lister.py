@@ -124,7 +124,7 @@ VIEWS = {
 		},
 		{
 			"text": "View Frequent Tags",
-			"view": "/static/views/generic.html",
+			"view": "/static/views/view_frequent_tags/page.html",
 			"icon": "tasks",
 			"sub": {
 				"title": "View Frequent Tags",

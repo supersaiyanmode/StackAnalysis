@@ -355,8 +355,9 @@ class ViewFrequentTagsController(RawTableController):
 	def select(self, obj):
 		return obj.query(ItemSets1.tag, Tags.name , ItemSets1.frequency).filter(ItemSets1.tag == Tags.id)
 
-	def paginate(self, query, page_size = 1000):
-		return query
+	def paginate(self, query, page_size=1000):
+		self.paginator = Paginator(page_size)
+		return self.paginator.paginate(query)
 
 raw_tables_handler.add_url_rule( '/users/<int:id>/',
 	view_func=UsersController.as_view('users_id'))

@@ -8,12 +8,10 @@ function processData(data) {
 
 function loadBubbleGraph(selector, json) {
 
-	// convert vals to int
-	json = json.map(function(d){ d.value = +d["frequency"]; return d; });
-
-	var diameter = 500;
+	var diameter = 800;
 	color    = d3.scale.category20b(); //color category
 
+	d3.select(selector).selectAll("*").remove();
 	var svg = d3.select(selector).append('svg')
 					.attr('width', diameter)
 					.attr('height', diameter);
@@ -40,12 +38,13 @@ function loadBubbleGraph(selector, json) {
 			.attr("x", function(d){ return d.x; })
 			.attr("y", function(d){ return d.y + 5; })
 			.attr("text-anchor", "middle")
-			.text(function(d){ return d.className; })
-         .style({
-            "fill":"white", 
-            "font-family":"Helvetica Neue, Helvetica, Arial, san-serif",
-            "font-size": "12px"
-        });
+			.text(function(d){ return d.className + " ("+ d.value + ")"; })
+         	.style({
+            	"fill":"white", 
+            	"font-family":"Helvetica Neue, Helvetica, Arial, san-serif",
+        	})
+        	.style("font-size", function(d){return d.r*0.2});
+        	
 
   
 }

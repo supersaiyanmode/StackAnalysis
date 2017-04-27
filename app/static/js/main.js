@@ -142,10 +142,6 @@ function drawMultipleTagsBarDistribution (selector, dataList, title, opts){
 	chart.draw(data, options);
 }
 
-function drawWordCloud(canvas, list){
-	WordCloud(document.getElementById(canvas), {list : list});
-}
-
 $(document).ready(loadNavigation);
 
 
