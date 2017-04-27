@@ -6,6 +6,7 @@ function trueLocationReputationInit() {
 		orderBySelector: 'div.container-fluid .order-by-table',
 		timeChartSelector: 'div.container-fluid div.timechart-row',
 		selector: "div.container-fluid div.table-row",
+		rowCountSelector: '.row-count-display',
 		url: "/true_location_reputation/"
 	}
 	tableObj = makeTable(params);

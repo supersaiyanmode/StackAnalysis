@@ -6,9 +6,9 @@ function processData(data) {
 	return {children: newDataSet};
 }
 
-function loadBubbleGraph(selector, json) {
+function loadBubbleGraph(selector, json, params) {
 
-	var diameter = 800;
+	var diameter = params.diameter || 800;
 	color = d3.scale.category20b(); //color category
 
 	d3.select(selector).selectAll("*").remove();

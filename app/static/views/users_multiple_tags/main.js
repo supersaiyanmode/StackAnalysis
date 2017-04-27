@@ -5,6 +5,7 @@ function usersMultipleTagsInit() {
 		visualizationSelector: 'div.container-fluid div.visualization-row',
 		timeChartSelector: 'div.container-fluid div.timechart-row',
 		selector: "div.container-fluid div.table-row",
+		rowCountSelector: '.row-count-display',
 		url: "/users_multiple_tags/"
 	}
 	tableObj = makeTable(params);

@@ -6,10 +6,11 @@ function makeTable(params) {
 	var visualizationSelector = params.visualizationSelector;
 	var timeChartSelector = params.timeChartSelector;
 	var orderBySelector = params.orderBySelector;
+	var rowCountSelector = params.rowCountSelector;
 	var tableUrl = params.url;
 	
-	var tableFilterData = [];
-	var tableOrderData = [];
+	var tableFilterData = params.tableFilterData || [];
+	var tableOrderData = params.tableOrderData || [];
 	
 	var currentView  = 'table-row';
 	var singleLoad = [
@@ -124,7 +125,7 @@ function makeTable(params) {
 
 	function loadRowCount(tableData){
 		var total_rows = tableData.row_count;
-		$(".row-count-display").html("(" + total_rows + " rows)");
+		$(rowCountSelector).html("(" + total_rows + " rows)");
 	}
 	
 	function loadPagination(tableData) {
@@ -297,7 +298,6 @@ function makeTable(params) {
 		$(queryFilterSelector).append(tableNode);
 
 		addRowFilterQuery(queryFilterSelector, tableData);
-		
 		attachTableQueryFilterEvents(tableData);
 	}
 
@@ -370,8 +370,6 @@ function makeTable(params) {
 	
 	return {
 		load: function() {
-			tableFilterData = [];
-			tableOrderData = [];
 			renderTableWithParams(0, tableFilterData, tableOrderData);
 		}
 	}

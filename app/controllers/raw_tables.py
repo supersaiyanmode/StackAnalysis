@@ -11,8 +11,8 @@ from flask_sqlalchemy_session import current_session as session
 from sqlalchemy import func, desc
 
 from models.data import Location, Tags, Users, Questions, Answers
-from models.data import ViewSkillsLocations, ViewAnswersLocalTime, UsersMultipleTags, ItemSets1
-from models.data import TrueLocationReputation
+from models.data import ViewSkillsLocations, ViewAnswersLocalTime, UsersMultipleTags
+from models.data import TrueLocationReputation, ViewUserSkills, ItemSets1
 from core import format_attrs, Paginator, QueryFilter, Sort
 
 
@@ -348,6 +348,18 @@ class ViewAnswersLocalTimeController(RawTableController):
 		response["charttype"] = "timechart"
 		return response
 
+class ViewUserSkillsController(RawTableController):
+	input_fields = ["user_id", "name", "answer_count"]
+	output_fields = ["User", "Skill", "Count"]
+
+	def select(self, obj):
+		sel = [
+			ViewUserSkills.user_id,
+			Tags.name,
+			ViewUserSkills.answer_count
+		]
+		return obj.query(*sel).filter(ViewUserSkills.user_skill_id == Tags.id)
+
 class ViewFrequentTagsController(RawTableController):
 	input_fields = ["tag", "name", "frequency"]
 	output_fields = ["Tag Id", "Tag Name", "Frequency"]
@@ -358,6 +370,7 @@ class ViewFrequentTagsController(RawTableController):
 	def paginate(self, query, page_size=1000):
 		self.paginator = Paginator(page_size)
 		return self.paginator.paginate(query)
+
 
 raw_tables_handler.add_url_rule( '/users/<int:id>/',
 	view_func=UsersController.as_view('users_id'))
@@ -402,5 +415,9 @@ raw_tables_handler.add_url_rule( '/true_location_reputation/',
 raw_tables_handler.add_url_rule( '/users_multiple_tags/',
 	view_func=UsersMultipleTagsController.as_view('users_multiple_tags'))
 
+raw_tables_handler.add_url_rule( '/users_tags/',
+	view_func=ViewUserSkillsController.as_view('view_user_tags'))
+
 raw_tables_handler.add_url_rule( '/view_frequent_tags/',
 	view_func=ViewFrequentTagsController.as_view('view_frequent_tags'))
+
