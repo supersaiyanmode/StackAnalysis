@@ -11,4 +11,3 @@ def get_user_dp(user_id):
 	resp.headers["Content-Type"] = "image/jpeg"
 	return resp
 
-
