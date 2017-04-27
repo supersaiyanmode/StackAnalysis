@@ -6,7 +6,6 @@ function getResponse(successFn, errorFn) {
 }
 
 function viewFrequentTagsInit() {
-	
 	getResponse(
 		function success(obj) {
 			var json ={};
@@ -18,10 +17,9 @@ function viewFrequentTagsInit() {
 			loadBubbleGraph(selector, json)
 		},
 		function fail(obj) {
-			output.html("Unable to load data.");
+			$(selector).html("Failed to load data")
 		}
 	);
-
 }
 
 $(viewFrequentTagsInit);
