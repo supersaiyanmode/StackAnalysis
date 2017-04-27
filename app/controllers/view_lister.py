@@ -13,12 +13,15 @@ VIEWS = {
 	'data': [
 		{
 			"text": "Dashboard",
+			"hashurl": "/",
 			"view": "/static/views/dashboard/page.html",
 			"icon": "dashboard",
 			"sub": {}
 		},
 		{
 			"text": "User Details",
+			"hashurl": "/user-details/{id}",
+			"hashparam": True,
 			"view": "/static/views/user_details/page.html",
 			"icon": "user",
 			"sub": {
@@ -28,6 +31,7 @@ VIEWS = {
 		},
 		{
 			"text": "Users",
+			"hashurl": "/users",
 			"view": "/static/views/generic.html",
 			"icon": "users",
 			"sub": {
@@ -37,6 +41,7 @@ VIEWS = {
 		},
 		{
 			"text": "Questions",
+			"hashurl": "/questions",
 			"view": "/static/views/generic.html",
 			"icon": "question-circle",
 			"sub": {
@@ -46,6 +51,7 @@ VIEWS = {
 		},
 		{
 			"text": "Answers",
+			"hashurl": "/answers",
 			"view": "/static/views/generic.html",
 			"icon": "comments",
 			"sub": {
@@ -55,6 +61,7 @@ VIEWS = {
 		},
 		{
 			"text": "Locations",
+			"hashurl": "/locations",
 			"view": "/static/views/generic.html",
 			"icon": "map-marker",
 			"sub": {
@@ -64,6 +71,7 @@ VIEWS = {
 		},
 		{
 			"text": "Tags",
+			"hashurl": "/tags",
 			"view": "/static/views/generic.html",
 			"icon": "tags",
 			"sub": {
@@ -73,6 +81,7 @@ VIEWS = {
 		},
 		{
 			"text": "Skill Distribution",
+			"hashurl": "/skills-distribution",
 			"view": "/static/views/generic.html",
 			"icon": "globe",
 			"sub": {
@@ -82,6 +91,7 @@ VIEWS = {
 		},
 		{
 			"text": "Time Distribution",
+			"hashurl": "/time-distribution",
 			"view": "/static/views/generic.html",
 			"icon": "clock-o",
 			"sub": {
@@ -91,6 +101,7 @@ VIEWS = {
 		},
 		{
 			"text": "Posts Count Distribution",
+			"hashurl": "/posts-count-distribution",
 			"view": "/static/views/generic.html",
 			"icon": "clipboard",
 			"sub": {
@@ -100,6 +111,7 @@ VIEWS = {
 		},
 		{
 			"text": "Average Score Distribution",
+			"hashurl": "/average-score-distribution",
 			"view": "/static/views/generic.html",
 			"icon": "star-half-o",
 			"sub": {
@@ -109,6 +121,7 @@ VIEWS = {
 		},
 		{
 			"text": "Reputation v/s Fake Location",
+			"hashurl": "/true-locations",
 			"view": "/static/views/generic.html",
 			"icon": "bar-chart",
 			"sub": {
@@ -118,12 +131,14 @@ VIEWS = {
 		},
 		{
 			"text": "Tags Cluster",
+			"hashurl": "/tags-cluster",
 			"view": "/static/views/tagscluster/page.html",
 			"icon": "tags",
 			"sub": {},
 		},
 		{
 			"text": "Users And Multiple Tags",
+			"hashurl": "/multiple-tags",
 			"view": "/static/views/generic.html",
 			"icon": "users",
 			"sub": {
@@ -133,6 +148,7 @@ VIEWS = {
 		},
 		{
 			"text": "View Frequent Tags",
+			"hashurl": "/frequent-tags",
 			"view": "/static/views/view_frequent_tags/page.html",
 			"icon": "tasks",
 			"sub": {

@@ -21,12 +21,6 @@ function loadOverViewHTML() {
 			output.html("Unable to load data.");
 		}
 	);
-
-	$("#page-wrapper .dashboard-content").on("click", "a", function() {
-		var view = $(this).data('view');
-		var sub = $(this).data('sub');
-		setCentralView(view, sub);
-	});
 }
 
 function onload() {

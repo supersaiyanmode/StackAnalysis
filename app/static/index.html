@@ -175,7 +175,7 @@
 						</div>
 					</div>
 				</div>
-				<a data-view="{{view}}" data-sub="{{sub}}" href="#">
+				<a href="#{{href}}">
 					<div class="panel-footer">
 						<span class="pull-left">View Details</span>
 						<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -206,7 +206,7 @@
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 				<ul class="nav navbar-nav side-nav">
 					<li>
-						<a href="#" data-view="{{view}}" data-sub="{{sub}}"><i class="fa fa-fw fa-{{icon}}"></i>&nbsp;&nbsp;{{text}}</a>
+						<a href="#{{hashurl}}"><i class="fa fa-fw fa-{{icon}}"></i>&nbsp;&nbsp;{{text}}</a>
 					</li>
 				</ul>
 			</div>
@@ -232,6 +232,9 @@
 	<script src="/static/js/jquery.bootpag.min.js"></script>
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	<script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/js-signals/1.0.0/js-signals.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crossroads/0.12.2/crossroads.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/hasher/1.2.0/hasher.js"></script>
 
 	<script src="/static/js/bubble.js"></script>
 	<script src="/static/js/main.js"></script>
