@@ -39,8 +39,17 @@ function loadLocationInfo(data) {
 }
 
 function loadUserTags(userId) {
-	loadUserTagDetails(userId, function(data) {
-		//loading bubble.
+	loadUserTagDetails(userId, function(obj) {
+		var json = {};
+		var data = obj["data"]
+		for(var item in data) {
+			json[data[item][1]] = data[item][2];
+		}
+		
+		var params = {
+			diameter: 300
+		};
+		loadBubbleGraph('.user-tags', json, params);
 	}, function(data) { alert("Failed to load data."); });
 }
 
