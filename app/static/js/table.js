@@ -8,6 +8,7 @@ function makeTable(params) {
 	var orderBySelector = params.orderBySelector;
 	var rowCountSelector = params.rowCountSelector;
 	var tableUrl = params.url;
+	var baseSelector = " " + (params.baseSelector || "") + " ";
 	
 	var tableFilterData = params.tableFilterData || [];
 	var tableOrderData = params.tableOrderData || [];
@@ -219,7 +220,7 @@ function makeTable(params) {
 			var cls = views[key].cls;
 			var loadedKey = views[key].loadedKey;
 
-			var selector = (".btn-group > a.btn[data-panel-class=" 
+			var selector = (baseSelector + ".btn-group > a.btn[data-panel-class=" 
 						+ cls + "]");
 			$(selector).removeClass("disabled");
 			$(selector).off('click');
@@ -229,8 +230,8 @@ function makeTable(params) {
 				$(this).addClass('active');
 
 				var panelClass = $(this).data("panel-class");
-				$("div.tab-pane.active").removeClass("active");
-				$("." + panelClass).parent().addClass("active");
+				$(baseSelector + "div.tab-pane.active").removeClass("active");
+				$(baseSelector + "." + panelClass).parent().addClass("active");
 
 				func(tableData);
 				return false;
@@ -242,10 +243,10 @@ function makeTable(params) {
 		});
 		
 		//Remove disabled buttons
-		var selector = $(".btn-group > a.btn.disabled").remove();
-		var remainingButtons = $(".btn-group > a.btn");
+		var selector = $(baseSelector + ".btn-group > a.btn.disabled").remove();
+		var remainingButtons = $(baseSelector + ".btn-group > a.btn");
 		if (remainingButtons.length <= 1) {
-			$(".btn-group").hide();
+			$(baseSelector + ".btn-group").hide();
 		}
 		
 		singleLoad.forEach(function(obj) {
@@ -271,8 +272,8 @@ function makeTable(params) {
 	}
 	
 	function attachParamUpdateEvent(tableData) {
-		$(".container-fluid").on("click", "button.parameter-update", function() {
-			$('ul.bootpag>li').not('.prev').first().trigger('click');
+		$(".container-fluid" + baseSelector).on("click", "button.parameter-update", function() {
+			$(baseSelector + 'ul.bootpag>li').not('.prev').first().trigger('click');
 			var obj = $(queryFilterSelector + " tbody tr").map(function() {
 				var colSel = $(this).find(".query-filter-column-select option:selected");
 				var opSel = $(this).find(".query-filter-op-select option:selected");
@@ -324,7 +325,7 @@ function makeTable(params) {
 	}
 
 	function attachTableQueryFilterEvents(tableData) {
-		$(".container-fluid").on("click", "button.query-filter-add", function() {
+		$(".container-fluid" + baseSelector).on("click", "button.query-filter-add", function() {
 			addRowFilterQuery(tableSelector, tableData);
 		});
 
@@ -369,7 +370,7 @@ function makeTable(params) {
 	}
 
 	function attachTableOrderByEvents(tableData) {
-		$(".container-fluid").on("click", "button.order-by-add", function() {
+		$(".container-fluid" + baseSelector).on("click", "button.order-by-add", function() {
 			addRowOrderBy(orderBySelector, tableData);
 		});
 
