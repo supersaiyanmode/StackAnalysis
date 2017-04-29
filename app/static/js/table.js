@@ -245,7 +245,7 @@ function makeTable(params) {
 		var selector = $(".btn-group > a.btn.disabled").remove();
 		var remainingButtons = $(".btn-group > a.btn");
 		if (remainingButtons.length <= 1) {
-			$(".btn-group").remove();
+			$(".btn-group").hide();
 		}
 		
 		singleLoad.forEach(function(obj) {
