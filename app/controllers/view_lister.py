@@ -109,7 +109,7 @@ VIEWS = {
 			"view": "/static/views/generic.html",
 			"icon": "clipboard",
 			"sub": {
-				"title": "Time Distribution",
+				"title": "Posts Count Distribution",
 				"javascript": "/static/views/view_posts_count_locations/main.js"
 			}
 		},
