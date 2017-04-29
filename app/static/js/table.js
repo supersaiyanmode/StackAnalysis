@@ -128,6 +128,7 @@ function makeTable(params) {
 			}).fail(function(data) {
 				//nothing.
 			});
+			return false;
 		});
 	}
 
@@ -300,6 +301,7 @@ function makeTable(params) {
 			});;
 			tableOrderData = order; //global variable update.
 			renderTableWithParams(0, tableFilterData, order);
+			return false;
 		});
 	}
 	
@@ -327,6 +329,7 @@ function makeTable(params) {
 	function attachTableQueryFilterEvents(tableData) {
 		$(".container-fluid" + baseSelector).on("click", "button.query-filter-add", function() {
 			addRowFilterQuery(tableSelector, tableData);
+			return false;
 		});
 
 		$(queryFilterSelector).on("change", "select.query-filter-column-select", function() {
@@ -372,6 +375,7 @@ function makeTable(params) {
 	function attachTableOrderByEvents(tableData) {
 		$(".container-fluid" + baseSelector).on("click", "button.order-by-add", function() {
 			addRowOrderBy(orderBySelector, tableData);
+			return false;
 		});
 
 		$(orderBySelector).on("click", "div.order-by-buttons a", function() {
