@@ -58,6 +58,7 @@ function loadUserQuestiondetails(userId) {
 		paginationSelector: 'div.container-fluid .questions-section .pagination-bar',
 		selector: "div.container-fluid .questions-section div.table-row",
 		rowCountSelector: '.questions-section .row-count-display',
+		baseSelector: '.questions-section',
 		url: "/questions/",
 		tableOrderData: [{"col": "score", "order": "desc"}],
 		tableFilterData: [{
@@ -77,6 +78,7 @@ function loadUserAnswerdetails(userId) {
 		paginationSelector: 'div.container-fluid .answers-section .pagination-bar',
 		selector: "div.container-fluid .answers-section div.table-row",
 		rowCountSelector: '.answers-section .row-count-display',
+		baseSelector: '.answers-section',
 		url: "/answers/",
 		tableOrderData: [{"col": "score", "order": "desc"}],
 		tableFilterData: [{
