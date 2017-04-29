@@ -378,6 +378,7 @@ function makeTable(params) {
 			$(this).parent().find(".active").removeClass("active");
 			$(this).addClass("active");
 			$(this).closest("tr").find("input[name=order]").val(val);
+			return false;
 		});
 	}
 	
