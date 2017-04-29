@@ -4,6 +4,7 @@ function tagsInit() {
 		queryFilterSelector: 'div.container-fluid .filter-query-table',
 		orderBySelector: 'div.container-fluid .order-by-table',
 		visualizationSelector: 'div.container-fluid div.visualization-row',
+		timeChartSelector: 'div.container-fluid div.timechart-row',
 		selector: "div.container-fluid div.table-row",
 		rowCountSelector: '.row-count-display',
 		url: "/tags/"
