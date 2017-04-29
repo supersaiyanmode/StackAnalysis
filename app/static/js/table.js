@@ -132,7 +132,7 @@ function makeTable(params) {
 
 	function loadRowCount(tableData){
 		var total_rows = tableData.row_count;
-		$(rowCountSelector).html("(" + total_rows + " rows)");
+		$(rowCountSelector).html(total_rows + " rows");
 	}
 	
 	function loadPagination(tableData) {
