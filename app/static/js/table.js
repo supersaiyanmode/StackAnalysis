@@ -324,7 +324,7 @@ function makeTable(params) {
 	}
 
 	function attachTableQueryFilterEvents(tableData) {
-		$(queryFilterSelector).on("click", "button.query-filter-add", function() {
+		$(".container-fluid").on("click", "button.query-filter-add", function() {
 			addRowFilterQuery(tableSelector, tableData);
 		});
 
@@ -369,7 +369,7 @@ function makeTable(params) {
 	}
 
 	function attachTableOrderByEvents(tableData) {
-		$(orderBySelector).on("click", "button.order-by-add", function() {
+		$(".container-fluid").on("click", "button.order-by-add", function() {
 			addRowOrderBy(orderBySelector, tableData);
 		});
 
