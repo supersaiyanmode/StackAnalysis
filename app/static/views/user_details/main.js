@@ -64,7 +64,8 @@ function loadUserQuestiondetails(userId) {
 			"col": "author_id",
 			"op": "__eq__",
 			"val": userId
-		}]
+		}],
+		maxPages:5
 	};
 	var tableObj = makeTable(params);
 	tableObj.load();
@@ -82,7 +83,8 @@ function loadUserAnswerdetails(userId) {
 			"col": "author_id",
 			"op": "__eq__",
 			"val": userId
-		}]
+		}],
+		maxPages:5
 	};
 	var tableObj = makeTable(params);
 	tableObj.load();

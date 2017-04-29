@@ -11,6 +11,7 @@ function makeTable(params) {
 	
 	var tableFilterData = params.tableFilterData || [];
 	var tableOrderData = params.tableOrderData || [];
+	var maxPages = params.maxPages || 10;
 	
 	var currentView  = 'table-row';
 	var singleLoad = [
@@ -137,7 +138,7 @@ function makeTable(params) {
 	function loadPagination(tableData) {
 		var paginationParams = {
 			total: Math.ceil(tableData.row_count / tableData.page_size),
-			maxVisible: 10,
+			maxVisible: maxPages,
 			leaps: true,
 			firstLastUse: true,
 			first: '←',
